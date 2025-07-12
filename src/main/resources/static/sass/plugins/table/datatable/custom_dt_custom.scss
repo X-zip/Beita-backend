@@ -1,0 +1,163 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../../base/base';    // Base Variables
+
+
+.widget-content-area {
+  box-shadow: none !important;
+}
+
+table.dataTable {
+  border-collapse: separate !important;
+  border-spacing: 0 5px;
+  margin-top: 50px !important;
+  margin-bottom: 50px !important;
+  border-collapse: collapse !important;
+}
+
+.table-hover:not(.table-dark) tbody tr {
+  td:first-child {
+    border-left: none !important;
+    border-left: none !important;
+  }
+
+  &:hover .new-control.new-checkbox .new-control-indicator {
+    border: 2px solid $primary;
+  }
+}
+
+/*Style. 1*/
+
+.style-1 {
+  .user-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: $warning;
+  }
+
+  .profile-img img {
+    width: 50px;
+    height: 50px;
+    border: 2px solid $m-color_5;
+    border-radius: 6px;
+    box-shadow: 0px 0px 14px 3px rgba(126, 142, 177, 0.24);
+  }
+}
+
+/*Style. 2*/
+
+.style-2 {
+  .new-control.new-checkbox .new-control-indicator {
+    top: 1px;
+  }
+
+  .user-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: $warning;
+  }
+
+  .profile-img {}
+
+  img.profile-img {
+    width: 50px;
+    height: 50px;
+    border: 2px solid $m-color_5;
+    box-shadow: 0px 0px 14px 3px rgba(126, 142, 177, 0.24);
+  }
+
+  .badge {
+    background: transparent;
+    transform: none;
+  }
+
+  .badge-primary {
+    color: $primary;
+    border: 2px dashed $primary;
+  }
+
+  .badge-warning {
+    color: $warning;
+    border: 2px dashed $warning;
+  }
+
+  .badge-danger {
+    color: $danger;
+    border: 2px dashed $danger;
+  }
+}
+
+/*Style. 3*/
+
+.style-3 {
+  .new-control.new-checkbox .new-control-indicator {
+    top: 1px;
+  }
+
+  .user-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: $warning;
+  }
+
+  .profile-img {}
+
+  img.profile-img {
+    width: 50px;
+    height: 50px;
+    border: 2px solid $m-color_5;
+    border-radius: 6px;
+    box-shadow: 0px 0px 14px 3px rgba(126, 142, 177, 0.24);
+  }
+
+  .badge {
+    background: transparent;
+    transform: none;
+  }
+
+  .badge-primary {
+    color: $primary;
+    border: 2px dashed $primary;
+  }
+
+  .badge-warning {
+    color: $warning;
+    border: 2px dashed $warning;
+  }
+
+  .badge-danger {
+    color: $danger;
+    border: 2px dashed $danger;
+  }
+
+  .table-controls {
+    padding: 0;
+
+    li {
+      list-style: none;
+      display: inline;
+
+      svg {
+        color: $m-color_6;
+        vertical-align: middle;
+        width: 28px;
+        height: 28px;
+        fill: rgba(0, 23, 55, 0.08);
+        cursor: pointer;
+      }
+    }
+  }
+
+  &.table-hover:not(.table-dark) tbody tr:hover {
+    .table-controls li svg {
+      color: $danger;
+      fill: rgba(231, 81, 90, 0.2196078431);
+    }
+
+    td:first-child {
+      color: $primary !important;
+    }
+  }
+}

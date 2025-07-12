@@ -1,0 +1,39 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../../base/base';    // Base Variables
+
+.widget-content-area {
+  box-shadow: none !important;
+}
+
+#column-filter {
+  .badge {
+    background: transparent;
+  }
+
+  .badge-primary {
+    color: $primary;
+    border: 2px dashed $primary;
+  }
+
+  .badge-warning {
+    color: $warning;
+    border: 2px dashed $warning;
+  }
+
+  .badge-danger {
+    color: $danger;
+    border: 2px dashed $danger;
+  }
+}
+
+.toggle-list a {
+  color: #fff !important;
+  background-color: $primary !important;
+  border-color: $primary;
+  margin-top: 13px;
+  margin-bottom: 13px;
+  margin-right: 5px;
+}

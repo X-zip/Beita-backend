@@ -1,0 +1,149 @@
+/*
+    ========================
+        Recent Activities
+    ========================
+*/
+
+.widget-activity-one {
+  .widget-content select {
+    padding: 0;
+    width: auto;
+    font-size: 13px;
+    border: none;
+    height: auto;
+    box-shadow: none;
+    color: $l-dark;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin: 0 0 0 auto;
+    margin-bottom: 20px;
+  }
+
+  .mt-container {
+    position: relative;
+    height: 232px;
+    overflow: auto;
+  }
+}
+
+.widget-activity-one .timeline-line .item-timeline {
+  display: flex;
+
+  .t-dot {
+    position: relative;
+
+    &:before {
+      content: '';
+      position: absolute;
+      border-color: inherit;
+      border-width: 3px;
+      border-style: solid;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-color: $m-color_3;
+      background: $m-color_4;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      border-color: inherit;
+      border-width: 1px;
+      border-style: solid;
+      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-color: $m-color_4;
+      width: 0;
+      height: auto;
+      top: 25px;
+      bottom: -15px;
+      border-right-width: 0;
+      border-top-width: 0;
+      border-bottom-width: 0;
+      border-radius: 0;
+    }
+  }
+
+  &.timeline-new .t-dot:before {
+    background: $primary;
+    border-color: $l-primary;
+  }
+
+  &:last-child .t-dot:after {
+    display: none;
+  }
+
+  .t-meta-time {
+    margin: 0;
+    min-width: 100px;
+    max-width: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    color: $m-color_6;
+    align-self: center;
+  }
+
+  .t-text {
+    padding: 10px;
+    align-self: center;
+    margin-left: 10px;
+
+    p {
+      font-size: 13px;
+      margin: 0;
+      color: $m-color_4;
+      font-weight: 600;
+
+      span {
+        color: $m-color_9;
+        font-weight: 600;
+      }
+
+      a {
+        color: $m-color_6;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .t-time {
+    margin: 0;
+    min-width: 80px;
+    max-width: 80px;
+    font-size: 13px;
+    font-weight: 600;
+    color: $l-dark;
+    padding: 10px 0;
+    letter-spacing: 1px;
+  }
+}
+
+.widget-activity-one .tm-action-btn {
+  text-align: center;
+  padding-top: 20px;
+
+  button {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    color: $primary;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border: none;
+    font-size: 15px;
+  }
+
+  svg {
+    width: 15px;
+    height: 15px;
+    vertical-align: inherit;
+  }
+}

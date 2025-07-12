@@ -1,0 +1,29 @@
+/*
+    =======================
+        Sold By cateory
+    =======================
+*/
+
+.widget-chart-two {
+  padding: 0 !important;
+}
+
+.widget.widget-chart-two {
+  .widget-heading {
+    padding: 20px 20px 0 20px;
+  }
+
+  .widget-content {
+    padding: 0 0 20px 0;
+  }
+}
+
+.widget-chart-two {
+  .apexcharts-canvas {
+    margin: 0 auto;
+  }
+
+  .apexcharts-legend-marker {
+    left: -5px !important;
+  }
+}

@@ -1,0 +1,150 @@
+.widget {
+  &.widget-activity-two {
+    position: relative;
+    background: $white;
+    border-radius: 8px;
+    height: 100%;
+
+    .widget-heading {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed $m-color_3;
+      padding: 20px 20px;
+      padding-bottom: 20px;
+
+      h5 {
+        font-size: 17px;
+        display: block;
+        color: $m-color_10;
+        font-weight: 600;
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+
+
+/*
+    ========================
+        Recent Activities
+    ========================
+*/
+
+.widget-activity-two {
+  .widget-content {
+    padding: 20px 20px 20px 20px;
+  }
+
+  .mt-container {
+    position: relative;
+    height: 293px;
+    overflow: auto;
+    padding: 0 0 0 12px;
+  }
+}
+
+.widget-activity-two .timeline-line .item-timeline {
+  display: flex;
+
+  .t-dot {
+    position: relative;
+
+    &:before {
+      content: '';
+      position: absolute;
+      border-color: inherit;
+      border-width: 3px;
+      border-style: solid;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-color: $m-color_3;
+      background: $m-color_4;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      border-color: inherit;
+      border-width: 1px;
+      border-style: solid;
+      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-color: $m-color_4;
+      width: 0;
+      height: auto;
+      top: 25px;
+      bottom: -15px;
+      border-right-width: 0;
+      border-top-width: 0;
+      border-bottom-width: 0;
+      border-radius: 0;
+    }
+  }
+
+  &.timeline-new .t-dot:before {
+    background: $primary;
+    border-color: $l-primary;
+  }
+
+  &:last-child .t-dot:after {
+    display: none;
+  }
+
+  .t-meta-time {
+    margin: 0;
+    min-width: 100px;
+    max-width: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    color: $m-color_6;
+    align-self: center;
+  }
+
+  .t-text {
+    padding: 10px;
+    align-self: center;
+    margin-left: 10px;
+
+    p {
+      font-size: 13px;
+      margin: 0;
+      color: $m-color_4;
+      font-weight: 600;
+
+      span {
+        color: $m-color_9;
+        font-weight: 600;
+      }
+
+      a {
+        color: $m-color_6;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.widget-activity-two .tm-action-btn {
+  text-align: center;
+  margin-top: 9px;
+
+  button {
+    box-shadow: none;
+    font-weight: 700;
+    letter-spacing: 0px;
+    font-size: 15px;
+    padding: 0;
+    background: transparent;
+    color: $primary;
+    border: none;
+  }
+}

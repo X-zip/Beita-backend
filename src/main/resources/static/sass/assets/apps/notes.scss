@@ -1,0 +1,611 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+.main-container, #content {
+  min-height: auto;
+}
+
+/*
+    App Note Container
+*/
+
+.app-note-container {
+  position: relative;
+  display: flex;
+
+  .tab-title {
+    max-width: 210px;
+    width: 100%;
+  }
+}
+
+.note-sidebar-scroll {
+  position: relative;
+  margin: auto;
+  width: 100%;
+  overflow: auto;
+  height: calc(100vh - 202px);
+}
+
+/*
+    Group section
+*/
+
+.group-section {
+  font-weight: 600;
+  font-size: 15px;
+  color: $dark;
+  letter-spacing: 1px;
+  margin-top: 25px;
+  margin-bottom: 13px;
+  padding: 9px 20px;
+
+  svg {
+    color: $m-color_6;
+    margin-right: 6px;
+    vertical-align: text-top;
+    width: 20px;
+    height: 20px;
+    fill: rgba(0, 23, 55, 0.08);
+  }
+}
+
+.app-note-overlay {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: $dark !important;
+  z-index: 4 !important;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+
+  &.app-note-overlay-show {
+    display: block;
+    opacity: .7;
+  }
+}
+
+/*
+    Tab Title
+*/
+
+.tab-title {
+  &.mail-menu-show {
+    left: 0;
+    width: 100%;
+    min-width: 190px;
+    height: 100%;
+  }
+
+  hr {
+    border-top: 1px solid $m-color_10;
+    max-width: 54px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+
+  .nav-pills {
+    .nav-link.active, .show > .nav-link {
+      background-color: $m-color_4;
+      color: $dark;
+      font-weight: 700;
+    }
+
+    a.nav-link {
+      position: relative;
+      font-weight: 700;
+      color: $m-color_9;
+      padding: 9px 20px;
+      cursor: pointer;
+      font-size: 14px;
+      border-radius: 6px;
+
+      svg {
+        margin-right: 7px;
+        width: 18px;
+        height: 18px;
+        vertical-align: sub;
+      }
+
+      .mail-badge {
+        background: $l-primary;
+        border-radius: 50%;
+        position: absolute;
+        right: 8px;
+        padding: 4px 7px;
+        height: 24px;
+        width: 23px;
+        color: $primary;
+        font-weight: 600;
+      }
+    }
+
+    &.group-list .nav-item a {
+      position: relative;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 9px 15px 9px 50px;
+      color: $dark;
+      letter-spacing: 1px;
+
+      &[class*="g-dot-"]:before {
+        position: absolute;
+        padding: 4px;
+        content: '';
+        border-radius: 50%;
+        top: 14px;
+        left: 20px;
+        border: 2px solid $m-color_9;
+      }
+
+      &.g-dot-danger:before {
+        background: $l-danger;
+        border: 1px solid $danger;
+      }
+
+      &.g-dot-primary:before {
+        background: $l-info;
+        border: 1px solid $info;
+      }
+
+      &.g-dot-warning:before {
+        background: $l-warning;
+        border: 1px solid $warning;
+      }
+
+      &.g-dot-success:before {
+        background: $l-secondary;
+        border: 1px solid $secondary;
+      }
+    }
+
+    .nav-item .dropdown-menu {
+      box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
+      padding: 0;
+      border: none;
+    }
+  }
+
+  li.mail-labels {
+    a.dropdown-item {
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 18px;
+
+      &:hover {
+        background-color: $white;
+        color: $primary;
+      }
+    }
+
+    .label:after {
+      position: absolute;
+      content: "";
+      height: 6px;
+      width: 6px;
+      border-radius: 50%;
+      right: 15px;
+      top: 43%;
+    }
+  }
+}
+
+/*Mail Labels*/
+
+/*
+    Note container
+*/
+
+.note-container {
+  padding: 0 15px;
+  width: 100%;
+
+  .switch {
+    text-align: right;
+    margin-bottom: 43px;
+
+    .active-view {
+      color: $primary;
+      fill: rgba(27, 85, 226, 0.2392156863);
+    }
+
+    .view-list, .view-grid {
+      padding: 10px;
+      background: $white;
+      border-radius: 5px;
+      cursor: pointer;
+      color: $m-color_9;
+      box-shadow: 0px 2px 4px rgba(126, 142, 177, 0.12);
+      width: 43px;
+      height: 41px;
+      fill: rgba(0, 23, 55, 0.08);
+    }
+  }
+
+  &.note-grid .note-item {
+    position: relative;
+    padding: 16px 16px;
+    margin-right: 0;
+    margin-left: 5px;
+    margin-bottom: 18px;
+    width: 100%;
+    max-width: 300px;
+    border-radius: 6px;
+    display: inline-flex;
+    background: $m-color_3;
+
+    &.note-personal {
+      background: $l-info;
+    }
+
+    &.note-work {
+      background: $l-warning;
+    }
+
+    &.note-important {
+      background: $l-danger;
+    }
+
+    &.note-social {
+      background: $l-secondary;
+    }
+
+    .note-inner-content {
+      border-radius: 4px;
+      width: 100%;
+      min-height: 163px;
+
+      .note-title {
+        font-size: 19px;
+        font-weight: 600;
+        color: $dark;
+        margin-bottom: 11px;
+        letter-spacing: 0px;
+      }
+
+      .meta-time {
+        font-weight: 600;
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: $m-color_9;
+        display: inline-block;
+        border-radius: 4px;
+      }
+
+      .note-description {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 18px;
+        letter-spacing: 0px;
+        word-wrap: break-word;
+      }
+
+      .note-action {
+        display: inline-block;
+
+        .fav-note, .delete-note {
+          padding: 4px;
+          border-radius: 5px;
+          cursor: pointer;
+          color: $m-color_9;
+          width: 28px;
+          height: 28px;
+          fill: rgba(0, 23, 55, 0.08);
+        }
+      }
+    }
+
+    &.note-fav .note-inner-content .note-action .fav-note {
+      fill: $warning;
+    }
+
+    .note-inner-content {
+      .note-action {
+        .fav-note:hover {
+          fill: $warning;
+        }
+
+        .delete-note:hover {
+          color: $danger;
+        }
+      }
+
+      .note-footer {
+        display: inline-block;
+        float: right;
+
+        .tags {
+          display: inline-block;
+          position: relative;
+          padding: 4px 6px;
+          border-radius: 4px;
+
+          [class*="g-dot-"] {
+            content: '';
+            background: transparent;
+            border-radius: 50%;
+            border: 2px solid $l-dark;
+            display: inline-block;
+            height: 11px;
+            width: 11px;
+            vertical-align: middle;
+            display: none;
+          }
+
+          .g-dot-personal {
+            background: $l-info;
+            border: 2px solid $info;
+          }
+
+          .g-dot-work {
+            background: $l-warning;
+            border: 2px solid $warning;
+          }
+
+          .g-dot-social {
+            background: $l-secondary;
+            border: 2px solid $secondary;
+          }
+
+          .g-dot-important {
+            background: $l-danger;
+            border: 2px solid $danger;
+          }
+        }
+      }
+    }
+
+    &.note-personal .note-inner-content .note-footer .tags .g-dot-personal, &.note-work .note-inner-content .note-footer .tags .g-dot-work, &.note-social .note-inner-content .note-footer .tags .g-dot-social, &.note-important .note-inner-content .note-footer .tags .g-dot-important {
+      display: inline-block;
+    }
+
+    .note-inner-content .note-footer {
+      .tags-selector {
+        display: inline-block;
+
+        .dropdown-menu {
+          min-width: 8rem;
+
+          a {
+            font-size: 14px;
+            padding: 3px 35px;
+            font-weight: 600;
+            letter-spacing: 0px;
+            color: $dark;
+          }
+
+          .dropdown-item {
+            &.active, &:active {
+              background: transparent;
+            }
+          }
+
+          [class*="g-dot-"]:before {
+            content: '';
+            position: absolute;
+            padding: 4px;
+            border-radius: 50%;
+            top: 9px;
+            left: 10px;
+            border: 2px solid $m-color_9;
+          }
+
+          a {
+            &.g-dot-important:before {
+              background: $l-danger;
+              border: 1px solid $danger;
+            }
+
+            &.g-dot-personal:before {
+              background: $l-info;
+              border: 1px solid $info;
+            }
+
+            &.g-dot-work:before {
+              background: $l-warning;
+              border: 1px solid $warning;
+            }
+
+            &.g-dot-social:before {
+              background: $l-secondary;
+              border: 1px solid $secondary;
+            }
+          }
+        }
+      }
+
+      .nav-link {
+        padding: 0;
+
+        span {
+          display: block;
+        }
+
+        .feather-more-vertical {
+          border-radius: 5px;
+          cursor: pointer;
+          color: $m-color_9;
+          width: 20px;
+          height: 20px;
+
+          &:hover {
+            color: $m-color_10;
+          }
+        }
+      }
+    }
+
+    &.note-personal .note-inner-content .note-footer .nav-link .feather-more-vertical, &.note-work .note-inner-content .note-footer .nav-link .feather-more-vertical, &.note-social .note-inner-content .note-footer .nav-link .feather-more-vertical, &.note-important .note-inner-content .note-footer .nav-link .feather-more-vertical {
+      display: none;
+    }
+  }
+}
+
+/* 
+    Note Container
+*/
+
+/*
+=====================
+    Modal Content
+=====================
+*/
+
+.new-control.new-radio .new-control-indicator {}
+
+.modal-content {
+  border: none;
+  box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
+
+  .modal-footer {
+    border-top: none;
+
+    [data-dismiss="modal"] {
+      background-color: $white;
+      color: $primary;
+      font-weight: 700;
+      border: 1px solid #e8e8e8;
+      padding: 10px 25px;
+    }
+
+    .btn[data-dismiss="modal"] svg {
+      margin-right: 5px;
+      width: 18px;
+      vertical-align: bottom;
+    }
+
+    #btn-n-add {
+      background-color: $primary;
+      color: $white;
+      font-weight: 600;
+      border: 1px solid $primary;
+      padding: 10px 25px;
+    }
+
+    #btn-n-save {
+      font-weight: 600;
+      padding: 10px 25px;
+    }
+  }
+}
+
+.modal-backdrop {
+  background-color: $m-color_2;
+}
+
+.modal-content svg.close {
+  position: absolute;
+  right: -7px;
+  top: -8px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px;
+  background: $white;
+  border-radius: 5px;
+  opacity: 1;
+  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: .600s;
+  color: $dark;
+}
+
+.notes-box .notes-content form {
+  .note-title {
+    padding-top: 20px;
+  }
+
+  input {}
+
+  .note-description {
+    padding-top: 40px;
+  }
+
+  textarea {}
+}
+
+/*
+    ===============
+        Note Box
+    ===============
+*/
+
+.hamburger {
+  display: none;
+}
+
+/*
+    Media Query
+*/
+
+@media (max-width: 2132px) {
+  .note-container.note-grid .note-item {
+    max-width: 32%;
+  }
+}
+
+@media (max-width: 1199px) {
+  .note-container.note-grid .note-item {
+    max-width: 48%;
+  }
+}
+
+@media (max-width: 991px) {
+  .app-notes {
+    margin-top: 37px;
+  }
+
+  .app-note-container .tab-title {
+    position: absolute;
+    z-index: 4;
+    left: -170px;
+    width: 0;
+  }
+
+  .tab-title.note-menu-show {
+    left: 0;
+    width: 100%;
+    min-width: 190px;
+    min-height: 485px;
+    border-radius: 0;
+    border-bottom-right-radius: 6px;
+    padding: 11px;
+    background: $white;
+  }
+
+  .note-sidebar-scroll {
+    height: 100%;
+  }
+
+  .app-hamburger-container {
+    text-align: right;
+  }
+
+  .hamburger {
+    position: relative;
+    top: -13px;
+    padding: 6px 9px 6px 9px;
+    font-size: 20px;
+    color: $white;
+    align-self: center;
+    display: inline-block;
+    background-color: $m-color_9;
+    border-radius: 50%;
+  }
+}
+
+@media (max-width: 767px) {
+  .note-container.note-grid .note-item {
+    max-width: 47%;
+  }
+}
+
+@media (max-width: 575px) {
+  .note-container.note-grid .note-item {
+    max-width: 100%;
+    margin-left: 0;
+  }
+}

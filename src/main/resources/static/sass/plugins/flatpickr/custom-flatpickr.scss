@@ -1,0 +1,110 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+
+.flatpickr-calendar {
+  width: 336.875px;
+  padding: 15px;
+  -webkit-box-shadow: 2px 5px 17px 0 rgba(31, 45, 61, 0.1);
+  box-shadow: 2px 5px 17px 0 rgba(31, 45, 61, 0.1);
+  border: 1px solid $m-color_4;
+
+  &.open {
+    display: inline-block;
+    z-index: 900;
+  }
+
+  &.arrowTop:before {
+    border-bottom-color: $m-color_2;
+  }
+
+  &:before {
+    border-width: 9px;
+  }
+
+  &:after {
+    border-width: 0px;
+  }
+}
+
+.flatpickr-months {
+  .flatpickr-prev-month, .flatpickr-next-month {
+    top: 8%;
+    padding: 5px 13px;
+    background: #fbfbfb;
+    border-radius: 4px;
+    height: 40px;
+  }
+
+  .flatpickr-prev-month:hover svg, .flatpickr-next-month:hover svg {
+    fill: $primary;
+  }
+}
+
+.flatpickr-day.today {
+  border-color: $primary;
+  color: $primary;
+  font-weight: 700;
+}
+
+.flatpickr-current-month {
+  .flatpickr-monthDropdown-months {
+    height: auto;
+    border: 1px solid $m-color_4;
+    color: $dark;
+    font-size: 15px;
+    padding: 12px 16px;
+    letter-spacing: 1px;
+    font-weight: 700;
+  }
+
+  input.cur-year {
+    height: auto;
+    border: 1px solid $m-color_4;
+    border-left: none;
+    color: $dark;
+    font-size: 15px;
+    padding: 13px 12px;
+    letter-spacing: 1px;
+    font-weight: 700;
+  }
+}
+
+.flatpickr-months .flatpickr-month {
+  height: 76px;
+}
+
+.flatpickr-day.flatpickr-disabled {
+  cursor: not-allowed;
+  color: $m-color_3;
+
+  &:hover {
+    cursor: not-allowed;
+    color: $m-color_3;
+  }
+}
+
+span.flatpickr-weekday {
+  color: $m-color_6;
+}
+
+.flatpickr-day {
+  color: $dark;
+  font-weight: 700;
+
+  &.selected, &.startRange, &.endRange, &.selected.inRange, &.startRange.inRange, &.endRange.inRange, &.selected:focus, &.startRange:focus, &.endRange:focus, &.selected:hover, &.startRange:hover, &.endRange:hover, &.selected.prevMonthDay, &.startRange.prevMonthDay, &.endRange.prevMonthDay, &.selected.nextMonthDay, &.startRange.nextMonthDay, &.endRange.nextMonthDay {
+    background: $primary;
+    color: $white;
+    border-color: $primary;
+    font-weight: 500;
+  }
+}
+
+@supports (-webkit-overflow-scrolling: touch) {
+  .form-control {
+    height: auto;
+  }
+}

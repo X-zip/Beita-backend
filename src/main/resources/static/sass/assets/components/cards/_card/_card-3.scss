@@ -1,0 +1,57 @@
+/*
+	Component Card 3
+*/
+
+.component-card_3 {
+  border: none;
+  border-radius: 8px;
+  background: $dark;
+  width: 18rem;
+  margin: 0 auto;
+  box-shadow: 4px 6px 10px -3px $m-color_4;
+
+  .card-body {
+    padding: 22px 20px;
+    text-align: center;
+
+    img {
+      width: 85px;
+      height: 85px;
+      margin-bottom: 25px;
+      border-radius: 50%;
+    }
+
+    h5.card-user_name {
+      font-size: 15px;
+      color: $white;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    p.card-user_occupation {
+      font-size: 14px;
+      color: $l-dark;
+      letter-spacing: 1px;
+    }
+
+    .card-star_rating {
+      margin-bottom: 24px;
+
+      svg {
+        width: 20px;
+        color: $warning;
+
+        &.fill {
+          fill: $warning;
+        }
+      }
+    }
+
+    .card-text {
+      color: $l-dark;
+      font-style: italic;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+  }
+}

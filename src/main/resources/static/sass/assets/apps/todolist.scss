@@ -1,0 +1,738 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+/*----------Theme checkbox---------*/
+
+.new-control {
+  position: relative;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.new-control-input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.new-control.new-checkbox {
+  .new-control-indicator {
+    position: relative;
+    top: .25rem;
+    left: 0;
+    display: block;
+    width: 30px;
+    height: 30px;
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: $m-color_3;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 50% 50%;
+    border-radius: 50%;
+    margin-right: 13px;
+  }
+
+  cursor: pointer;
+
+  > input:checked ~ span.new-control-indicator {
+    background: $m-color_6;
+
+    &:after {
+      display: block;
+    }
+  }
+
+  span.new-control-indicator:after {
+    border: solid $m-color_6;
+    top: 50%;
+    left: 50%;
+    margin-left: -2px;
+    margin-top: -6px;
+    width: 5px;
+    height: 10px;
+    border-width: 0 2px 2px 0 !important;
+    transform: rotate(45deg);
+    content: '';
+    position: absolute;
+    display: none;
+  }
+
+  &.checkbox-primary > input:checked ~ span.new-control-indicator {
+    background: transparent;
+    border: 2px solid $m-color_6;
+  }
+}
+
+.mail-box-container {
+  position: relative;
+  display: flex;
+  border-radius: 6px;
+  background: $white;
+  -webkit-box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.08), 0 1px 20px 0 rgba(0, 0, 0, 0.07), 0px 1px 11px 0px rgba(0, 0, 0, 0.07);
+  -moz-box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.08), 0 1px 20px 0 rgba(0, 0, 0, 0.07), 0px 1px 11px 0px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.08), 0 1px 20px 0 rgba(0, 0, 0, 0.07), 0px 1px 11px 0px rgba(0, 0, 0, 0.07);
+}
+
+.mail-overlay {
+  display: none;
+  position: absolute;
+  width: 100vw;
+  height: 100%;
+  background: $dark !important;
+  z-index: 4 !important;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+
+  &.mail-overlay-show {
+    display: block;
+    opacity: .7;
+  }
+}
+
+.tab-title {
+  position: relative;
+  padding: 20px 15px;
+  max-width: 240px;
+  border-right: 1px solid $m-color_3;
+
+  svg.feather-clipboard {
+    color: $primary;
+    fill: rgba(27, 85, 226, 0.2392156863);
+    margin-bottom: 13px;
+  }
+
+  h5 {
+    position: relative;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: $m-color_9;
+  }
+
+  #addTask {
+    position: absolute;
+    font-size: 14px;
+    padding: 9px 20px;
+    border: none;
+    color: $white;
+    bottom: 32px;
+    left: 17%;
+    background-color: $primary;
+
+    svg {
+      margin-right: 5px;
+    }
+  }
+
+  &.mail-menu-show {
+    left: 0;
+    width: 100%;
+    min-width: 190px;
+    height: 100%;
+  }
+
+  hr {
+    border-top: 1px solid $m-color_2;
+    max-width: 54px;
+  }
+
+  .todoList-sidebar-scroll {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 318px);
+  }
+
+  .nav-pills {
+    .nav-link.active {
+      svg {
+        color: $primary;
+        fill: rgba(27, 85, 226, 0.2392156863);
+      }
+
+      background-color: transparent;
+      color: $primary;
+      color: $primary;
+      background: $m-color_2;
+      border-top-right-radius: 30px;
+      border-bottom-right-radius: 30px;
+      padding: 10px 12px 10px 14px;
+    }
+
+    a.nav-link {
+      position: relative;
+      font-weight: 700;
+      color: $m-color_6;
+      border-radius: 0;
+      padding: 20px 0px 20px 15px;
+      -webkit-transition: all 0.35s ease;
+      transition: all 0.35s ease;
+    }
+
+    .nav-item:not(:last-child) a.nav-link {}
+
+    .nav-link {
+      .badge {
+        border-radius: 50%;
+        position: absolute;
+        right: 24px;
+        padding: 2px 5px;
+        height: 24px;
+        width: 23px;
+        font-weight: 700;
+        border: 2px solid $m-color_3;
+        transform: none;
+      }
+
+      &.active .badge {
+        border: none;
+        padding: 0 !important;
+        font-size: 15px;
+        top: 11px;
+        color: $primary !important;
+      }
+    }
+
+    a.nav-link {
+      &:hover {
+        color: $primary;
+
+        svg {
+          color: $primary;
+          fill: rgba(27, 85, 226, 0.2392156863);
+        }
+      }
+
+      svg {
+        color: $m-color_6;
+        margin-right: 6px;
+        vertical-align: middle;
+        width: 21px;
+        height: 21px;
+        fill: rgba(0, 23, 55, 0.08);
+      }
+    }
+
+    .nav-link {
+      &#all-list .badge {
+        color: $dark;
+      }
+
+      &#todo-task-done .badge {
+        color: $info;
+      }
+
+      &#todo-task-important .badge {
+        color: $m-color_16;
+      }
+    }
+  }
+}
+
+/*
+=====================
+    Todo Inbox
+=====================
+*/
+
+.todo-inbox {
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-width: 100%;
+  width: 100%;
+
+  .search {
+    display: flex;
+
+    input {
+      border: none;
+      padding: 12px 13px 12px 13px;
+      border-bottom: 1px solid $m-color_3;
+      background: transparent;
+      border-radius: 0;
+    }
+  }
+
+  .mail-menu {
+    background: $white;
+    margin: 7px 13px 7px 13px;
+    width: 25px;
+    border-radius: 0;
+    color: $m-color_9;
+    align-self: center;
+    border-bottom: 1px solid $m-color_3;
+  }
+
+  .todo-item-inner {
+    display: flex;
+  }
+
+  .message-box {
+    background: $white;
+    padding: 0 0 5px 0;
+  }
+}
+
+.todo-box-scroll {
+  position: relative;
+  margin: auto;
+  width: 100%;
+  overflow: auto;
+  height: calc(100vh - 148px);
+}
+
+.todo-inbox .todo-item {
+  cursor: pointer;
+  position: relative;
+
+  &:hover {}
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $m-color_3;
+  }
+
+  &.todo-task-trash {
+    display: none;
+
+    &.trash-show {
+      display: block;
+    }
+  }
+
+  .todo-item-inner {
+    .n-chk {
+      padding: 20px 10px 20px 10px;
+    }
+
+    .todo-content {
+      width: 100%;
+      padding: 20px 10px 20px 10px;
+    }
+
+    .todo-heading {
+      font-size: 18px;
+      font-weight: 700;
+      color: $m-color_9;
+      margin-bottom: 2px;
+      -webkit-transition: all 0.35s ease;
+      transition: all 0.35s ease;
+    }
+
+    &:hover .todo-heading {
+      -webkit-transform: translateY(0) scale(1.01);
+      transform: translateY(0) scale(1.01);
+    }
+
+    p.todo-text {
+      font-size: 14px;
+      margin-bottom: 0;
+      color: $l-dark;
+      font-weight: 600;
+      -webkit-transition: all 0.35s ease;
+      transition: all 0.35s ease;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+      max-width: calc(100vw - 730px);
+    }
+
+    &:hover .todo-text {
+      -webkit-transform: translateY(0) scale(1.01);
+      transform: translateY(0) scale(1.01);
+    }
+
+    p.meta-date {
+      margin-bottom: 0;
+      font-size: 12px;
+      font-weight: 600;
+      color: $m-color_6;
+      -webkit-transition: all 0.35s ease;
+      transition: all 0.35s ease;
+    }
+
+    &:hover p.meta-date {
+      -webkit-transform: translateY(0) scale(1.01);
+      transform: translateY(0) scale(1.01);
+    }
+
+    .priority-dropdown {
+      float: right;
+      padding: 20px 10px 20px 10px;
+
+      .dropdown-toggle {
+        font-size: 20px;
+
+        &.danger svg {
+          color: $danger;
+          fill: rgba(231, 81, 90, 0.19);
+        }
+
+        &.warning svg {
+          color: $warning;
+          fill: rgba(233, 176, 43, 0.19);
+        }
+
+        &.primary svg {
+          color: $info;
+          fill: rgba(33, 150, 243, 0.19);
+        }
+      }
+
+      .dropdown-menu {
+        left: -45px !important;
+
+        a {
+          &.dropdown-item {
+            &.active, &:active {
+              background: transparent;
+            }
+          }
+
+          svg {
+            font-size: 19px;
+            font-weight: 700;
+            margin-right: 7px;
+            vertical-align: middle;
+          }
+
+          &.danger svg {
+            color: $danger;
+          }
+
+          &.warning svg {
+            color: $warning;
+          }
+
+          &.primary svg {
+            color: $info;
+          }
+        }
+      }
+    }
+
+    .action-dropdown .dropdown-menu {
+      .permanent-delete, .revive {
+        display: none;
+      }
+    }
+  }
+
+  &.todo-task-trash {
+    .n-chk {
+      display: none;
+    }
+
+    .todo-item-inner {
+      .todo-content {
+        width: 100%;
+        padding: 20px 14px 20px 14px;
+      }
+
+      .priority-dropdown .dropdown-menu {
+        display: none;
+      }
+
+      .action-dropdown .dropdown-menu {
+        .edit, .important, .delete {
+          display: none;
+        }
+
+        .permanent-delete, .revive {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .todo-item-inner .action-dropdown {
+    .dropdown-menu {
+      left: -7px !important;
+
+      .dropdown-item {
+        &.active, &:active {
+          background-color: transparent;
+        }
+      }
+    }
+
+    float: right;
+    padding: 20px 10px 20px 10px;
+
+    .dropdown-toggle svg {
+      width: 21px;
+      height: 21px;
+      margin-top: 5px;
+      color: $m-color_6;
+    }
+
+    .show .dropdown-toggle svg {
+      color: $m-color_12;
+    }
+  }
+
+  &.todo-task-done .todo-item-inner {
+    .todo-heading {
+      text-decoration: line-through;
+    }
+
+    p {
+      &.meta-date, &.todo-text {
+        text-decoration: line-through;
+      }
+    }
+  }
+}
+
+.modal-content {
+  border: none;
+  box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
+
+  svg.close {
+    position: absolute;
+    right: -7px;
+    top: -8px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px;
+    background: $white;
+    border-radius: 5px;
+    opacity: 1;
+    color: $primary;
+    box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: .600s;
+
+    &:hover {
+      box-shadow: none;
+      transition: .600s;
+      opacity: 1 !important;
+    }
+  }
+}
+
+#todoShowListItem .task-text {
+  position: relative;
+  max-height: 260px;
+  padding: 0 16px;
+}
+
+.compose-box {
+  background-color: $white;
+  border-radius: 6px;
+
+  .compose-content {}
+}
+
+#todoShowListItem {
+  .modal-content .modal-body {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .compose-content h5 {
+    margin-bottom: 19px;
+    padding-bottom: 19px;
+    border-bottom: 1px solid $m-color_3;
+  }
+}
+
+.compose-box .compose-content {
+  h5 {
+    font-weight: 700;
+    font-size: 18px;
+    color: $dark;
+    text-align: center;
+    margin-bottom: 35px;
+  }
+
+  .task-text {
+    p {
+      word-break: break-word;
+    }
+
+    img {
+      max-width: 100%;
+    }
+  }
+}
+
+#todoShowListItem .modal-footer .btn[data-dismiss="modal"] {
+  background-color: $white;
+  color: $primary;
+  font-weight: 700;
+  border: 1px solid #e8e8e8;
+  padding: 10px 25px;
+
+  svg {
+    margin-right: 8px;
+    width: 19px;
+    height: 19px;
+  }
+}
+
+.compose-box .compose-content form {
+  svg {
+    align-self: center;
+    font-size: 19px;
+    margin-right: 14px;
+    color: $primary;
+    font-weight: 600;
+  }
+
+  #taskdescription {
+    height: 170px;
+  }
+
+  .validation-text {
+    display: none;
+    color: $danger;
+    font-weight: 600;
+    text-align: left;
+    margin-top: 6px;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+}
+
+#addTaskModal .modal-footer {
+  border-top: none;
+  padding-top: 0;
+
+  .btn {
+    &[data-dismiss="modal"] {
+      background-color: $white;
+      color: $primary;
+      font-weight: 700;
+      border: 1px solid #e8e8e8;
+      padding: 10px 25px;
+    }
+
+    &.add-tsk {
+      background-color: $primary;
+      color: $white;
+      font-weight: 600;
+      border: 1px solid $primary;
+      padding: 10px 25px;
+    }
+
+    &.edit-tsk {
+      background-color: $success;
+      color: $white;
+      font-weight: 600;
+      padding: 10px 25px;
+    }
+  }
+}
+
+.modal-backdrop {
+  background-color: $m-color_9;
+}
+
+.compose-box .compose-content form #editor-container {
+  h1, p {
+    color: $dark;
+  }
+}
+
+@media (max-width: 767px) {
+  .todo-inbox {
+    display: block;
+
+    .message-box {
+      width: 100%;
+      margin-bottom: 40px;
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .mail-box-container {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .todo-inbox {
+    .search {
+      border-bottom: 1px solid $m-color_3;
+    }
+
+    .mail-menu {
+      border-bottom: none;
+    }
+
+    .search input {
+      border-right: 1px solid $m-color_3;
+      border-bottom: none;
+    }
+
+    .todo-item .todo-item-inner p.todo-text {
+      max-width: calc(100vw - 228px);
+    }
+  }
+
+  .tab-title {
+    position: absolute;
+    z-index: 4;
+    left: -100px;
+    width: 0;
+    background: $white;
+  }
+
+  .todo-inbox {
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .modal-backdrop {
+    opacity: 0.8 !important;
+  }
+}
+
+@media (max-width: 575px) {
+  .todo-inbox .mail-item div.mail-item-heading .mail-item-inner .f-body {
+    > div {
+      display: block;
+    }
+
+    .meta-time {
+      margin-bottom: 0;
+      float: none;
+    }
+  }
+}
+
+/*
+=====================
+    IE Support
+=====================
+*/
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  /* IE10+ CSS styles go here */
+
+  .tab-title {
+    width: 100%;
+  }
+}
+
+/*
+=====================
+    Mozilla Support 
+=====================
+*/
+
+@-moz-document url-prefix() {
+  .todo-inbox .todo-item .todo-item-inner .todo-content {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+}

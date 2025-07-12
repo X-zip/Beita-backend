@@ -1,0 +1,49 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../../base/base';    // Base Variables
+
+
+/* Common styles */
+.pricing {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-justify-content: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto 2em;
+}
+
+.pricing__item {
+  position: relative;
+  text-align: center;
+  -webkit-flex: 0 1 315px;
+  flex: 0 1 315px;
+}
+
+.pricing__feature-list {
+  text-align: left;
+}
+
+.pricing__action {
+  color: inherit;
+  border: none;
+  background: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+
+//  ===============================
+//       _pricing-table Imports 
+//  ===============================
+
+@import '_pricing-table/_pricing-table-toggle';
+@import '_pricing-table/_pricing-table-animated';
+@import '_pricing-table/_pricing-table-basic';
+@import '_pricing-table/_pricing-table-basic';

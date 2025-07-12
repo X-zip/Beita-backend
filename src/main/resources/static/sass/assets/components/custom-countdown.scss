@@ -1,0 +1,87 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+
+/*
+    Countdown Simple
+*/
+
+#cd-simple {
+  display: flex;
+  justify-content: space-around;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+
+  .countdown {
+    margin-bottom: 23px;
+  }
+
+  .clock-count-container {
+    width: 100px;
+    height: 100px;
+    -webkit-box-shadow: 1px 2px 12px 0 rgba(31, 45, 61, 0.1);
+    box-shadow: 1px 2px 12px 0 rgba(31, 45, 61, 0.1);
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border: 1px solid $m-color_3;
+  }
+
+  .clock-val {
+    font-size: 35px;
+    color: $primary;
+    margin-bottom: 0;
+  }
+
+  .clock-text {
+    color: $dark;
+    font-size: 15px;
+    margin-bottom: 0;
+    margin-top: 16px;
+  }
+}
+
+/*
+    Countdown Circle
+*/
+
+#cd-circle {
+  display: flex;
+  justify-content: space-around;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+
+  .countdown {
+    margin-bottom: 23px;
+  }
+
+  .clock-count-container {
+    width: 85px;
+    height: 85px;
+    -webkit-box-shadow: 1px 2px 12px 0 rgba(31, 45, 61, 0.1);
+    box-shadow: 1px 2px 12px 0 rgba(31, 45, 61, 0.1);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border: 1px solid $m-color_3;
+    margin: 0 0 12px 0;
+  }
+
+  .clock-val {
+    font-size: 25px;
+    color: $primary;
+    margin-bottom: 0;
+  }
+
+  .clock-text {
+    color: $dark;
+    font-size: 15px;
+    margin-bottom: 0;
+    margin-top: 16px;
+  }
+}

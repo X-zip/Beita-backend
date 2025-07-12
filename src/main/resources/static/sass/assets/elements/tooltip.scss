@@ -1,0 +1,99 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+
+.tooltip-inner {
+  border-radius: 6px;
+}
+
+.tooltip .tooltip-item {
+  color: $white;
+  padding: 0 9px;
+}
+
+.tooltip-section h6 {
+  color: $dark;
+  font-size: 0.875rem;
+  margin-top: 25px;
+  margin-bottom: 20px;
+}
+
+/*
+	==================
+		Colors
+	=================
+*/
+
+/*
+	Tooltips
+*/
+
+/*		Tooltip Inner 	*/
+
+.tooltip-primary .tooltip-inner {
+  color: $primary;
+  background-color: $l-primary;
+}
+
+.tooltip-success .tooltip-inner {
+  color: $success;
+  background-color: $l-success;
+}
+
+.tooltip-info .tooltip-inner {
+  color: $info;
+  background-color: $l-info;
+}
+
+.tooltip-danger .tooltip-inner {
+  color: $danger;
+  background-color: $l-danger;
+}
+
+.tooltip-warning .tooltip-inner {
+  color: $warning;
+  background-color: $l-warning;
+}
+
+.tooltip-secondary .tooltip-inner {
+  color: $secondary;
+  background-color: $l-secondary;
+}
+
+.tooltip-dark .tooltip-inner {
+  color: $dark;
+  background-color: $l-dark;
+}
+
+/*		Tooltip arrow 		*/
+
+.tooltip-primary .arrow:before {
+  border-top-color: $l-primary;
+}
+
+.tooltip-success .arrow:before {
+  border-top-color: $l-success;
+}
+
+.tooltip-info .arrow:before {
+  border-top-color: $l-info;
+}
+
+.tooltip-danger .arrow:before {
+  border-top-color: $l-danger;
+}
+
+.tooltip-warning .arrow:before {
+  border-top-color: $l-warning;
+}
+
+.tooltip-secondary .arrow:before {
+  border-top-color: $l-secondary;
+}
+
+.tooltip-dark .arrow:before {
+  border-top-color: $l-dark;
+}

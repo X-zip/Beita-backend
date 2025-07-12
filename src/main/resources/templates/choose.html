@@ -1,0 +1,279 @@
+<!-- Copyright (c) 2019-2020 昱清科技 all rights reserved. -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <title>校园树洞</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico"/>
+    <link href="assets/css/loader.css" rel="stylesheet" type="text/css" />
+    <script src="assets/js/loader.js"></script>
+
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/plugins.css" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+    <link href="plugins/apex/apexcharts.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/dashboard/dash_1.css" rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+</head>
+<body>
+
+    <!--  BEGIN NAVBAR  -->
+    <div th:insert="component :: navBar"></div>
+    <!--  END NAVBAR  -->
+
+    <!--  BEGIN MAIN CONTAINER  -->
+    <div class="main-container" id="container">
+
+        <div class="overlay"></div>
+        <div class="search-overlay"></div>
+
+        <!--  BEGIN SIDEBAR  -->
+       <div class="sidebar-wrapper sidebar-theme"  th:insert="component :: pageSidebar"></div>
+        <!--  END SIDEBAR  -->
+        
+        <!--  BEGIN CONTENT AREA  -->
+        <div id="content" class="main-content">
+            <div class="layout-px-spacing">
+                <div class="row layout-top-spacing">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+				        <div class="table-responsive">
+				        <div class="form-group col-lg-6 col-12 mx-auto" >
+					     	<input type="search" id="site-search" name="q" class="form-control">	
+							<button class="btn btn-primary mb-2" onclick="search()" >标题搜索</button>
+						</div>
+				        <table border="1" class="table table-bordered mb-4">
+						    <tr>
+						        <td>编号</td>
+						        <td>内容</td>
+						        <td>分类</td>
+						        <td>阅读数量</td>
+						        <td>点赞数量</td>
+						        <td>评论数量</td>
+						        <td>发布时间</td>
+						        <td>加精</td>
+						        <td>置顶</td>
+						        <td>删除</td>
+						        <td>审核</td>
+						    </tr>
+						    <tr th:each="task : ${taskList}">
+						        <td th:text="${task.id}" ><input name="idValue" type="text" th:value="${task.id}"></td>
+						        <td th:text="${task.content}" style="max-width:500px"></td>
+						        <td th:text="${task.radioGroup}"></td>
+						        <td th:text="${task.watchNum}"></td>
+						        <td th:text="${task.likeNum}"></td>
+						        <td th:text="${task.commentNum}"></td>
+						        <td th:text="${task.c_time}"></td>
+						        <td th:if="${task.choose == 0}" >
+						         <button class="btn btn-primary mb-2" style="min-width:60px;font-size:10px;padding:5px" type="button" id="addChoose" >加精</button>
+						        </td>
+						        <td th:if="${task.choose == 1}">
+						         <button class="btn btn-primary mb-2" style="min-width:60px;font-size:10px;padding:5px" type="button" id="removeChoose">取消</button>
+						        </td>
+						        <td th:if="${#strings.substring(task.c_time,0,4)<'2100'}" >
+						         <button class="btn btn-primary mb-2" style="min-width:60px;font-size:10px;padding:5px" type="button" id="addTop" >置顶</button>
+						        </td>
+						        <td th:if="${#strings.substring(task.c_time,0,4)>='2100'}">
+						         <button class="btn btn-primary mb-2" style="min-width:60px;font-size:10px;padding:5px" type="button" id="removeTop">取消</button>
+						        </td>
+						        <td th:if="${task.is_delete == 0}" >
+						         <button class="btn btn-primary mb-2" style="min-width:60px;font-size:10px;padding:5px" type="button" id="delete" >删除</button>
+						        </td>
+						        <td th:if="${task.is_delete == 1}">
+						         <button class="btn btn-primary mb-2" style="min-width:60px;font-size:10px;padding:5px" type="button" id="removeDelete">恢复</button>
+						        </td>
+						        <td th:if="${task.is_complaint == 0}" >
+						         <button class="btn btn-primary mb-2" style="min-width:60px;font-size:10px;padding:5px" type="button" id="hide" >反审核</button>
+						        </td>
+						        <td th:if="${task.is_complaint == 1}">
+						         <button class="btn btn-primary mb-2" style="min-width:60px;font-size:10px;padding:5px" type="button" id="removeHide">审核</button>
+						        </td>
+						        <td th:if="${task.is_complaint == 0}" >
+						    </tr>
+					    </table>
+				        </div>
+				    	<div class="paginating-container pagination-solid">
+						<input type="hidden" id="curPage" value="${curPage}"></input>
+						<ul class="pagination" id="pageListId">
+							<li class="btn btn-primary mb-2" style="margin:10px;" th:if="${curPage > 0}"><a style="color:white;margin:10px;" th:href="'/addChoose?length=' + ${(curPage-1)*50}" th:text="上一页" th:if="${curPage > 0}"></a></li>
+							<li class="btn btn-primary mb-2" style="margin:10px;" th:if="${number == 50 }"><a style="color:white;margin:10px;" th:href="'/addChoose?length=' + ${(curPage+1)*50}" th:text="下一页"></a></li>
+						</ul>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  END CONTENT AREA  -->
+
+
+    </div>
+    <!-- END MAIN CONTAINER -->
+
+ 
+    <script src="assets/js/libs/jquery-3.1.1.min.js"></script>
+    <script src="bootstrap/js/popper.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="assets/js/app.js"></script>
+     <script>
+        $(document).ready(function() {
+            App.init();
+        });
+    </script>
+    <script src="assets/js/custom.js"></script>
+    <!-- END GLOBAL MANDATORY SCRIPTS -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    <script src="plugins/apex/apexcharts.min.js"></script>
+    <script src="assets/js/dashboard/dash_1.js"></script>
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+<script th:inline="javascript" type="text/javascript">
+function search()
+{
+    var content = document.getElementById("site-search").value;
+    window.location.href = "/getChooseBySearch?search="+content
+}
+
+$(document).on('click', '#addChoose', function (){
+    var checkID = $(this).parents("tr").find("td").eq(0).text();
+    console.log(checkID)
+    $.ajax({
+        type: "get",
+        url: "/addChooseList?id="+checkID+"&&choose=1",
+        dataType: "text",// 设置你收到服务器数据的格式，根据服务器返回类型填：json、text
+        //contentType : 'application/json;charset=utf-8',//设置你发送给服务器的格式: application/json;charset=utf-8
+        success: function(data){
+        	setTimeout("window.location.reload()",100);     
+        }
+    }); 
+})
+
+$(document).on('click', '#removeChoose', function (){
+	var checkID = $(this).parents("tr").find("td").eq(0).text();
+    $.ajax({
+        type: "get",
+        url: "/addChooseList?id="+checkID+"&&choose=0",
+        dataType: "text",// 设置你收到服务器数据的格式，根据服务器返回类型填：json、text
+        //contentType : 'application/json;charset=utf-8',//设置你发送给服务器的格式: application/json;charset=utf-8
+        success: function(data){
+        	setTimeout("window.location.reload()",100);   
+        }
+    }); 
+})
+
+$(document).on('click', '#delete', function (){
+    var checkID = $(this).parents("tr").find("td").eq(0).text();
+    console.log(checkID)
+    $.ajax({
+        type: "get",
+        url: "/addDeleteList?id="+checkID+"&&is_delete=1",
+        dataType: "text",// 设置你收到服务器数据的格式，根据服务器返回类型填：json、text
+        //contentType : 'application/json;charset=utf-8',//设置你发送给服务器的格式: application/json;charset=utf-8
+        success: function(data){
+        	setTimeout("window.location.reload()",100);     
+        }
+    }); 
+})
+
+$(document).on('click', '#removeDelete', function (){
+	var checkID = $(this).parents("tr").find("td").eq(0).text();
+    $.ajax({
+        type: "get",
+        url: "/addDeleteList?id="+checkID+"&&is_delete=0",
+        dataType: "text",// 设置你收到服务器数据的格式，根据服务器返回类型填：json、text
+        //contentType : 'application/json;charset=utf-8',//设置你发送给服务器的格式: application/json;charset=utf-8
+        success: function(data){
+        	setTimeout("window.location.reload()",100);   
+        }
+    }); 
+})
+
+$(document).on('click', '#hide', function (){
+    var checkID = $(this).parents("tr").find("td").eq(0).text();
+    console.log(checkID)
+    $.ajax({
+        type: "get",
+        url: "/addHideList?id="+checkID+"&&is_complaint=1",
+        dataType: "text",// 设置你收到服务器数据的格式，根据服务器返回类型填：json、text
+        //contentType : 'application/json;charset=utf-8',//设置你发送给服务器的格式: application/json;charset=utf-8
+        success: function(data){
+        	setTimeout("window.location.reload()",100);     
+        }
+    }); 
+})
+
+$(document).on('click', '#removeHide', function (){
+	var checkID = $(this).parents("tr").find("td").eq(0).text();
+    $.ajax({
+        type: "get",
+        url: "/addHideList?id="+checkID+"&&is_complaint=0",
+        dataType: "text",// 设置你收到服务器数据的格式，根据服务器返回类型填：json、text
+        //contentType : 'application/json;charset=utf-8',//设置你发送给服务器的格式: application/json;charset=utf-8
+        success: function(data){
+        	setTimeout("window.location.reload()",100);   
+        }
+    }); 
+})
+
+$(document).on('click', '#addTop', function (){
+    var checkID = $(this).parents("tr").find("td").eq(0).text();
+    console.log(checkID)
+    $.ajax({
+        type: "get",
+        url: "/addTopList?id="+checkID+"&&is_top=1",
+        dataType: "text",// 设置你收到服务器数据的格式，根据服务器返回类型填：json、text
+        //contentType : 'application/json;charset=utf-8',//设置你发送给服务器的格式: application/json;charset=utf-8
+        success: function(data){
+        	setTimeout("window.location.reload()",100);     
+        }
+    }); 
+})
+
+$(document).on('click', '#removeTop', function (){
+	var checkID = $(this).parents("tr").find("td").eq(0).text();
+    $.ajax({
+        type: "get",
+        url: "/addTopList?id="+checkID+"&&is_top=0",
+        dataType: "text",// 设置你收到服务器数据的格式，根据服务器返回类型填：json、text
+        //contentType : 'application/json;charset=utf-8',//设置你发送给服务器的格式: application/json;charset=utf-8
+        success: function(data){
+        	setTimeout("window.location.reload()",100);   
+        }
+    }); 
+})
+
+$(document).on('click', '#addBanner', function (){
+    var checkID = $(this).parents("tr").find("td").eq(0).text();
+    console.log(checkID)
+    $.ajax({
+        type: "get",
+        url: "/addBannerList?id="+checkID+"&&is_banner=1",
+        dataType: "text",// 设置你收到服务器数据的格式，根据服务器返回类型填：json、text
+        //contentType : 'application/json;charset=utf-8',//设置你发送给服务器的格式: application/json;charset=utf-8
+        success: function(data){
+        	setTimeout("window.location.reload()",100);     
+        }
+    }); 
+})
+
+$(document).on('click', '#removeBanner', function (){
+	var checkID = $(this).parents("tr").find("td").eq(0).text();
+    $.ajax({
+        type: "get",
+        url: "/addBannerList?id="+checkID+"&&is_banner=0",
+        dataType: "text",// 设置你收到服务器数据的格式，根据服务器返回类型填：json、text
+        //contentType : 'application/json;charset=utf-8',//设置你发送给服务器的格式: application/json;charset=utf-8
+        success: function(data){
+        	setTimeout("window.location.reload()",100);   
+        }
+    }); 
+})
+</script>
+
+</body>
+</html>

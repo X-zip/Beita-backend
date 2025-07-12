@@ -1,0 +1,17 @@
+[SECRET]
+[APPID]
+[VERIFY]
+[PASSWORD]
+[ACCESS_KEY]
+[SECRET_KEY]
+[BUCKET]
+[PIC_URL]
+[TEMPLATE_ID]
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
+spring.mail.host=
+spring.mail.port=
+spring.mail.username=
+spring.mail.password=
+spring.mail.from=

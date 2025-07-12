@@ -1,0 +1,414 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+/*
+    ============================
+        Pagination container
+    =============================
+*/
+
+.paginating-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0;
+
+  .prev svg, .next svg {
+    width: 18px;
+    height: 18px;
+    vertical-align: text-bottom;
+  }
+
+  .pagination {
+    margin-bottom: 0;
+  }
+
+  li {
+    a {
+      padding: 10px 15px;
+      font-weight: 600;
+      color: $dark;
+    }
+
+    padding: 10px 0;
+    font-weight: 600;
+    color: $dark;
+    border-radius: 4px;
+
+    &:not(:last-child) {
+      margin-right: 4px;
+    }
+  }
+}
+
+/*
+    Default Style
+*/
+
+.pagination-default {
+  li {
+    border: 2px solid $m-color_3;
+
+    &:hover {
+      border: 2px solid $primary !important;
+
+      a {
+        color: $primary;
+      }
+    }
+
+    &.active {
+      border: 2px solid $primary !important;
+      color: $primary;
+    }
+
+    a.active:hover, &.active a {
+      color: $primary;
+    }
+  }
+
+  .prev {
+    border: 2px solid $m-color_3;
+
+    &:hover {
+      border: 2px solid $primary;
+
+      a, svg {
+        color: $primary;
+      }
+    }
+  }
+
+  .next {
+    border: 2px solid $m-color_3;
+
+    &:hover {
+      border: 2px solid $primary;
+
+      a, svg {
+        color: $primary;
+      }
+    }
+  }
+}
+
+/* 
+    Solid Style
+*/
+
+.pagination-solid {
+  li {
+    background-color: $m-color_3;
+
+    &:hover a {
+      color: $primary;
+    }
+
+    &.active {
+      background-color: $primary !important;
+      color: $white;
+    }
+
+    a.active:hover, &.active a {
+      color: $white;
+    }
+  }
+
+  .prev {
+    background-color: $m-color_3;
+
+    &:hover {
+      background-color: $primary;
+
+      a, svg {
+        color: $white;
+      }
+    }
+  }
+
+  .next {
+    background-color: $m-color_3;
+
+    &:hover {
+      background-color: $primary;
+
+      a, svg {
+        color: $white;
+      }
+    }
+  }
+}
+
+/*    
+    ===================
+        No Spacing
+    ===================
+*/
+
+.pagination-no_spacing {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0;
+
+  .prev {
+    background-color: $m-color_3;
+    border-radius: 50%;
+    padding: 10px 11px;
+    margin-right: 5px;
+
+    &:hover {
+      background-color: $primary;
+
+      svg {
+        color: $white;
+      }
+    }
+  }
+
+  .next {
+    background-color: $m-color_3;
+    border-radius: 50%;
+    padding: 10px 11px;
+    margin-left: 5px;
+
+    &:hover {
+      background-color: $primary;
+
+      svg {
+        color: $white;
+      }
+    }
+  }
+
+  .prev svg, .next svg {
+    width: 18px;
+    height: 18px;
+    vertical-align: text-bottom;
+  }
+
+  .pagination {
+    margin-bottom: 0;
+  }
+
+  li {
+    &:first-child {
+      border-top-left-radius: 50px;
+      border-bottom-left-radius: 50px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 50px;
+      border-bottom-right-radius: 50px;
+    }
+
+    background-color: $m-color_3;
+
+    a {
+      padding: 10px 15px;
+      font-weight: 600;
+      color: $dark;
+
+      &.active {
+        background-color: $primary !important;
+        border-radius: 6px;
+        color: $white;
+
+        &:hover {
+          color: $white;
+        }
+      }
+
+      &:hover {
+        color: $primary;
+      }
+    }
+
+    padding: 10px 0;
+    font-weight: 600;
+    color: $dark;
+  }
+}
+
+/*
+    =======================
+        Custom Pagination
+    =======================
+*/
+
+/*
+    Custom Solid
+*/
+
+.pagination-custom_solid {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0;
+
+  .prev {
+    background-color: $m-color_3;
+    border-radius: 50%;
+    padding: 10px 11px;
+    margin-right: 25px;
+
+    &:hover {
+      background-color: $primary;
+
+      svg {
+        color: $white;
+      }
+    }
+  }
+
+  .next {
+    background-color: $m-color_3;
+    border-radius: 50%;
+    padding: 10px 11px;
+    margin-left: 25px;
+
+    &:hover {
+      background-color: $primary;
+
+      svg {
+        color: $white;
+      }
+    }
+  }
+
+  .prev svg, .next svg {
+    width: 18px;
+    height: 18px;
+    vertical-align: text-bottom;
+  }
+
+  .pagination {
+    margin-bottom: 0;
+  }
+
+  li {
+    &:first-child {
+      border-top-left-radius: 50px;
+      border-bottom-left-radius: 50px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 50px;
+      border-bottom-right-radius: 50px;
+    }
+
+    background-color: $m-color_3;
+
+    a {
+      padding: 10px 15px;
+      font-weight: 600;
+      color: $dark;
+
+      &.active {
+        background-color: $primary !important;
+        border-radius: 6px;
+        color: $white;
+
+        &:hover {
+          color: $white;
+        }
+      }
+
+      &:hover {
+        color: $primary;
+      }
+    }
+
+    padding: 10px 0;
+    font-weight: 600;
+    color: $dark;
+  }
+}
+
+/*
+    Custom Outline
+*/
+
+.pagination-custom_outline {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0;
+
+  .prev {
+    border: 2px solid $m-color_3;
+    border-radius: 50%;
+    padding: 8px 11px;
+    margin-right: 25px;
+
+    &:hover {
+      border: 2px solid $primary;
+
+      svg {
+        color: $primary;
+      }
+    }
+  }
+
+  .next {
+    border: 2px solid $m-color_3;
+    border-radius: 50%;
+    padding: 8px 11px;
+    margin-left: 25px;
+
+    &:hover {
+      border: 2px solid $primary;
+
+      svg {
+        color: $primary;
+      }
+    }
+  }
+
+  .prev svg, .next svg {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+  }
+
+  .pagination {
+    margin-bottom: 0;
+  }
+
+  li {
+    padding: 10px 0;
+    font-weight: 600;
+    color: $dark;
+    border: 1px solid $m-color_3;
+
+    &.active {
+      background-color: $m-color_3;
+    }
+
+    &:first-child {
+      border-top-left-radius: 50px;
+      border-bottom-left-radius: 50px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 50px;
+      border-bottom-right-radius: 50px;
+    }
+
+    a {
+      padding: 10px 15px;
+      font-weight: 600;
+      color: $dark;
+
+      &:hover {
+        color: $primary;
+      }
+    }
+
+    &.active a {
+      background-color: #ffffff;
+      border: 2px solid $primary !important;
+      border-radius: 6px;
+      color: $primary;
+    }
+  }
+}

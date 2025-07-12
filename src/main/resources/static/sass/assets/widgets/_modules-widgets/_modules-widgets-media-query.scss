@@ -1,0 +1,162 @@
+/*
+    =====================
+        Media Query
+    =====================
+*/
+
+@media (max-width: 1199px) {
+  .widget.widget-activity-two .widget-heading {
+    margin-bottom: 21px;
+  }
+
+  .widget-activity-two .mt-container {
+    position: relative;
+    height: 177px;
+  }
+}
+
+@media (max-width: 575px) {
+  .widget-card-four .w-content-img img {
+    height: 94px;
+  }
+
+  .widget-notification-one .noti-action a span {
+    display: none;
+  }
+
+  .widget-statistic .col-12:not(:last-child) .widget-one_hybrid {
+    margin-bottom: 40px;
+  }
+}
+
+
+
+
+/*
+    ====================
+        Media Object
+    ====================
+*/
+
+@media (min-width: 1200px) {
+  .table-responsive {
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 1430px) and (min-width: 1200px) {
+  /*
+      ===========================
+          Top Selling Product
+      ===========================
+  */
+
+  .widget-table-two .table .td-content img, .widget-table-three .table .td-content img {
+    display: block;
+  }
+
+  /*
+      ===========================
+          Top Selling Product
+      ===========================
+  */
+}
+
+@media (max-width: 767px) {
+  .widget-notification-two button {
+    display: none;
+  }
+}
+
+@media (max-width: 575px) {
+  /*
+      ==================
+          Total Sales
+      ==================
+  */
+
+  .widget-two .w-chart {
+    position: inherit;
+  }
+
+  /*
+      ========================
+          Recent Activities
+      ========================
+  */
+
+  .widget-activity-one .mt-container {
+    height: auto;
+  }
+
+  /*
+      ===========================
+          Top Selling Product
+      ===========================
+  */
+
+  .widget-table-two .table {
+    > {
+      thead > tr > th {
+        padding-right: 15px;
+      }
+
+      tbody > tr > td {
+        border-top: none;
+        padding-top: 0;
+        padding-bottom: 0;
+        padding-right: 12px;
+        padding-left: 12px;
+      }
+    }
+
+    .td-content {
+      &.customer-name {
+        color: $m-color_9;
+        text-align: center;
+      }
+
+      &.product-brand {
+        text-align: center;
+      }
+
+      img {
+        display: block;
+        margin: 0 auto 5px auto;
+      }
+    }
+  }
+
+  /*
+      ===========================
+          Top Selling Product
+      ===========================
+  */
+
+  .widget-table-three .table {
+    > {
+      thead > tr > th {
+        padding-right: 15px;
+      }
+
+      tbody > tr > td {
+        border-top: none;
+        padding-top: 0;
+        padding-bottom: 0;
+        padding-right: 12px;
+        padding-left: 12px;
+      }
+    }
+
+    .td-content {
+      &.product-name {
+        text-align: center;
+      }
+
+      img {
+        display: block;
+        margin: 0 auto 5px auto;
+      }
+    }
+  }
+}

@@ -1,0 +1,79 @@
+/* 
+    Pricing
+*/
+
+#pricingWrapper {
+  padding: 2.3rem 0 2.3rem 0;
+
+  .stacked {
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    transition: all 0.2s;
+    -webkit-transition-delay: 0s;
+    -moz-transition-delay: 0s;
+    transition-delay: 0s;
+    position: relative;
+    background: $white;
+    border: 1px solid $m-color_4;
+
+    .card-header, .card-footer {
+      padding: 30px;
+      background: $white;
+      border-bottom: 1px solid $m-color_4;
+      color: $dark;
+    }
+
+    .card-header .card-price {
+      -webkit-transition: all 0.2s;
+      -moz-transition: all 0.2s;
+      transition: all 0.2s;
+      -webkit-transition-delay: 0s;
+      -moz-transition-delay: 0s;
+      transition-delay: 0s;
+      color: $dark;
+      display: block;
+      width: 6.25rem;
+      height: 6.25rem;
+      margin-top: -30px;
+      border-radius: 0.25rem;
+      text-align: center;
+      line-height: 6.25rem;
+      font-size: 1.875rem;
+      -webkit-box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
+      -moz-box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
+      box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
+      border-radius: 0.25rem;
+      border: 2px solid $primary;
+      background: $white;
+      font-weight: 700;
+    }
+
+    &:hover .card-price {
+      -webkit-transform: translate(0, -10px);
+      -moz-transform: translate(0, -10px);
+      transform: translate(0, -10px);
+    }
+
+    .card-header p {
+      font-weight: 600;
+      font-size: 15px;
+      color: $dark;
+    }
+
+    .card-body {
+      .list-group-minimal .list-group-item {
+        margin-bottom: 12px;
+        padding: 0;
+        background: transparent;
+        border: 0;
+        font-weight: 600;
+        font-size: 14px;
+        color: $dark;
+      }
+
+      a {
+        padding: 15px 10px;
+      }
+    }
+  }
+}

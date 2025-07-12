@@ -1,0 +1,449 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+.section {
+  -webkit-box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.0901960784), 0 1px 20px 0 rgba(0, 0, 0, 0.08), 0px 1px 11px 0px rgba(0, 0, 0, 0.06);
+  -moz-box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.0901960784), 0 1px 20px 0 rgba(0, 0, 0, 0.08), 0px 1px 11px 0px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.0901960784), 0 1px 20px 0 rgba(0, 0, 0, 0.08), 0px 1px 11px 0px rgba(0, 0, 0, 0.06);
+}
+.layout-spacing {
+    padding-bottom: 25px;
+}
+.form-control {
+  padding: 8px 8px;
+}
+
+.blockui-growl-message {
+  display: none;
+  text-align: left;
+  padding: 15px;
+  background-color: $success;
+  color: $white;
+  border-radius: 3px;
+
+  i {
+    font-size: 20px;
+  }
+}
+
+.general-info .info h6, .about .info h5, .work-platforms .info h5, .contact .info h5, .social .info h5, .skill .info h5, .edu-experience .info h5, .work-experience .info h5 {
+  color: $dark;
+  margin: 4px 8px 40px 8px;
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+/*
+    General Infomation
+*/
+
+.general-info {
+  background-color: $white;
+  border-radius: 6px;
+
+  .info, .save-info {
+    padding: 20px;
+  }
+
+  .info {
+    .form {
+      width: 92%;
+    }
+
+    .upload {
+      border-right: 1px solid $m-color_2;
+
+      p {
+        font-size: 14px;
+        font-weight: 600;
+        color: $primary;
+
+        i {
+          font-size: 22px;
+          color: $primary;
+          vertical-align: middle;
+        }
+      }
+    }
+
+    label {
+      color: $m-color_6;
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    .dropify-wrapper {
+      width: 120px;
+      height: 120px;
+      border: none;
+      border-radius: 6px;
+
+      .dropify-preview {
+        background-color: $white;
+        padding: 0;
+      }
+
+      .dropify-clear {
+        font-size: 16px;
+        padding: 4px 8px;
+        color: $white;
+        border: none;
+
+        &:hover {
+          background-color: transparent;
+        }
+      }
+
+      .dropify-preview .dropify-infos .dropify-infos-inner p.dropify-infos-message {
+        padding-top: 27px;
+
+        &::before {
+          height: 20px;
+          position: absolute;
+          top: -1px;
+          left: 45%;
+          color: $white;
+          -webkit-transform: translate(-50%, 0);
+          transform: translate(-50%, 0);
+          background: transparent;
+          width: 0;
+          height: 0;
+          font-size: 28px;
+          width: 24px;
+          content: " ";
+          background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-upload-cloud'%3e%3cpolyline points='16 16 12 12 8 16'%3e%3c/polyline%3e%3cline x1='12' y1='12' x2='12' y2='21'%3e%3c/line%3e%3cpath d='M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3'%3e%3c/path%3e%3cpolyline points='16 16 12 12 8 16'%3e%3c/polyline%3e%3c/svg%3e");
+          height: 20px;
+        }
+      }
+
+      &.touch-fallback {
+        border: 1px solid $m-color_2;
+
+        .dropify-preview .dropify-infos .dropify-infos-inner {
+          padding: 0;
+        }
+
+        .dropify-clear {
+          color: $m-color_9;
+        }
+
+        .dropify-preview .dropify-infos .dropify-infos-inner p.dropify-filename {
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+}
+
+/*
+    Image upload
+*/
+
+/*
+    About
+*/
+
+.about {
+  background-color: $white;
+  border-radius: 6px;
+
+  .info, .save-info {
+    padding: 20px;
+  }
+
+  .info label {
+    color: $m-color_6;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+}
+
+/*
+    Education and Experience
+*/
+
+.work-platforms {
+  background-color: $white;
+  border-radius: 6px;
+
+  .info {
+    padding: 20px;
+  }
+
+  .platform-div {
+    &:not(:last-child) {
+      margin-bottom: 55px;
+      padding-bottom: 55px;
+      border-bottom: 2px solid $m-color_3;
+    }
+
+    &:last-child {
+      margin-bottom: 40px;
+    }
+  }
+}
+
+/*
+    Contact
+*/
+
+.contact {
+  background-color: $white;
+  border-radius: 6px;
+
+  .info, .save-info {
+    padding: 20px;
+  }
+
+  .info label {
+    color: $m-color_6;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+}
+
+/*
+    Social
+*/
+
+.social {
+  background-color: $white;
+  border-radius: 6px;
+
+  .info, .save-info {
+    padding: 20px;
+  }
+
+  .input-group-prepend .input-group-text {
+    border-radius: 6px;
+    color: $white;
+    border: none;
+  }
+}
+
+.input-group .input-group-prepend .input-group-text svg {
+  color: $primary;
+}
+
+.social .info input {
+  border-radius: 0.25rem !important;
+}
+
+/*
+    Skills
+*/
+
+.skill {
+  background-color: $white;
+  border-radius: 6px;
+
+  .input-form {
+    margin-bottom: 24px;
+    display: flex;
+    width: 50%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  input[type="text"] {
+    margin-right: 10px;
+  }
+
+  #add-skills {}
+
+  .info {
+    padding: 20px;
+  }
+
+  .skill-name {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+
+  .save-info {
+    padding: 20px;
+  }
+
+  .info label {
+    text-transform: uppercase;
+    color: $l-primary;
+  }
+
+  .custom-progress {
+    &.progress-up .range-count {
+      margin-top: 11px;
+    }
+
+    &.progress-down .range-count {
+      margin-top: 15px;
+    }
+  }
+
+  .range-count {
+    font-weight: 700;
+    color: $dark;
+
+    .range-count-number {
+      display: inline-block;
+      background: #ffffff;
+      padding: 3px 8px;
+      border-radius: 5px;
+      color: $primary;
+      border: 1px solid $m-color_3;
+    }
+  }
+
+  .custom-progress {
+    &.top-right .range-count, &.bottom-right .range-count {
+      text-align: right;
+    }
+  }
+
+  .progress-range-counter {
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      background: $primary;
+      cursor: pointer;
+      height: 16px;
+      width: 16px;
+      margin-top: -4px;
+      -webkit-transition: all 0.35s ease;
+      transition: all 0.35s ease;
+    }
+
+    &:active::-webkit-slider-thumb {
+      -webkit-transform: scale(1.2);
+      transform: scale(1.2);
+    }
+
+    &:focus::-webkit-slider-thumb {
+      background: $primary;
+      cursor: pointer;
+      height: 16px;
+      width: 16px;
+      margin-top: -4px;
+      box-shadow: none;
+    }
+
+    &::-moz-range-thumb {
+      background: $primary;
+      cursor: pointer;
+      height: 16px;
+      width: 16px;
+      margin-top: -4px;
+    }
+  }
+}
+
+/*
+    Education and Experience
+*/
+
+.edu-experience {
+  background-color: $white;
+  border-radius: 6px;
+
+  .edu-section {
+    &:not(:last-child) {
+      margin-bottom: 55px;
+      padding-bottom: 55px;
+      border-bottom: 2px solid $m-color_3;
+    }
+
+    &:last-child {
+      margin-bottom: 40px;
+    }
+  }
+
+  .info, .save-info {
+    padding: 20px;
+  }
+
+  .info label {
+    color: $m-color_6;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+}
+
+/*
+    Work Experience
+*/
+
+.work-experience {
+  background-color: $white;
+  border-radius: 6px;
+
+  .work-section {
+    &:not(:last-child) {
+      margin-bottom: 55px;
+      padding-bottom: 55px;
+      border-bottom: 2px solid $m-color_3;
+    }
+
+    &:last-child {
+      margin-bottom: 40px;
+    }
+  }
+
+  .info, .save-info {
+    padding: 20px;
+  }
+
+  .info label {
+    color: $m-color_6;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+}
+
+/*
+    Footer
+*/
+
+.account-settings-footer {
+  position: fixed;
+  bottom: 0;
+  width: calc(100% - 96px);
+  background: $dark;
+  padding: 12px 20px;
+  -webkit-box-shadow: -2px -9px 20px rgba(126, 142, 177, 0.12);
+  -moz-box-shadow: -2px -9px 20px rgba(126, 142, 177, 0.12);
+  box-shadow: -2px -9px 20px rgba(126, 142, 177, 0.12);
+  border-top: 1px solid $m-color_1;
+  border-radius: 6px 6px 0 0;
+  z-index: 5;
+
+  .as-footer-container {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 991px) {
+  .account-settings-container .account-content {
+    width: 100%;
+    padding: 0;
+  }
+
+  .account-settings-footer {
+    width: calc(100% - 29px);
+  }
+}
+
+@media (max-width: 767px) {
+  .general-info .info .upload {
+    border-right: none;
+  }
+
+  .skill .input-form {
+    width: 100%;
+  }
+}

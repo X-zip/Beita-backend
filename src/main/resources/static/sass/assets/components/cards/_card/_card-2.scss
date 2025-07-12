@@ -1,0 +1,34 @@
+/*
+	Component Card 2
+*/
+
+.component-card_2 {
+  border: 1px solid $m-color_3;
+  border-radius: 6px;
+  width: 18rem;
+  margin: 0 auto;
+  box-shadow: 4px 6px 10px -3px $m-color_4;
+
+  .card-body {
+    padding: 22px 20px;
+  }
+
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+  }
+
+  .card-text {
+    color: $m-color_6;
+    line-height: 22px;
+  }
+
+  a.btn-primary {
+    margin: 26px 0 0 0;
+    padding: 10px 16px;
+    background: $m-color_17 !important;
+    border-color: $m-color_17;
+  }
+}

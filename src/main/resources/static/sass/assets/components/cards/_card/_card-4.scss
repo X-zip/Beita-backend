@@ -1,0 +1,65 @@
+/*
+	Component Card 4
+*/
+
+.component-card_4 {
+  width: 30rem;
+  margin: 0 auto;
+  border: none;
+  border: 1px solid $m-color_3;
+  border-radius: 8px;
+  -webkit-box-shadow: 4px 6px 10px -3px $m-color_4;
+  box-shadow: 4px 6px 10px -3px $m-color_4;
+
+  .card-body {
+    padding: 0;
+    display: flex;
+  }
+
+  .user-profile {
+    align-self: center;
+    padding: 0 25px;
+  }
+
+  img {
+    border-radius: 50%;
+  }
+
+  .user-info {
+    padding: 24px 8px 24px 0px;
+  }
+
+  .card-user_name {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .card-user_occupation {
+    color: $m-color_6;
+    font-size: 13px;
+  }
+
+  .card-star_rating {
+    span {
+      display: inline-block;
+      padding: 0px 8px;
+      font-size: 15px;
+      border-radius: 50px;
+      margin-bottom: 22px;
+    }
+
+    svg {
+      width: 16px;
+      vertical-align: bottom;
+    }
+  }
+
+  .card-text {
+    color: $m-color_9;
+    font-size: 14px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    line-height: 23px;
+  }
+}

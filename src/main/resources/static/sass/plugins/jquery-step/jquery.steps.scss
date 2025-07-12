@@ -1,0 +1,990 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+/*
+    Common 
+*/
+
+.wizard, .tabcontrol {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+
+.wizard a, .tabcontrol a {
+  outline: 0;
+}
+
+.wizard ul, .tabcontrol ul {
+  list-style: none !important;
+  padding: 0;
+  margin: 0;
+}
+
+.wizard ul > li, .tabcontrol ul > li {
+  display: block;
+  padding: 0;
+}
+
+/* Accessibility */
+
+.wizard > .steps .current-info, .tabcontrol > .steps .current-info, .wizard > .content > .title, .tabcontrol > .content > .title {
+  position: absolute;
+  left: -999em;
+}
+
+/*
+    Wizard
+*/
+
+.wizard {
+  > .steps {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+
+  &.vertical {
+    > .steps {
+      display: inline;
+      float: left;
+      width: 30%;
+    }
+
+    > .steps > ul > li {
+      float: none;
+      width: 100%;
+    }
+
+    > .content {
+      display: inline;
+      float: left;
+      margin: 0 2.5% 0.5em 2.5%;
+      width: 65%;
+    }
+
+    > .actions {
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+
+    > .actions > ul > li {
+      margin: 0 0 0 1em;
+    }
+  }
+
+  > {
+    .steps {
+      .number {
+        font-size: 1.429em;
+      }
+
+      > ul > li {
+        float: left;
+      }
+    }
+
+    .actions > ul > li {
+      float: left;
+    }
+  }
+
+  > {
+    .steps {
+      a {
+        display: block;
+        width: auto;
+        padding: 10px;
+        text-decoration: none;
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        border-radius: 0;
+
+        &:hover, &:active {
+          display: block;
+          width: auto;
+          padding: 10px;
+          text-decoration: none;
+          -webkit-border-radius: 0;
+          -moz-border-radius: 0;
+          border-radius: 0;
+        }
+      }
+
+      .disabled a {
+        background: $m-color_2;
+        color: #aaa;
+        cursor: default;
+
+        &:hover, &:active {
+          background: $m-color_2;
+          color: #aaa;
+          cursor: default;
+        }
+      }
+
+      .current a {
+        background: $primary;
+        color: $white;
+        cursor: default;
+
+        &:hover, &:active {
+          background: $primary;
+          color: $white;
+          cursor: default;
+        }
+      }
+
+      .done a {
+        background: $dark;
+        color: $white;
+
+        &:hover, &:active {
+          background: $dark;
+          color: $white;
+        }
+      }
+
+      .error a {
+        background: #ff3111;
+        color: $white;
+
+        &:hover, &:active {
+          background: #ff3111;
+          color: $white;
+        }
+      }
+    }
+
+    .content {
+      background: $m-color_1;
+      display: block;
+      margin-top: 27px;
+      min-height: 18em;
+      overflow: hidden;
+      position: relative;
+      width: auto;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+
+      section.body:not(.current) {
+        display: none !important;
+      }
+    }
+  }
+
+  > {
+    .content > .body {
+      padding: 4.5%;
+
+      ul {
+        list-style: disc !important;
+
+        > li {
+          display: list-item;
+        }
+      }
+
+      > iframe {
+        border: 0 none;
+        width: 100%;
+        height: 100%;
+      }
+
+      input {
+        display: block;
+        border: 1px solid #ccc;
+
+        &[type="checkbox"] {
+          display: inline-block;
+        }
+
+        &.error {
+          background: rgb(251, 227, 228);
+          border: 1px solid #fbc2c4;
+          color: #8a1f11;
+        }
+      }
+
+      label.error {
+        color: #8a1f11;
+        display: inline-block;
+        margin-left: 1.5em;
+      }
+    }
+
+    .actions {
+      margin-top: 30px;
+      margin-bottom: 24px;
+    }
+  }
+
+  > .actions > ul {
+    display: inline-block;
+    text-align: right;
+
+    > li {
+      margin: 0 0.5em;
+    }
+  }
+
+  > .actions {
+    a {
+      background-color: $primary;
+      color: $white;
+      display: block;
+      padding: 0.5em 1em;
+      text-decoration: none;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+
+      &:hover, &:active {
+        background-color: $primary;
+        color: $white;
+        display: block;
+        padding: 0.5em 1em;
+        text-decoration: none;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+      }
+    }
+
+    .disabled a {
+      background: $m-color_2;
+      color: $m-color_6;
+
+      &:hover, &:active {
+        background: $m-color_2;
+        color: $m-color_6;
+      }
+    }
+  }
+}
+
+/*
+    Tabcontrol
+*/
+
+.tabcontrol > {
+  .steps {
+    position: relative;
+    display: block;
+    width: 100%;
+
+    > ul {
+      position: relative;
+      margin: 6px 0 0 0;
+      top: 1px;
+      z-index: 1;
+
+      > li {
+        float: left;
+        margin: 5px 2px 0 0;
+        padding: 1px;
+        -webkit-border-top-left-radius: 5px;
+        -webkit-border-top-right-radius: 5px;
+        -moz-border-radius-topleft: 5px;
+        -moz-border-radius-topright: 5px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+
+        &:hover {
+          background: #edecec;
+          border: 1px solid #bbb;
+          padding: 0;
+        }
+
+        &.current {
+          background: $white;
+          border: 1px solid #bbb;
+          border-bottom: 0 none;
+          padding: 0 0 1px 0;
+          margin-top: 0;
+
+          > a {
+            padding: 15px 30px 10px 30px;
+          }
+        }
+
+        > a {
+          color: #5f5f5f;
+          display: inline-block;
+          border: 0 none;
+          margin: 0;
+          padding: 10px 30px;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+
+  .content {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 35em;
+    overflow: hidden;
+    border-top: 1px solid #bbb;
+    padding-top: 20px;
+
+    > .body {
+      float: left;
+      position: absolute;
+      width: 95%;
+      height: 95%;
+      padding: 2.5%;
+
+      ul {
+        list-style: disc !important;
+
+        > li {
+          display: list-item;
+        }
+      }
+    }
+  }
+}
+
+/*Vertical*/
+
+.wizard {
+  &.vertical > .steps a {
+    margin-bottom: 5px;
+
+    &:hover, &:active {
+      margin-bottom: 5px;
+    }
+  }
+
+  > {
+    .steps {
+      .disabled a {
+        background-color: transparent;
+        color: $m-color_6;
+
+        &:hover, &:active {
+          background-color: transparent;
+          color: $m-color_6;
+        }
+      }
+
+      a {
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        border-radius: 0;
+
+        &:hover, &:active {
+          -webkit-border-radius: 0;
+          -moz-border-radius: 0;
+          border-radius: 0;
+        }
+      }
+
+      .current a {
+        .number, &:hover .number, &:active .number {
+          border-color: $white;
+        }
+      }
+
+      .done a {
+        .number, &:hover .number, &:active .number, .number, &:hover .number, &:active .number {
+          border-color: $white;
+        }
+      }
+
+      .last.current.done a {
+        background: $primary;
+        color: $white;
+
+        &:hover, &:active {
+          background: $primary;
+          color: $white;
+        }
+      }
+    }
+
+    .actions > ul > li {
+      margin: 0;
+    }
+
+    .steps {
+      .done a {
+        border-bottom: 3px solid $m-color_6;
+
+        &:hover, &:active {
+          border-bottom: 3px solid $m-color_6;
+        }
+      }
+
+      .number {
+        font-size: 15px;
+        padding: 2px 5px;
+        border: 1px solid $white;
+        border-radius: 20px;
+      }
+    }
+  }
+}
+
+/*  Simple */
+
+/*Circle*/
+
+.circle.wizard {
+  ul, &.tabcontrol ul {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .actions ul {
+    justify-content: space-between;
+  }
+
+  > {
+    .steps {
+      > ul > li {
+        float: none;
+        width: 100%;
+        text-align: center;
+        position: relative;
+      }
+
+      .number {
+        font-size: 15px;
+        border: 2px solid $black;
+        border-radius: 53px;
+        display: block;
+        font-size: 14px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50px;
+        height: 50px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .current a {
+        background: transparent;
+        color: $dark;
+        cursor: default;
+        text-align: center;
+
+        &:hover, &:active {
+          background: transparent;
+          color: $dark;
+          cursor: default;
+          text-align: center;
+        }
+      }
+
+      ul li {
+        &::after, &::before {
+          content: '';
+          z-index: 9;
+          display: block;
+          position: absolute;
+          top: 35px;
+          width: 235%;
+          height: 3px;
+          right: 0;
+          left: 0;
+          margin-left: auto;
+          margin-right: auto;
+          background-color: $m-color_1;
+        }
+      }
+    }
+
+    .content {
+      margin-top: 0;
+    }
+
+    .steps {
+      a {
+        .number, &:hover .number, &:active .number {
+          border-color: $m-color_2;
+          background-color: $white;
+          position: relative;
+          z-index: 10;
+          text-align: center;
+        }
+      }
+
+      .disabled a {
+        .number, &:hover .number, &:active .number {
+          border-color: $m-color_1;
+          background-color: $m-color_1;
+        }
+      }
+
+      .current:not(.done) a {
+        .number, &:hover .number, &:active .number {
+          border-color: $primary;
+          background-color: $primary;
+          color: $white;
+        }
+      }
+
+      .done a {
+        border: none;
+        background-color: transparent;
+        color: $dark;
+        font-weight: 600;
+
+        &:hover, &:active {
+          border: none;
+          background-color: transparent;
+          color: $dark;
+          font-weight: 600;
+        }
+
+        .number {
+          border-color: $primary;
+        }
+      }
+
+      ul li.done {
+        &::after, &::before {
+          background-color: $primary;
+        }
+      }
+
+      .last.current.done a {
+        border: none;
+        background-color: transparent;
+        color: $dark;
+
+        &:hover, &:active {
+          border: none;
+          background-color: transparent;
+          color: $dark;
+        }
+      }
+    }
+  }
+}
+
+.wizard > .steps .done a, .classic.wizard > .steps .current a, .wizard > .steps .disabled a {
+  cursor: pointer !important;
+}
+
+/* Pill  */
+
+.pill.wizard {
+  ul, &.tabcontrol ul {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .actions ul {
+    justify-content: space-between;
+  }
+
+  > {
+    .steps {
+      > ul > li {
+        float: none;
+        width: 100%;
+        text-align: center;
+        position: relative;
+      }
+
+      a i {
+        display: block;
+        font-size: 24px;
+      }
+
+      li.disabled {
+        opacity: .5;
+      }
+
+      .disabled a {
+        background-color: $m-color_2;
+        color: $dark;
+        border: solid 1px $m-color_4;
+
+        &:hover, &:active {
+          background-color: $m-color_2;
+          color: $dark;
+          border: solid 1px $m-color_4;
+        }
+      }
+
+      a {
+        border-bottom: 2px solid $m-color_1;
+        font-size: 15px;
+        font-weight: 600;
+        margin-right: 6px;
+        border-radius: 20px;
+
+        &:hover, &:active {
+          border-bottom: 2px solid $m-color_1;
+          font-size: 15px;
+          font-weight: 600;
+          margin-right: 6px;
+          border-radius: 20px;
+        }
+      }
+    }
+
+    .content {
+      margin-top: 0;
+      background: transparent;
+    }
+
+    .steps {
+      a {
+        .number, &:hover .number, &:active .number {
+          border: none;
+        }
+      }
+
+      .done a {
+        border: 1px solid $m-color_4;
+        background-color: transparent;
+        color: $dark;
+
+        &:hover, &:active {
+          border: 1px solid $m-color_4;
+          background-color: transparent;
+          color: $dark;
+        }
+
+        .number {
+          border-color: $primary;
+        }
+      }
+
+      ul li.done:not(.last) {
+        &::after, &::before {
+          background-color: $primary;
+        }
+      }
+
+      .last.current.done a {
+        border: 1px solid $m-color_4;
+        background-color: transparent;
+        color: $dark;
+
+        &:hover, &:active {
+          border: 1px solid $m-color_4;
+          background-color: transparent;
+          color: $dark;
+        }
+      }
+    }
+  }
+}
+
+/*Circle Vertical*/
+
+.circle.vertical.wizard {
+  display: flex;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+
+  > .steps {
+    -ms-flex: 0 0 30%;
+    flex: 0 0 30%;
+    max-width: 30%;
+  }
+
+  ul, &.tabcontrol ul {
+    display: block;
+  }
+
+  .actions ul {
+    justify-content: space-between;
+    display: flex;
+  }
+
+  > {
+    .steps {
+      > ul > li {
+        float: none;
+        width: 100%;
+        text-align: center;
+        position: relative;
+        padding-top: 26px;
+        padding-bottom: 10px;
+      }
+
+      .number {
+        font-size: 15px;
+        border: 2px solid $black;
+        border-radius: 53px;
+        display: block;
+        font-size: 14px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50px;
+        height: 50px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .current a {
+        background: transparent;
+        color: $dark;
+        cursor: default;
+        text-align: center;
+
+        &:hover, &:active {
+          background: transparent;
+          color: $dark;
+          cursor: default;
+          text-align: center;
+        }
+      }
+
+      ul li {
+        &::after, &::before {
+          content: '';
+          z-index: 9;
+          display: block;
+          position: absolute;
+          top: 0;
+          width: 3px;
+          height: 110%;
+          right: 0;
+          left: 0;
+          margin-left: auto;
+          margin-right: auto;
+          background-color: $m-color_1;
+        }
+      }
+    }
+
+    .content {
+      -ms-flex: 0 0 50%;
+      flex: 0 0 70%;
+      max-width: 70%;
+      margin: 0;
+    }
+
+    .steps {
+      a {
+        .number, &:hover .number, &:active .number {
+          border-color: $dark;
+          background-color: $white;
+          position: relative;
+          z-index: 10;
+          text-align: center;
+        }
+      }
+
+      .disabled a {
+        .number, &:hover .number, &:active .number {
+          border-color: $m-color_1;
+          background-color: $m-color_1;
+        }
+      }
+
+      .done a {
+        border: none;
+        background-color: transparent;
+        color: $dark;
+
+        &:hover, &:active {
+          border: none;
+          background-color: transparent;
+          color: $dark;
+        }
+
+        .number {
+          border-color: $primary;
+        }
+      }
+
+      ul li.done {
+        &::after, &::before {
+          background-color: $primary;
+        }
+      }
+
+      .last.current.done a {
+        border: none;
+        background-color: transparent;
+        color: $dark;
+
+        &:hover, &:active {
+          border: none;
+          background-color: transparent;
+          color: $dark;
+        }
+      }
+    }
+  }
+}
+
+/*Pill Vertical*/
+
+.pills.vertical.wizard {
+  display: flex;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+
+  > .steps {
+    -ms-flex: 0 0 30%;
+    flex: 0 0 30%;
+    max-width: 30%;
+  }
+
+  ul, &.tabcontrol ul {
+    display: flow-root;
+    justify-content: space-around;
+  }
+
+  .actions ul {
+    justify-content: space-between;
+    display: flex;
+  }
+
+  > {
+    .steps {
+      > ul > li {
+        float: none;
+        width: 100%;
+        text-align: center;
+        position: relative;
+      }
+
+      .number {
+        font-size: 15px;
+        border: none;
+        font-size: 14px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      li.disabled {
+        opacity: .5;
+      }
+
+      a {
+        font-weight: 600;
+        margin-right: 6px;
+        border-radius: 20px;
+        margin-bottom: 25px;
+
+        &:hover, &:active {
+          font-weight: 600;
+          margin-right: 6px;
+          border-radius: 20px;
+          margin-bottom: 25px;
+        }
+      }
+
+      .disabled a {
+        background-color: $m-color_2;
+        color: $dark;
+        border: solid 1px $m-color_4;
+
+        &:hover, &:active {
+          background-color: $m-color_2;
+          color: $dark;
+          border: solid 1px $m-color_4;
+        }
+      }
+
+      .current a {
+        cursor: default;
+        text-align: center;
+        border-radius: 30px;
+        margin-right: 5px;
+
+        &:hover, &:active {
+          cursor: default;
+          text-align: center;
+          border-radius: 30px;
+          margin-right: 5px;
+        }
+      }
+    }
+
+    .content {
+      -ms-flex: 0 0 50%;
+      flex: 0 0 70%;
+      max-width: 70%;
+      margin: 0;
+    }
+
+    .steps {
+      .done a {
+        border: 1px solid $m-color_4;
+        background-color: transparent;
+        color: $dark;
+
+        &:hover, &:active {
+          border: 1px solid $m-color_4;
+          background-color: transparent;
+          color: $dark;
+        }
+
+        .number {
+          border-color: $primary;
+        }
+      }
+
+      ul li.done:not(.last) {
+        &::after, &::before {
+          background-color: $primary;
+        }
+      }
+
+      .last.current.done a {
+        border: 1px solid $m-color_4;
+        background-color: transparent;
+        color: $dark;
+
+        &:hover, &:active {
+          border: 1px solid $m-color_4;
+          background-color: transparent;
+          color: $dark;
+        }
+      }
+    }
+  }
+}
+
+/*For Validation Checkbox */
+
+label.custom-control-label {
+  margin-left: 30px;
+}
+
+@media (max-width: 575px) {
+  .pill.wizard ul[role="tablist"] {
+    display: block;
+
+    li {
+      margin-bottom: 2rem;
+    }
+  }
+
+  .pills.vertical.wizard > {
+    .steps, .content {
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+}

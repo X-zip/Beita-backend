@@ -1,0 +1,192 @@
+<!-- Copyright (c) 2019-2020 昱清科技 all rights reserved. -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <title>校园树洞</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico"/>
+    <link href="assets/css/loader.css" rel="stylesheet" type="text/css" />
+    <script src="assets/js/loader.js"></script>
+
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/plugins.css" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+    <link href="plugins/apex/apexcharts.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/dashboard/dash_1.css" rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+</head>
+<body>
+
+
+    <!--  BEGIN NAVBAR  -->
+    <div th:insert="component :: navBar"></div>
+    <!--  END NAVBAR  -->
+
+    <!--  BEGIN MAIN CONTAINER  -->
+    <div class="main-container" id="container">
+
+        <div class="overlay"></div>
+        <div class="search-overlay"></div>
+
+        <!--  BEGIN SIDEBAR  -->
+       <div class="sidebar-wrapper sidebar-theme"  th:insert="component :: pageSidebar"></div>
+        <!--  END SIDEBAR  -->
+        
+        <!--  BEGIN CONTENT AREA  -->
+        <div id="content" class="main-content">
+            <div class="layout-px-spacing">
+                <div class="row layout-top-spacing">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                    	<span>跑腿骑手认证管理</span>
+                    	<div class="form-group col-lg-4 col-4" >	
+						</div>
+				        <div class="table-responsive" >
+					        <table border="1" class="table table-bordered mb-4">
+							    <tr>
+							        <td>编号</td>
+							        <td>微信ID</td>
+							        <td>真实姓名</td>
+							        <td>电话</td>
+							        <td>微信</td>
+							        <td>学校</td>
+							        <td>学院或专业名</td>
+							        <td>学生证照片</td>
+							        <td>证件号码</td>
+							        <td>证件正面照片</td>
+							        <td>证件背面照片</td>
+							        <td>申请时间</td>
+							        <td>状态</td>
+							        <td>审核</td>
+							        <td>驳回</td>
+							    </tr>
+							    <tr th:each="rider : ${paotuiRiderList}">
+							        <td th:text="${rider.id}" ><input name="idValue" type="text" th:value="${rider.id}"></td>
+							        <td th:text="${rider.openid}"></td>
+							        <td th:text="${rider.realname}"></td>
+							        <td th:text="${rider.phone}"></td>
+							        <td th:text="${rider.wechat}"></td>
+							        <td th:text="${rider.campus}"></td>
+							        <td th:text="${rider.school}"></td>
+
+							        <td>
+							       	 <div th:if="${rider.student_card_pic !=null}">
+							       	 	<img th:src="${rider.student_card_pic}" style="height:200px">
+							       	 </div>
+							       	 <div th:if="${rider.student_card_pic ==null}">
+							       	 	无学生证图片
+							       	 </div>
+							        </td>
+							        <td th:text="${rider.ic_number}"></td>
+							        <td>
+							       	 <div th:if="${rider.ic_pic_front !=null}">
+							       	 	<img th:src="${rider.ic_pic_front}" style="height:200px">
+							       	 </div>
+							       	 <div th:if="${rider.ic_pic_front ==null}">
+							       	 	无IC正面图片
+							       	 </div>
+							        </td>
+							        <td>
+							       	 <div th:if="${rider.ic_pic_back !=null}">
+							       	 	<img th:src="${rider.ic_pic_back}" style="height:200px">
+							       	 </div>
+							       	 <div th:if="${rider.ic_pic_back ==null}">
+							       	 	无IC背面图片
+							       	 </div>
+							        </td>
+							        <td th:text="${rider.c_time}"></td>
+							        <td>
+								        <div th:if="${rider.is_verified == 1}">
+								        	已审核
+								        </div>
+								        <div th:if="${rider.is_verified == 0}">
+								        	等待审核
+								        </div>
+							        </td>
+							        <td>
+							        <div th:if="${rider.is_verified == 0}">
+							        	<button class="btn btn-primary mb-2" style="min-width:60px;font-size:10px;padding:5px" type="button" id="verify" >审核</button>
+							        </div>
+							        <div th:if="${rider.is_verified == 1}">
+							        	<button class="btn btn-primary mb-2" style="min-width:60px;font-size:10px;padding:5px" type="button" id="unverify" >反审核</button>
+							        </div>
+							        </td>
+							        <td>
+							        	<button class="btn btn-primary mb-2" style="min-width:60px;font-size:10px;padding:5px" type="button" id="revoke" >驳回</button>
+							        </td>
+							    </tr>
+						    </table>
+				        </div>
+				        <div class="paginating-container pagination-solid">
+							<input type="hidden" id="curPage" value="${curPage}"></input>
+							<ul class="pagination" id="pageListId">
+								<li class="btn btn-primary mb-2" style="margin:10px;" th:if="${curPage > 0}"><a style="color:white;margin:10px;" th:href="'/getPaotuiRiderbyLength?length=' 
+								+ ${(curPage-1)*50}" th:text="上一页" th:if="${curPage > 0}"></a></li>
+								<li class="btn btn-primary mb-2" style="margin:10px;" th:if="${number == 50 }"><a style="color:white;margin:10px;" th:href="'/getPaotuiRiderbyLength?length=' 
+								+ ${(curPage+1)*50}" th:text="下一页"></a></li>
+							</ul>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  END CONTENT AREA  -->
+
+
+    </div>
+    <!-- END MAIN CONTAINER -->
+
+    <script src="assets/js/libs/jquery-3.1.1.min.js"></script>
+    <script src="bootstrap/js/popper.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="assets/js/app.js"></script>
+     <script>
+        $(document).ready(function() {
+            App.init();
+        });
+        <!--
+        function openModal() {
+            document.getElementById("exampleModal").style.display="block";    
+        }
+        function hideModal() {
+            document.getElementById("exampleModal").style.display="none";
+        }
+        function addMember() {
+        	var name = document.getElementById("name").value;
+        	var openid = document.getElementById("openid").value;
+        	window.location.href = "/addMember?name="+name + "&&openid="+openid
+        }
+        -->
+        $(document).on('click', '#verify', function (){
+        	var id = $(this).parents("tr").find("td").eq(0).text();
+        	var openid = $(this).parents("tr").find("td").eq(1).text();
+        	window.location.href = "/updatePaotuiRiderStatus?id="+id+'&&status='+1 +'&&openid='+openid;
+        });
+        
+        $(document).on('click', '#unverify', function (){
+        	var id = $(this).parents("tr").find("td").eq(0).text();
+        	var openid = $(this).parents("tr").find("td").eq(1).text();
+        	window.location.href = "/updatePaotuiRiderStatus?id="+id+'&&status='+0 +'&&openid='+openid;
+        });
+        $(document).on('click', '#revoke', function (){
+        	var id = $(this).parents("tr").find("td").eq(0).text();
+        	var openid = $(this).parents("tr").find("td").eq(1).text();
+        	window.location.href = "/deletePaotuiRider?id="+id+'&&openid='+openid;
+        })
+    </script>
+    <script src="assets/js/custom.js"></script>
+    <!-- END GLOBAL MANDATORY SCRIPTS -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    <script src="plugins/apex/apexcharts.min.js"></script>
+    <script src="assets/js/dashboard/dash_1.js"></script>
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+
+</body>
+</html>

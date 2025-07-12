@@ -1,0 +1,152 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../../base/base';    // Base Variables
+
+
+h1, h2, h3, h4, h5, h6 {
+  color: $dark;
+}
+
+/*
+    Basic
+*/
+
+.card {
+  border: 2px solid $m-color_3;
+  border-radius: 6px;
+  margin-bottom: 4px;
+}
+
+.card-header {
+  background-color: transparent;
+  color: $m-color_17;
+  border-color: transparent;
+  border-radius: 4px;
+  padding: 0;
+  position: relative;
+
+  section > div {
+    padding: 13px 19px;
+    cursor: pointer;
+    display: block;
+    font-size: 14px;
+    letter-spacing: 1px;
+
+    &.collapsed {
+      color: $m-color_6;
+    }
+
+    &:not(.collapsed) {
+      color: $primary;
+      border-bottom: 2px solid $m-color_3;
+      font-weight: 600;
+    }
+
+    .icons {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      padding: 9px;
+
+      svg {
+        width: 18px;
+      }
+    }
+  }
+}
+
+.card .card-body {
+  p {
+    color: $m-color_6;
+    letter-spacing: 1px;
+    font-size: 13px;
+
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+
+  ul {
+    margin-bottom: 0;
+
+    li {
+      font-size: 12px;
+      letter-spacing: 1px;
+
+      &:not(:last-child) {
+        margin-bottom: 5px;
+      }
+
+      a {
+        color: $dark;
+        font-size: 13px;
+        font-weight: 600;
+
+        &:hover {
+          color: $primary;
+        }
+      }
+    }
+  }
+}
+
+/*
+    No Outer Spacing
+*/
+
+.no-outer-spacing {
+  border: 2px solid $m-color_3;
+  border-radius: 6px;
+
+  .card {
+    margin-bottom: 0;
+    border: none;
+    border-radius: 0;
+
+    &:first-child {
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+
+    &:not(:last-child) {
+      border-bottom: 2px solid $m-color_3;
+    }
+  }
+
+  .card-header section > div:not(.collapsed) {
+    border-bottom: none;
+  }
+}
+
+/*
+    Accordin with Icons
+*/
+
+.accordion-icons {
+  .accordion-icon {
+    display: inline-block;
+    margin-right: 10px;
+
+    svg {
+      color: $m-color_6;
+      margin-right: 6px;
+      vertical-align: middle;
+      width: 20px;
+      height: 20px;
+      fill: rgba(0, 23, 55, 0.08);
+    }
+  }
+
+  div:not(.collapsed) .accordion-icon svg {
+    color: $primary;
+    fill: rgba(27, 85, 226, 0.2392156863);
+  }
+}

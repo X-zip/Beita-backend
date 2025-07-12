@@ -1,0 +1,248 @@
+<!-- Copyright (c) 2019-2020 昱清科技 all rights reserved. -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <title>校园树洞</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico"/>
+    <link href="assets/css/loader.css" rel="stylesheet" type="text/css" />
+    <script src="assets/js/loader.js"></script>
+
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/plugins.css" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+    <link href="plugins/apex/apexcharts.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/dashboard/dash_1.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/forms/switches.css" rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+    
+    <style type="text/css">
+		.divX{z-index:200;
+		    -moz-border-radius:20px;
+		    -webkit-border-radius:20px;
+		    line-height:10px;
+		    text-align:center;
+		    font-weight:bold;
+		    cursor:pointer;
+		    font-size:10px;
+		   /*  display: none; */
+		}
+		
+		.container{
+	        width:90%;
+	        height:40px;
+	        border: 2px solid #1b55e2;
+	        position:relative;
+	        float:left; 
+	        display:inline;
+	        margin:5px 10px 5px 10px;
+	        border-radius: 20px;
+	        
+		}
+		.containerAvatar{
+	        width:90%;
+	        position:relative;
+	        float:left; 
+	        display:inline;
+	        margin:5px 10px 5px 10px;
+	        border-radius: 20px;
+	        
+		}
+		.content{
+		        position:relative;
+		        top:10px;
+		        width:100%;
+		        text-align: center;
+		        font-weight:bold;
+		}
+		.delete{
+		        width:20px;
+		        height:20px;
+		        border-radius:60%;
+		        position:absolute;
+		        top:-10px;
+		        right:-10px;
+		        cursor:pointer;
+		        z-index:999;
+		}
+		.deleteA{
+		        width:20px;
+		        height:20px;
+		        border-radius:60%;
+		        position:absolute;
+		        top:-5px;
+		        right:-5px;
+		        cursor:pointer;
+		        z-index:999;
+		}
+	</style>
+</head>
+<body>
+
+
+    <!--  BEGIN NAVBAR  -->
+    <div th:insert="component :: navBar"></div>
+    <!--  END NAVBAR  -->
+
+    <!--  BEGIN MAIN CONTAINER  -->
+    <div class="main-container" id="container">
+
+        <div class="overlay"></div>
+        <div class="search-overlay"></div>
+
+        <!--  BEGIN SIDEBAR  -->
+       <div class="sidebar-wrapper sidebar-theme"  th:insert="component :: pageSidebar"></div>
+        <!--  END SIDEBAR  -->
+        
+        <!--  BEGIN CONTENT AREA  -->
+        <div id="content" class="main-content">
+            <div class="layout-px-spacing">
+                <div class="row layout-top-spacing">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+				    	<span>审核开关(待开发)</span><br>
+				    	<label class="switch s-icons s-outline s-outline-default mr-2">
+						    <input type="checkbox" id="checkbox">
+						    <span class="slider"></span>
+						</label>
+						<br>
+				    	<span>分类设置(待开发)</span><br>
+				    	<br>
+				    	<span>昵称设置(待开发)</span><br>
+				    	<div style="display: flex; flex-flow: wrap;">
+					    	<div th:each="nickname : ${nickNameList}" >
+					    		<div class="container">
+						    		<div id="deleteNickname">
+						    			<svg t="1667708906555" id="delete" class="delete" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7003" width="16" height="16"><path d="M512 949.333333C270.933333 949.333333 74.666667 753.066667 74.666667 512S270.933333 74.666667 512 74.666667 949.333333 270.933333 949.333333 512 753.066667 949.333333 512 949.333333z m-151.466667-292.266666c10.666667 10.666667 29.866667 12.8 42.666667 2.133333l2.133333-2.133333 104.533334-102.4 102.4 102.4 2.133333 2.133333c12.8 10.666667 32 8.533333 42.666667-2.133333 12.8-12.8 12.8-32 0-44.8L554.666667 509.866667l102.4-102.4 2.133333-2.133334c10.666667-12.8 8.533333-32-2.133333-42.666666s-29.866667-12.8-42.666667-2.133334l-2.133333 2.133334-102.4 102.4-102.4-102.4-2.133334-2.133334c-12.8-10.666667-32-8.533333-42.666666 2.133334-12.8 12.8-12.8 32 0 44.8l102.4 102.4-102.4 102.4-2.133334 2.133333c-10.666667 12.8-10.666667 32 0 42.666667z" p-id="7004"></path></svg>
+						    			<input type="hidden" th:value="${nickname.id}" class="nicknameId">
+						    		</div>
+					    			<!-- <img src="http://www.iconpng.com/download/png/61252" class="delete" οnclick="alert(1)"/> -->
+					    			<div class="content" th:text="${nickname.nickname}"></div>
+					    			
+					    		</div>
+					    	</div>
+				    	</div>
+				    	<input class="form-control" style="display:initial;width:auto;" type="text" id="newNickname" placeholder="新增昵称" name="newNickname">
+				    	<button class="btn btn-primary mb-2" id="addNickname">添加</button>
+				    	<br><br>
+				    	<span>头像设置(待开发)</span><br>
+				    	<div style="display: flex; flex-flow: wrap;">
+					    	<div th:each="avatar: ${avatarList}">
+					    		<div class="containerAvatar">
+					    			<div id="deleteAvatar">
+						    			<svg t="1667708906555" id="deleteA" class="deleteA" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7003" width="16" height="16"><path d="M512 949.333333C270.933333 949.333333 74.666667 753.066667 74.666667 512S270.933333 74.666667 512 74.666667 949.333333 270.933333 949.333333 512 753.066667 949.333333 512 949.333333z m-151.466667-292.266666c10.666667 10.666667 29.866667 12.8 42.666667 2.133333l2.133333-2.133333 104.533334-102.4 102.4 102.4 2.133333 2.133333c12.8 10.666667 32 8.533333 42.666667-2.133333 12.8-12.8 12.8-32 0-44.8L554.666667 509.866667l102.4-102.4 2.133333-2.133334c10.666667-12.8 8.533333-32-2.133333-42.666666s-29.866667-12.8-42.666667-2.133334l-2.133333 2.133334-102.4 102.4-102.4-102.4-2.133334-2.133334c-12.8-10.666667-32-8.533333-42.666666 2.133334-12.8 12.8-12.8 32 0 44.8l102.4 102.4-102.4 102.4-2.133334 2.133333c-10.666667 12.8-10.666667 32 0 42.666667z" p-id="7004"></path></svg>
+						    			<input type="hidden" th:value="${avatar.id}" class="avatarId">
+						    		</div>
+					    			<img id="cover_img" th:src="${avatar.avatar}" style="width: 160px; height: 160px; margin: 5px 10px 5px 10px; position:relative;">
+					    		</div>
+					    	</div>
+				    	</div>
+				    	<br>
+				    	<button class="btn btn-primary mb-2" id ="uploadAvatar">新增头像</button>	
+						<img id="cover_img" src="https://yqtech.ltd/quanzi/beike.jpg" style="width: 160px; height: 160px; display: none;">
+						<input class="form-control" type="text" id="imgPath" placeholder="上传路径" name="imgPath" style="display: none;">
+						
+						<br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  END CONTENT AREA  -->
+
+
+    </div>
+    <!-- END MAIN CONTAINER -->
+
+    <script src="assets/js/libs/jquery-3.1.1.min.js"></script>
+    <script src="bootstrap/js/popper.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="plugins/ajaxupload/ajaxupload.js"></script>
+     <script>
+        $(document).ready(function() {
+            App.init();
+        });
+        $(document).on('click', '#checkbox', function (){
+			var id = document.getElementById("checkbox").checked;
+			console.log(id)
+		});
+		$(document).on('click', '#deleteNickname', function(){
+			var r=confirm("确定删除吗？");
+			if (r==true)
+			{
+			    x="你按下了\"确定\"按钮!";
+			    var nickname_id=$(this).find(".nicknameId").val();
+			    console.log(nickname_id);
+			    window.location.href = "/deleteNickname?id="+nickname_id
+			    /* console.log($(event.target).find("#test").val()) */
+			    /* window.location.href = "/deleteNickname?id="+id */
+			}
+			else
+			{
+			    x="你按下了\"取消\"按钮!";
+			}
+			console.log(x)
+		});
+		$(document).on('click', "#addNickname", function(){
+			var newNickname = $("#newNickname").val();
+			console.log(newNickname);
+			window.location.href = "/addNickname?nickname="+newNickname;
+		});
+        new AjaxUpload('#uploadAvatar', {
+            action: '/uploadPicture',
+            name: 'file',
+            autoSubmit: true,
+            responseType: "json",
+            onSubmit: function (file, extension) {
+                if (!(extension && /^(jpg|jpeg|png|gif)$/.test(extension.toLowerCase()))) {
+                    alert('只支持jpg、png、gif格式的文件！');
+                    return false;
+                }
+            },
+            onComplete: function (file, r) {
+                if (r != null && r.resultCode == 200) {
+        			console.log(r);
+                    $("#cover_img").attr("src", r.data);
+                    $("#imgPath").attr("value", r.data);
+                    $("#cover_img").attr("style", "width: 160px;height: 160px;display:block;");
+                    var imgPath = document.getElementById("imgPath").value;
+                	window.location.href = "/addAvatar?avatar="+imgPath
+                } else {
+                    alert("error");
+                }
+            }
+        });
+        $(document).on('click', '#deleteAvatar', function(){
+			var r=confirm("确定删除吗？");
+			if (r==true)
+			{
+			    x="你按下了\"确定\"按钮!";
+			    var avatar_id=$(this).find(".avatarId").val();
+			    console.log(avatar_id);
+			    window.location.href = "/deleteAvatar?id="+avatar_id;
+			    /* console.log($(event.target).find("#test").val()) */
+			    /* window.location.href = "/deleteNickname?id="+id */
+			}
+			else
+			{
+			    x="你按下了\"取消\"按钮!";
+			}
+			console.log(x)
+		});
+    </script>
+    <script src="assets/js/custom.js"></script>
+    <!-- END GLOBAL MANDATORY SCRIPTS -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    <script src="plugins/apex/apexcharts.min.js"></script>
+    <script src="assets/js/dashboard/dash_1.js"></script>
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../base/base';    // Base Variables
+
+.sidenav {
+  position: fixed;
+  right: -30px;
+  top: 125px;
+  width: 236px;
+  height: 100%;
+  border-left: 1px solid $m-color_3;
+
+  .sidenav-header {
+    &:after {
+      display: none;
+    }
+
+    p {
+      font-weight: 600;
+      font-size: 18px;
+      color: $white;
+      margin-bottom: 20px;
+      background: $primary;
+      text-align: center;
+      border-radius: 5px;
+      padding: 4px;
+      letter-spacing: 1px;
+      background-image: linear-gradient(to right, $primary 0%, $secondary 100%);
+    }
+  }
+
+  .sidenav-content {
+    background-color: transparent;
+    display: block;
+    border: none;
+
+    a {
+      display: block;
+      padding: 3px 0px;
+      color: $dark;
+      font-size: 12px;
+      padding: 3px 25px;
+
+      &.active {
+        color: $secondary;
+        font-weight: 700;
+        border-left: 1px solid $secondary;
+      }
+
+      &:hover {
+        color: $primary;
+        font-weight: 700;
+        border-left: 1px solid $secondary;
+      }
+    }
+  }
+}
+
+#content > .container {
+  display: flex;
+  max-width: 58.333333% !important;
+  margin-left: 80px;
+  padding: 0 16px !important;
+
+  > .container {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+@media (max-width: 575px) {
+  .sidenav .sidenav-content a {
+    padding: 4px 7px;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 1199px) {
+  .sidenav {
+    display: none;
+  }
+
+  #content > .container {
+    max-width: 100% !important;
+    margin-left: auto;
+
+    > .container {
+      max-width: 100%;
+    }
+  }
+}

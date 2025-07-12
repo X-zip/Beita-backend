@@ -1,0 +1,107 @@
+.widget {
+  &.widget-one {
+    padding: 22px 18px;
+    background: $white;
+
+    .widget-heading h6 {
+      color: $m-color_10;
+      margin-bottom: 41px;
+      font-size: 17px;
+      display: block;
+      font-weight: 600;
+    }
+
+    .w-chart {
+      display: flex;
+
+      .w-chart-section {
+        width: 50%;
+        padding: 0 12px;
+
+        .w-detail {
+          position: absolute;
+          color: $white;
+        }
+
+        .w-title {
+          font-size: 13px;
+          font-weight: 700;
+          margin-bottom: 0;
+        }
+
+        .w-stats {
+          color: $m-color_17;
+          font-size: 20px;
+          letter-spacing: 1px;
+          margin-bottom: 0;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+}
+
+
+
+/*
+    ==================
+        Widget
+    ==================
+*/
+
+.widget-one {
+  position: relative;
+  background: $primary;
+  padding: 0;
+  border-radius: 8px;
+  height: 100%;
+  -webkit-box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.08), 0 1px 20px 0 rgba(0, 0, 0, 0.07), 0px 1px 11px 0px rgba(0, 0, 0, 0.07);
+  -moz-box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.08), 0 1px 20px 0 rgba(0, 0, 0, 0.07), 0px 1px 11px 0px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.08), 0 1px 20px 0 rgba(0, 0, 0, 0.07), 0px 1px 11px 0px rgba(0, 0, 0, 0.07);
+
+  .widget-content {
+    font-size: 17px;
+  }
+
+  .w-numeric-value {
+    position: absolute;
+    display: flex;
+    color: $white;
+    font-weight: 500;
+    padding: 20px;
+
+    .w-icon {
+      display: inline-block;
+      background: $white;
+      padding: 13px 12px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-self: center;
+      height: 45px;
+      width: 45px;
+      margin-right: 14px;
+    }
+
+    svg {
+      display: block;
+      color: $primary;
+      width: 20px;
+      height: 20px;
+    }
+
+    .w-value {
+      font-size: 26px;
+      display: block;
+      color: $white;
+      font-weight: 600;
+      margin-bottom: -9px;
+    }
+
+    .w-numeric-title {
+      font-size: 13px;
+      color: $white;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+  }
+}

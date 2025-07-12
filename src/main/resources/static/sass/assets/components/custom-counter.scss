@@ -1,0 +1,94 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+/*
+    Simple Counter
+*/
+
+.simple--counter-container {
+  display: flex;
+  justify-content: space-around;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+
+  .counter-container {
+    margin-bottom: 23px;
+
+    .counter-content {
+      width: 100px;
+      height: 100px;
+      -webkit-box-shadow: 1px 2px 12px 0 rgba(31, 45, 61, 0.1);
+      box-shadow: 1px 2px 12px 0 rgba(31, 45, 61, 0.1);
+      border-radius: 6px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      border: 1px solid $m-color_3;
+    }
+  }
+
+  .s-counter {
+    font-size: 35px;
+    color: $primary;
+    margin-bottom: 0;
+  }
+
+  .s-counter-text {
+    color: $dark;
+    font-size: 15px;
+    margin-bottom: 0;
+    margin-top: 16px;
+  }
+}
+
+/*
+    With Icon
+*/
+
+.icon--counter-container {
+  display: flex;
+  justify-content: space-around;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+
+  .counter-container {
+    margin-bottom: 23px;
+  }
+
+  .counter-ico {
+    color: $primary;
+    font-size: 28px;
+    width: 30px;
+    height: 30px;
+    margin-bottom: 6px;
+  }
+
+  .counter-content {
+    width: 85px;
+    height: 85px;
+    -webkit-box-shadow: 1px 2px 12px 0 rgba(31, 45, 61, 0.1);
+    box-shadow: 1px 2px 12px 0 rgba(31, 45, 61, 0.1);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border: 1px solid $m-color_3;
+    margin: 0 0 12px 0;
+  }
+
+  .ico-counter {
+    font-size: 25px;
+    color: $dark;
+    margin-bottom: 0;
+  }
+
+  .ico-counter-text {
+    color: $m-color_6;
+    font-size: 13px;
+    font-weight: 100;
+    letter-spacing: 1px;
+  }
+}

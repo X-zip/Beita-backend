@@ -1,0 +1,57 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+.bootstrap-touchspin .input-group-btn-vertical {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  z-index: 11;
+
+  > .btn {
+    position: absolute;
+    right: 0;
+    height: 50%;
+    padding: 0;
+    width: 2em;
+    text-align: center;
+    line-height: 1;
+  }
+}
+
+.input-group.btn-group.bootstrap-touchspin .btn {
+  padding: .375rem .75rem;
+}
+
+.bootstrap-touchspin {
+  .input-group-btn-vertical {
+    .bootstrap-touchspin-up {
+      border-radius: 0 4px 0 0;
+      top: 0;
+    }
+
+    .bootstrap-touchspin-down {
+      border-radius: 0 0 4px 0;
+      bottom: 0;
+    }
+  }
+
+  .input-group-addon[class*="btn-"] .input-group-text {
+    background-color: transparent;
+    border: none;
+  }
+}
+
+.btn[class*="btn-"] {
+  &.bootstrap-touchspin-up [class*="flaticon-"], &.bootstrap-touchspin-down [class*="flaticon-"] {
+    font-size: 10px;
+  }
+}
+
+.input-group-sm > {
+  .form-control, .input-group-prepend > .btn, .input-group-append > .btn {
+    height: auto !important;
+  }
+}

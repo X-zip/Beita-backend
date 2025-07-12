@@ -1,0 +1,183 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+
+/*      Map     */
+
+#basic_map1 {
+  width: 100%;
+  height: 757px;
+}
+
+/*  Contact Section Header     */
+
+.cu-contact-section {
+  .cu-section-header {
+    position: absolute;
+    background: $dark;
+    z-index: 1;
+    width: 100%;
+    padding: 15px 34px;
+    color: $white;
+    background-color: rgba(43, 80, 237, 0.1098039216);
+
+    h4 {
+      color: $white;
+      font-size: 34px;
+      font-weight: 600;
+      letter-spacing: 3px;
+    }
+
+    p {
+      color: $white;
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+  }
+
+  position: relative;
+  padding: 0;
+  background-color: $l-primary;
+
+  .contact-form {
+    position: absolute;
+    top: 0;
+    right: 58px;
+    bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    height: fit-content;
+    height: -moz-max-content;
+    height: -webkit-fit-content;
+    z-index: 2;
+
+    form {
+      background: $white;
+      padding: 25px 35px;
+      border-radius: 10px;
+      margin-top: 24px;
+      margin-bottom: 24px;
+      -webkit-box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.0901960784), 0 1px 20px 0 rgba(0, 0, 0, 0.08), 0px 1px 11px 0px rgba(0, 0, 0, 0.06);
+      -moz-box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.0901960784), 0 1px 20px 0 rgba(0, 0, 0, 0.08), 0px 1px 11px 0px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.0901960784), 0 1px 20px 0 rgba(0, 0, 0, 0.08), 0px 1px 11px 0px rgba(0, 0, 0, 0.06);
+
+      .input-fields {
+        position: relative;
+
+        svg {
+          position: absolute;
+          top: 11px;
+          color: $primary;
+          width: 20px;
+          left: 25px;
+
+          &.feather-mail {
+            left: 12px;
+            top: 7px;
+          }
+        }
+      }
+
+      h4 {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 25px;
+        color: $dark;
+      }
+
+      input {
+        padding: 8px 5px 8px 40px;
+        background-color: transparent;
+        font-weight: 600;
+
+        &::-webkit-input-placeholder, &::-ms-input-placeholder, &::-moz-placeholder {
+          color: $m-color_5;
+          font-size: 14px;
+        }
+
+        &:focus {
+          background-color: #ffffff;
+          border-color: $dark;
+        }
+      }
+    }
+  }
+
+  .n-chk {
+    display: inline-block;
+  }
+
+  .form-group textarea {
+    padding: 8px 5px 8px 43px;
+    background-color: transparent;
+    margin-top: 15px;
+    resize: none;
+
+    &::-webkit-input-placeholder, &::-ms-input-placeholder, &::-moz-placeholder {
+      color: $m-color_5;
+      font-size: 14px;
+    }
+
+    &:focus {
+      background-color: #ffffff;
+      border-color: $dark;
+    }
+
+    &:-ms-input-placeholder {
+      color: #7b8489;
+    }
+  }
+
+  form button {
+    border: none;
+    padding: 15px 25px;
+    display: block;
+    width: 100%;
+  }
+}
+
+/* 	Contact Content 	*/
+
+@media (max-width: 991px) {
+  .cu-contact-section {
+    .cu-section-header {
+      display: none;
+    }
+
+    .contact-form {
+      right: 0;
+      left: 0;
+      margin-right: auto;
+      margin-left: auto;
+      margin-top: 0;
+      margin-bottom: 0;
+
+      form {
+        max-width: 530px;
+        margin: 0 auto;
+        width: 100%;
+        border-radius: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  body {
+    background: $white;
+  }
+
+  #basic_map1 {
+    display: none;
+  }
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .cu-contact-section .contact-form form {
+    min-width: 530px;
+    width: 100%;
+  }
+}

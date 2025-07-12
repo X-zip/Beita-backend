@@ -1,0 +1,20 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+
+//  ===============================
+//       _infobox Imports 
+//  ===============================
+
+@import '_infobox/_infobox-1';
+@import '_infobox/_infobox-2';
+@import '_infobox/_infobox-3';
+
+@media (max-width: 575px) {
+  .infobox-1, .infobox-2, .infobox-3 {
+    width: auto;
+  }
+}

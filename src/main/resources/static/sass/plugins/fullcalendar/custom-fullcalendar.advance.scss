@@ -1,0 +1,418 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+.ps--active-y > .ps__rail-y {
+  z-index: 20;
+}
+#content > .container {
+  max-width: 100% !important;
+}
+
+.fc-view {
+  height: calc(100vh - 312px);
+}
+
+#calendar {
+  height: calc(100vh - 226px);
+}
+
+.popover {
+  border: none;
+  border-radius: 5px;
+  border-color: $l-primary;
+  max-width: 338px;
+  min-width: 270px;
+  background: $white;
+  box-shadow: none;
+  border: 1px solid $m-color_3;
+  box-shadow: 0px 3px 11px 0px rgba(31, 45, 61, 0.1);
+}
+
+.popover-primary {
+  .arrow {
+    &:after, &:before {
+      display: none;
+      border-top-color: $primary;
+    }
+  }
+
+  .popover-header {
+    background-color: $m-color_9;
+    border-color: $l-primary;
+    color: $white;
+    padding: 11px 18px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    font-weight: 400;
+  }
+
+  .popover-body {
+    color: $dark;
+    min-height: 90px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 11px 18px;
+  }
+}
+
+.flatpickr-calendar.open {
+  display: inline-block;
+  z-index: 99999 !important;
+}
+
+.calendar-upper-section {
+  padding: 0;
+  margin-bottom: 40px;
+  margin-top: 5px;
+}
+
+.labels .label {
+  display: inline-block;
+  margin-bottom: 0;
+  position: relative;
+  padding: 0 17px;
+  font-size: 14px;
+  color: $dark;
+  cursor: pointer;
+
+  &:before {
+    content: '';
+    position: absolute;
+    padding: 0;
+    background: $black;
+    border-radius: 2px;
+    left: 0px;
+    top: 5px;
+    height: 10px;
+    width: 10px;
+  }
+
+  &.label-primary:before {
+    background: $primary;
+  }
+
+  &.label-warning:before {
+    background: $warning;
+  }
+
+  &.label-success:before {
+    background: $success;
+  }
+
+  &.label-danger:before {
+    background: $danger;
+  }
+}
+
+.radio-primary span.new-control-indicator {
+  border: 2px solid $primary;
+}
+
+.radio-warning span.new-control-indicator {
+  border: 2px solid $warning;
+}
+
+.radio-success span.new-control-indicator {
+  border: 2px solid $success;
+}
+
+.radio-danger span.new-control-indicator {
+  border: 2px solid $danger;
+}
+
+.fc-button-group {
+  border-radius: 6px;
+}
+
+button {
+  &.fc-month-button, &.fc-agendaWeek-button, &.fc-agendaDay-button {
+    padding: 6px 10px;
+    letter-spacing: 1px;
+  }
+
+  &.fc-prev-button, &.fc-next-button {
+    padding: 6px 10px;
+  }
+
+  &.fc-today-button {
+    border: 1px solid $m-color_3;
+    border-radius: 6px !important;
+    padding: 6px 10px;
+  }
+}
+
+.bg-primary {
+  background-color: $l-primary !important;
+  border-color: $l-primary !important;
+  color: $white;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.bg-success {
+  background-color: $l-success !important;
+  border-color: $l-success !important;
+  color: $white;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.bg-warning {
+  background-color: $l-warning !important;
+  border-color: $l-warning !important;
+  color: $white;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.bg-danger {
+  background-color: $l-danger !important;
+  border-color: $l-danger !important;
+  color: $white;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+a {
+  &.bg-primary:hover, &.bg-success:hover, &.bg-warning:hover, &.bg-danger:hover {
+    background-color: inherit !important;
+    border-width: 2px !important;
+  }
+}
+
+.fc-scroller {
+  height: 100% !important;
+  position: relative;
+  height: calc(100vh - 285px) !important;
+
+  &.fc-time-grid-container {
+    height: calc(100vh - 420px) !important;
+  }
+}
+
+.fc-agendaWeek-view .fc-scroller.fc-time-grid-container, .fc-agendaDay-view .fc-scroller.fc-time-grid-container {
+  height: calc(100vh - 330px) !important;
+}
+
+/*
+    Modal
+*/
+
+#addEventsModal {
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  .modal-content {
+    border: none;
+  }
+
+  .modal-body {
+    padding: 25px 38px;
+
+    .close {
+      cursor: pointer;
+    }
+  }
+
+  .modal-title {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0px;
+    color: $dark;
+  }
+
+  form {
+    margin-top: 30px;
+
+    label {
+      margin-bottom: 5px;
+      font-size: 14px;
+      font-weight: 600;
+      color: $l-dark;
+    }
+
+    .event-badge {
+      margin-top: 16px;
+
+      p {
+        margin-bottom: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        color: $l-dark;
+      }
+    }
+
+    label {}
+
+    input {
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 0;
+    }
+  }
+}
+
+#calendar .form-control {
+  margin-bottom: 20px;
+  color: $dark;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+input[readonly] {
+  color: $dark;
+}
+
+.modal-footer {
+  border-top: none;
+  padding-top: 0;
+  padding-bottom: 25px;
+}
+
+#addEventsModal .modal-footer {
+  .btn {
+    box-shadow: none;
+  }
+
+  #add-e {
+    background-color: $primary;
+    color: $white;
+    font-weight: 600;
+    border: 1px solid $primary;
+    padding: 10px 25px;
+  }
+
+  #edit-event {
+    background-color: $m-color_14;
+    color: $white;
+    font-weight: 600;
+    border: 1px solid $m-color_3;
+    padding: 10px 25px;
+  }
+
+  [data-dismiss="modal"] {
+    background-color: $white;
+    color: $primary;
+    font-weight: 700;
+    border: 1px solid #e8e8e8;
+    padding: 10px 25px;
+  }
+}
+
+td.fc-today.fc-state-highlight span {
+  background: $primary;
+  border-radius: 50%;
+  color: $white;
+  display: inline-block !important;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.fc-day-grid-event {
+  .fc-content:before {
+    content: '';
+    height: 5px;
+    background: $black;
+    width: 5px;
+    position: absolute;
+    left: -9px;
+    top: 4px;
+    border-radius: 50%;
+  }
+
+  &.bg-primary .fc-content:before {
+    background: $primary;
+  }
+
+  &.bg-success .fc-content:before {
+    background: $success;
+  }
+
+  &.bg-warning .fc-content:before {
+    background: $warning;
+  }
+
+  &.bg-danger .fc-content:before {
+    background: $danger;
+  }
+}
+
+.animated {
+  -webkit-animation-duration: .500s;
+  animation-duration: .500s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+}
+
+@media (max-width: 767px) {
+  #calendar {
+    .fc-event {
+      margin: 0;
+    }
+
+    height: auto !important;
+  }
+
+  .fc-scroller, .fc-agendaWeek-view .fc-scroller.fc-time-grid-container, .fc-agendaDay-view .fc-scroller.fc-time-grid-container, .fc-view {
+    height: auto !important;
+  }
+
+  .fc-basic-view .fc-body .fc-row {
+    height: 120px !important;
+  }
+
+  .fc-toolbar .fc-left {
+    float: none;
+    display: block;
+    width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .fc .fc-toolbar > * > * {
+    float: none;
+    vertical-align: bottom;
+  }
+
+  .fc-toolbar {
+    .fc-right {
+      float: none;
+      margin: 0 0 30px 0;
+    }
+
+    .fc-center {
+      margin: 0 0 30px 0;
+    }
+  }
+}

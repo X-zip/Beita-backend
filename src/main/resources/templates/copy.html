@@ -1,0 +1,204 @@
+<!-- Copyright (c) 2019-2020 昱清科技 all rights reserved. -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <title>校园树洞</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico"/>
+    <link href="assets/css/loader.css" rel="stylesheet" type="text/css" />
+    <script src="assets/js/loader.js"></script>
+
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/plugins.css" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+    <link href="plugins/apex/apexcharts.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/dashboard/dash_1.css" rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+</head>
+<body>
+    <!--  BEGIN NAVBAR  -->
+    <div th:insert="component :: navBar"></div>
+    <!--  END NAVBAR  -->
+
+    <!--  BEGIN MAIN CONTAINER  -->
+    <div class="main-container" id="container">
+
+        <div class="overlay"></div>
+        <div class="search-overlay"></div>
+
+        <!--  BEGIN SIDEBAR  -->
+       <div class="sidebar-wrapper sidebar-theme"  th:insert="component :: pageSidebar"></div>
+        <!--  END SIDEBAR  -->
+        
+        <!--  BEGIN CONTENT AREA  -->
+        <div id="content" class="main-content">
+            <div class="layout-px-spacing">
+                <div class="row layout-top-spacing">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                        <button id="btn" class="btn">复制</button>  
+					      	<div style = "width:400px;" id="target" >	
+					        	<th:block th:unless="${#lists.isEmpty(selectList)}" >
+					        		<!-- <img class="bk_img" th:src="@{https://www.yqtech.ltd:8802/background.jpg}"/> --> 
+					        		<section>
+					        		<th:block th:each="task : ${selectList}">
+					                	<section style="display: inline-block; font-size:12px; visibility: visible;height:auto;">
+										     <section style="overflow: hidden; width: 100%; display: flex; -webkit-box-align: center; margin-bottom:5px; align-items: center; max-width: 100% !important; visibility: visible;flex-direction: row;opacity:0.95;">
+											     <section style="width: 100%; height:auto;margin: 5px 5px 5px 5px; visibility: visible;border-radius:1em;padding:0 0 0 0;"th:styleappend="${task.radioGroup == 'radio40'?'background-color: 
+											     #f1ccb8' : task.radioGroup == 'radio41'?'background-color:#f1ccb8' : task.radioGroup == 'radio42'?'background-color: #f1f1b8;' : 
+											     task.radioGroup == 'radio43'?'background-color:#b8f1ed':task.radioGroup == '树洞'?'background-color: 
+											     #d9b8f1' : task.radioGroup == '求助'?'background-color: #e7dbca' : task.radioGroup == '求职'?'background-color: #f1f1b8;' : 
+											     task.radioGroup == '闲置'?'background-color: #f2debd' : 'background-color: #f1ccb8'}">
+												     <section style="padding: 5px 5px 5px 5px;cursor: pointer; visibility: visible; width:100%" >
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio40'}">吐槽</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio41'}">表白</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio42'}">心愿</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio43'}">知乎</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio1'}">租房信息</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio2'}">失物招领</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio3'}">寻物启事</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio5'}">兼职发布</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio6'}">告白倾诉</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio7'}">打听求助</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio10'}">电脑电子</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio11'}">家居家电</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio12'}">游戏影视</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio13'}">衣包饰品</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio14'}">美容护肤</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio15'}">体育休闲</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio16'}">学习办公</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio17'}">母婴用品</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio18'}">宠物植物</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio19'}">求购</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio20'}">食品饮品</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:if="${task.radioGroup == 'radio21'}">其他</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == 'rent'}">求租</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == 'owner'}">招租</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == 'tenent'}">招室友</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == 'job'}">求 职</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == 'career'}">招 聘</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == 'refer'}">内 推</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == 'study'}">课程咨询</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == 'class'}">选课推荐</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == 'question'}">问题咨询</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == 'tutor'}">导师评价</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == 'roommate'}">卖室友</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == 'social'}">社 交</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == 'eat'}">约 饭</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == 'play'}">约 玩</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == 'help'}">打听求助</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == '树洞'}">树洞</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == '求助'}">求助</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == '求职'}">求职</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == '闲置'}">闲置</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:30%;line-height: 1em;" th:if="${task.radioGroup == '租房'}">租房</section>
+												     	 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:50%;margin-left:45%;margin-top:-1.5em;line-height: 1em;" th:text="${task.c_time}"></section>
+													     <section th:if="${task.radioGroup == 'radio40' || task.radioGroup == 'radio41' || task.radioGroup == 'radio42' || task.radioGroup == 'radio43'}" 
+													     style="height: auto; color: rgb(255, 255, 255); font-size: 1.2em; line-height: 18px;float:left;width:100%;line-height: 1.4em;margin-bottom:20px;margin-top:20px;" th:text="${task.content}" ></section>
+													     <section th:unless="${task.radioGroup == 'radio40' || task.radioGroup == 'radio41' || task.radioGroup == 'radio42' || task.radioGroup == 'radio43'}" 
+													     style="height: auto; color: rgb(0, 0, 0); font-size: 1.2em; line-height: 18px;float:left;width:100%;line-height: 1.4em;margin-bottom:20px;margin-top:20px;" th:text="${task.content}"></section>
+													     <section style="margin-bottom:20px;margin-top:20px;width:100%;" th:if="${task.cover != ''}"><img th:src="@{${task.cover +'?imageView2/2/w/500'}} " style="width:70%;opacity:1;"></section>
+													     <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:45%;line-height: 1em;" th:text="'评论: '+${task.commentNum}"></section>
+														 <section style="height: 18px; color: rgb(0, 0, 0); font-size: 1em; line-height: 18px;float:left;width:50%;line-height: 1em;">
+														 	<a th:data-miniprogram-appid="${task.appid}" th:data-miniprogram-path="${task.img}" data-miniprogram-type="text" data-miniprogram-nickname="校园">点击进入小程序查看详情</a></section>
+												     </section>
+											     </section>
+											    <!--   <section style="width: 28.5%; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; display: flex; justify-content: center; visibility: visible;margin-left:5px;">
+											     <img th:src="@{${task.img}}" alt="" style="width:50%;opacity:1;">
+											     </section>-->
+										     </section>
+									     </section>
+									                         
+					                </th:block> 
+					        		</section>       		
+					       			       		                 
+					            </th:block>		          
+						      </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  END CONTENT AREA  -->
+
+
+    </div>
+    <!-- END MAIN CONTAINER -->
+
+<script th:inline="javascript" type="text/javascript">
+function printDetails(){
+    var checkID = [];//定义一个空数组
+    $("input[name='checkedid']:checked").each(function(i){//把所有被选中的复选框的值存入数组
+        checkID[i] =$(this).val();
+    console.log(checkID);
+    });
+    $.ajax({
+        type: "get",
+        url: "/getSelected?id="+checkID,
+        dataType: "text",// 设置你收到服务器数据的格式，根据服务器返回类型填：json、text
+        //contentType : 'application/json;charset=utf-8',//设置你发送给服务器的格式: application/json;charset=utf-8
+        success: function(data){
+            console.log(data)
+            
+        }
+    });
+   
+}
+
+
+window.onload = function(){ 
+    //获取到所需复制的代码
+    var temp = document.getElementById("target").innerHTML.trim().replace(/\s+/g," ");
+   	temp=temp.replace("&nbsp","");
+   	temp=temp.replace("\r\n","");
+   	temp=temp.replace("\n","");
+   	temp=temp.replace("\r","");
+    // 创建mousemove监听事件，当检测到有文字被选中，则移除copy，否则则添加copy
+    document.addEventListener('mousemove',function () {
+        let selObj = window.getSelection(); 
+        let selectedText = selObj.toString();
+        if (selectedText != '') {
+            // 移除copy监听事件
+            document.removeEventListener('copy', myFunction);
+        }else{
+            // 添加copy监听事件
+            document.addEventListener('copy',myFunction);
+        }
+    })
+    function myFunction(e) {
+        e.preventDefault(); 
+        e.clipboardData.setData('text/html', temp);
+    }
+    // 给button加click事件，当被点击时则创建一个copy事件，来触发上面的copy监听事件
+    var btn = document.getElementById('btn');
+    btn.addEventListener('click', function(){
+        document.execCommand("copy");
+        alert("已复制好，可贴粘。");
+    });
+}
+
+
+</script>
+    <script src="assets/js/libs/jquery-3.1.1.min.js"></script>
+    <script src="bootstrap/js/popper.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="assets/js/app.js"></script>
+     <script>
+        $(document).ready(function() {
+            App.init();
+        });
+    </script>
+    <script src="assets/js/custom.js"></script>
+    <!-- END GLOBAL MANDATORY SCRIPTS -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    <script src="plugins/apex/apexcharts.min.js"></script>
+    <script src="assets/js/dashboard/dash_1.js"></script>
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+</body>
+</html>

@@ -1,0 +1,717 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+
+.modal-backdrop {
+  background-color: $m-color_6;
+
+  &.show {
+    opacity: .7;
+  }
+}
+
+#addListModal {
+  .modal-dialog {
+    max-width: 345px;
+  }
+
+  .modal-content {
+    border: none;
+    box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
+  }
+
+  .compose-box {
+    h5 {
+      font-weight: 700;
+      font-size: 18px;
+      color: $dark;
+      text-align: center;
+      margin-bottom: 38px;
+    }
+
+    .list-title {
+      display: flex;
+
+      svg {
+        align-self: center;
+        font-size: 19px;
+        margin-right: 14px;
+        color: $primary;
+        font-weight: 600;
+      }
+
+      input {
+        border: none;
+        padding: 10px 16px;
+        -webkit-box-shadow: 2px 5px 17px 0 rgba(31, 45, 61, 0.1);
+        box-shadow: 2px 5px 17px 0 rgba(31, 45, 61, 0.1);
+
+        &::-webkit-input-placeholder, &::-ms-input-placeholder, &::-moz-placeholder {
+          color: $l-dark;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  .modal-footer {
+    justify-content: center;
+    border: none;
+    padding: 23px 20px;
+
+    .btn[data-dismiss="modal"] {
+      background-color: $white;
+      color: $primary;
+      font-weight: 700;
+      border: 1px solid $m-color_3;
+      padding: 10px 25px;
+    }
+
+    .edit-list {
+      background-color: $m-color_14;
+      color: $white;
+      font-weight: 600;
+      border: 1px solid $m-color_3;
+      padding: 10px 25px;
+    }
+
+    .btn.add-list {
+      background-color: $primary;
+      color: $white;
+      font-weight: 600;
+      border: 1px solid $m-color_3;
+      padding: 10px 25px;
+    }
+  }
+}
+
+/*Add Task Modal*/
+
+#addTaskModal {
+  .compose-box h5 {
+    font-weight: 700;
+    font-size: 18px;
+    color: $m-color_9;
+    text-align: center;
+    margin-bottom: 38px;
+  }
+
+  .task-title {
+    display: flex;
+  }
+
+  .modal-content {
+    .card {
+      border: 1px solid $m-color_3;
+      margin-bottom: 26px;
+      border-radius: 6px;
+      cursor: pointer;
+      background-color: $white;
+    }
+
+    .card-header {
+      padding: 0;
+      padding: 0;
+      border: none;
+      background: none;
+
+      > div {
+        padding: 13px 21px;
+        font-weight: 600;
+        font-size: 16px;
+        color: $primary;
+      }
+    }
+
+    border: none;
+    box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
+
+    svg {
+      align-self: center;
+      font-size: 19px;
+      margin-right: 14px;
+      color: $primary;
+      font-weight: 600;
+    }
+
+    input {
+      padding: 10px 16px;
+
+      &[type="range"] {
+        box-shadow: none;
+        padding: 0;
+
+        &::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          background: $primary;
+          cursor: pointer;
+          -webkit-transition: all 0.35s ease;
+          transition: all 0.35s ease;
+        }
+
+        &:active::-webkit-slider-thumb {
+          -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+          box-shadow: none;
+        }
+
+        &:focus::-webkit-slider-thumb {
+          box-shadow: none;
+        }
+      }
+    }
+
+    .range-count {
+      display: inline-block;
+      margin-left: 6px;
+      font-size: 16px;
+      font-weight: 700;
+      color: $dark;
+    }
+
+    .img-preview {
+      text-align: center;
+
+      img {
+        width: 280px;
+        height: 280px;
+        margin: 0 auto;
+      }
+    }
+
+    .custom-file .custom-file-label {
+      margin-bottom: 0;
+    }
+
+    .input-group .input-group-append {
+      height: 40px;
+    }
+
+    .custom-file .custom-file-label:after {
+      height: auto;
+      display: none;
+    }
+
+    .input-group-append .input-group-text {
+      border: none;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+  }
+
+  .task-badge {
+    display: flex;
+  }
+
+  .modal-content textarea {
+    padding: 10px 16px;
+  }
+
+  .modal-footer {
+    justify-content: center;
+    border: none;
+    padding-top: 0;
+
+    .btn[data-dismiss="modal"] {
+      background-color: $white;
+      color: $primary;
+      font-weight: 700;
+      border: 1px solid #e8e8e8;
+      padding: 10px 25px;
+    }
+
+    [data-btnfn="addTask"] {
+      background-color: $primary;
+      color: $white;
+      font-weight: 600;
+      border: 1px solid $primary;
+      padding: 10px 25px;
+    }
+
+    [data-btnfn="editTask"] {
+      background-color: $m-color_14;
+      color: $white;
+      font-weight: 600;
+      border: 1px solid $m-color_3;
+      padding: 10px 25px;
+    }
+  }
+}
+
+/* Delete Modal*/
+
+#deleteConformation .modal-content {
+  border: 0;
+  -webkit-box-shadow: 2px 5px 17px 0 rgba(31, 45, 61, 0.1);
+  box-shadow: 2px 5px 17px 0 rgba(31, 45, 61, 0.1);
+  padding: 30px;
+
+  .modal-header {
+    border: none;
+    padding: 0;
+
+    .icon {
+      padding: 7px 9px;
+      background: rgba(231, 81, 90, 0.37);
+      text-align: center;
+      margin-right: 8px;
+      border-radius: 50%;
+    }
+
+    svg {
+      width: 20px;
+      color: $danger;
+      fill: rgba(231, 81, 90, 0.37);
+    }
+
+    .modal-title {
+      color: $dark;
+      font-size: 18px;
+      font-weight: 700;
+      align-self: center;
+    }
+  }
+
+  .modal-body {
+    padding: 28px 0;
+
+    p {
+      color: $m-color_6;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 0;
+    }
+  }
+
+  .modal-footer {
+    padding: 0;
+    border: none;
+
+    [data-dismiss="modal"] {
+      background-color: $white;
+      color: $danger;
+      font-weight: 700;
+      border: 1px solid #e8e8e8;
+      padding: 10px 25px;
+    }
+
+    [data-remove="task"] {
+      color: $white;
+      font-weight: 600;
+      padding: 10px 25px;
+    }
+  }
+}
+
+.task-list-section {
+  display: flex;
+  overflow-x: auto;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  padding-bottom: 15px;
+}
+
+.task-list-container {
+  min-width: 309px;
+  padding: 0 15px;
+  width: 467px;
+
+  &:first-child {
+    padding-left: 0;
+  }
+
+  &:last-child {
+    padding-right: 0;
+  }
+}
+
+/*  
+    Connect Sorting Div
+*/
+
+.connect-sorting {
+  padding: 15px;
+  background: $m-color_3;
+  border-radius: 10px;
+  -webkit-box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.08), 0 1px 20px 0 rgba(0, 0, 0, 0.07), 0px 1px 11px 0px rgba(0, 0, 0, 0.07);
+  -moz-box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.08), 0 1px 20px 0 rgba(0, 0, 0, 0.07), 0px 1px 11px 0px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.08), 0 1px 20px 0 rgba(0, 0, 0, 0.07), 0px 1px 11px 0px rgba(0, 0, 0, 0.07);
+
+  .task-container-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 5px;
+
+    .dropdown .dropdown-menu {
+      padding: 11px;
+
+      .dropdown-item {
+        padding: 5px;
+        font-size: 14px;
+        font-weight: 700;
+
+        &:hover {
+          color: $primary;
+        }
+
+        &.active, &:active {
+          background-color: transparent;
+        }
+      }
+    }
+
+    h6 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+  }
+
+  .add-s-task {
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+    -webkit-transition: all 0.3s ease-out;
+
+    &:hover {
+      -webkit-transform: translateY(-3px);
+      transform: translateY(-3px);
+    }
+
+    .addTask {
+      display: block;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      padding: 13px 11px;
+      border-radius: 4px;
+      background: $primary;
+
+      &:hover {
+        color: $white;
+      }
+
+      svg {
+        width: 18px;
+        vertical-align: bottom;
+      }
+    }
+  }
+}
+
+.scrumboard {
+  .task-header {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 20px 0 20px;
+
+    h4 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 0;
+    }
+
+    svg {
+      &.feather-edit-2 {
+        width: 18px;
+        height: 18px;
+        color: $m-color_6;
+        vertical-align: middle;
+        fill: rgba(0, 23, 55, 0.08);
+        cursor: pointer;
+        padding: 0;
+        margin-right: 5px;
+
+        &:hover {
+          color: $primary;
+          fill: rgba(27, 85, 226, 0.2392156863);
+        }
+      }
+
+      &.feather-trash-2 {
+        color: $danger;
+        margin-right: 6px;
+        vertical-align: middle;
+        width: 18px;
+        height: 18px;
+        fill: rgba(231, 81, 90, 0.14);
+        cursor: pointer;
+
+        &:hover {
+          fill: rgba(231, 81, 90, 0.37);
+        }
+      }
+    }
+  }
+
+  .card {
+    border: none;
+    border-radius: 4px;
+    margin-bottom: 30px;
+    -webkit-box-shadow: 2px 5px 17px 0 rgba(31, 45, 61, 0.1);
+    box-shadow: 2px 5px 17px 0 rgba(31, 45, 61, 0.1);
+
+    .card-body {
+      padding: 0;
+
+      .task-body .task-bottom {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 15px;
+
+        div {
+          &.tb-section-1 {
+            span {
+              font-size: 13px;
+              font-weight: 600;
+              width: 17px;
+              height: 17px;
+
+              &:hover {
+                color: $primary;
+                cursor: pointer;
+
+                svg {
+                  color: $primary;
+                  fill: rgba(27, 85, 226, 0.2392156863);
+                }
+              }
+            }
+
+            svg {
+              width: 18px;
+              vertical-align: bottom;
+
+              &:not(:last-child) {
+                margin-right: 5px;
+              }
+            }
+          }
+
+          &.tb-section-2 svg {
+            width: 18px;
+            cursor: pointer;
+            color: $m-color_6;
+            margin-right: 6px;
+            vertical-align: middle;
+            width: 18px;
+            height: 18px;
+            fill: rgba(0, 23, 55, 0.08);
+
+            &.feather-edit-2 {
+              width: 18px;
+              height: 18px;
+              color: $m-color_6;
+              vertical-align: middle;
+              fill: rgba(0, 23, 55, 0.08);
+              cursor: pointer;
+              padding: 0;
+
+              &:hover {
+                color: $primary;
+                fill: rgba(27, 85, 226, 0.2392156863);
+              }
+            }
+
+            &.feather-trash-2 {
+              color: $danger;
+              margin-right: 6px;
+              vertical-align: middle;
+              width: 18px;
+              height: 18px;
+              fill: rgba(231, 81, 90, 0.14);
+
+              &:hover {
+                fill: rgba(231, 81, 90, 0.37);
+              }
+            }
+
+            &:not(:last-child) {
+              margin-right: 5px;
+            }
+          }
+        }
+      }
+    }
+
+    &.img-task {
+      .card-body, .task-header {}
+
+      .card-body {
+        .task-content {
+          padding: 10px 10px 0 10px;
+
+          img {
+            border-radius: 6px;
+            height: 105px;
+            width: 100%;
+          }
+        }
+
+        .task-body .task-bottom {}
+      }
+    }
+
+    &.simple-title-task .card-body {
+      .task-header {
+        margin-bottom: 0;
+        padding: 20px;
+
+        div {
+          &:nth-child(1) {
+            width: 70%;
+          }
+
+          &:nth-child(2) {
+            width: 30%;
+            text-align: right;
+          }
+        }
+      }
+
+      .task-body .task-bottom {
+        padding: 3px 15px 11px 15px;
+      }
+    }
+
+    &.task-text-progress .card-body .task-content {
+      p {
+        padding: 5px 20px 5px 20px;
+      }
+
+      > div {
+        display: flex;
+        padding: 5px 20px 5px 20px;
+      }
+
+      .progress {
+        height: 9px;
+        width: 100%;
+        margin-right: 17px;
+        margin-bottom: 0;
+        align-self: center;
+
+        .progress-bar p {}
+      }
+
+      > div p.progress-count {
+        padding: 0;
+        margin-bottom: 0;
+      }
+    }
+
+    &.ui-sortable-helper {
+      background-color: $primary;
+
+      .task-header {
+        span {
+          color: $white;
+
+          svg {
+            color: $white;
+          }
+        }
+
+        svg {
+          &.feather-edit-2, &.feather-trash-2 {
+            color: $white;
+          }
+        }
+
+        h4 {
+          color: $white;
+        }
+      }
+
+      &.task-text-progress .card-body .task-content {
+        p {
+          color: $white;
+        }
+
+        .progress .progress-bar {
+          background-color: $info !important;
+        }
+      }
+
+      .task-header svg.feather-user {
+        color: $white;
+      }
+
+      .card-body {
+        .task-body .task-bottom div {
+          &.tb-section-1 {
+            color: $white;
+
+            svg {
+              color: $white;
+            }
+          }
+
+          &.tb-section-2 svg {
+            color: $white;
+          }
+        }
+
+        .task-content .progress {
+          box-shadow: none;
+        }
+      }
+    }
+  }
+}
+
+/*
+    img task
+*/
+
+/*
+    task-text-progress
+*/
+
+/*
+    Style On events
+*/
+
+/* On Drag Task */
+
+.ui-state-highlight {
+  position: relative;
+  border-color: $primary;
+  height: 141px;
+  margin-bottom: 36px;
+  border-radius: 15px;
+  border: 1px dashed $primary;
+  background-image: linear-gradient(45deg, rgba(27, 85, 226, 0.09) 25%, transparent 25%, transparent 50%, rgba(27, 85, 226, 0.09) 50%, rgba(27, 85, 226, 0.09) 75%, transparent 75%, transparent);
+  background-size: 1rem 1rem;
+  -webkit-animation: progress-bar-stripes 1s linear infinite;
+  animation: progress-bar-stripes 1s linear infinite;
+
+  &:before {
+    content: 'Drop';
+    position: absolute;
+    left: 41%;
+    font-size: 19px;
+    color: $primary;
+    top: 50%;
+    margin-top: -16px;
+    font-weight: 600;
+  }
+}
+
+.connect-sorting-content {
+  min-height: 80px;
+}
+
+@keyframes progress-bar-stripes {
+  0% {
+    background-position: 1rem 0;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}

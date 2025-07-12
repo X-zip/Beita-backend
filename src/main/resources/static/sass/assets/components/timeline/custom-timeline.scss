@@ -1,0 +1,57 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../../base/base';    // Base Variables
+
+
+
+
+//  ===============================
+//       _timeline Imports 
+//  ===============================
+
+@import '_timeline/_timeline-profile';
+@import '_timeline/_timeline-modern';
+@import '_timeline/_timeline-alter';
+@import '_timeline/_timeline-basic';
+
+
+@media (max-width: 767px) {
+  .timeline-simple .timeline-list .timeline-post-content .post-gallery-img img {
+    width: 150px;
+    margin-bottom: 23px;
+  }
+}
+
+@media (max-width: 575px) {
+  .timeline-alter .item-timeline {
+    display: block;
+    text-align: center;
+
+    .t-meta-time p, .t-usr-txt p {
+      margin: 0 auto;
+    }
+  }
+
+  .timeline-simple .timeline-list .timeline-post-content {
+    display: block;
+
+    div.user-profile {
+      &:after {
+        display: none;
+      }
+
+      margin-bottom: 18px;
+      text-align: center;
+
+      img {
+        margin-right: 0;
+      }
+    }
+
+    h4, .meta-time-date {
+      text-align: center;
+    }
+  }
+}

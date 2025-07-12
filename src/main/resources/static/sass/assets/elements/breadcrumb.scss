@@ -1,0 +1,344 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+
+.breadcrumb {
+  background-color: transparent;
+  margin-bottom: 0;
+}
+
+/*
+    Breadcrumb 1
+*/
+
+.breadcrumb-one {
+  display: inline-block;
+
+  .breadcrumb {
+    padding: 0;
+    vertical-align: text-bottom;
+  }
+
+  .breadcrumb-item {
+    align-self: center;
+
+    a {
+      color: $m-color_6;
+      vertical-align: text-bottom;
+
+      svg {
+        width: 18px;
+        height: 18px;
+        vertical-align: sub;
+        fill: $m-color_3;
+      }
+    }
+
+    &.active a {
+      color: $m-color_9;
+    }
+
+    span {
+      vertical-align: text-bottom;
+    }
+
+    &.active {
+      color: $dark;
+      font-weight: 600;
+    }
+
+    + .breadcrumb-item {
+      padding: 0px;
+
+      &::before {
+        color: $m-color_6;
+        padding: 0 6px 0 6px;
+      }
+    }
+  }
+}
+
+/*
+    Breadcrumb 2
+*/
+
+.breadcrumb-two {
+  .breadcrumb {
+    list-style: none;
+    overflow: hidden;
+    padding: 0;
+
+    li {
+      float: left;
+    }
+  }
+
+  .breadcrumb-item + .breadcrumb-item::before {
+    color: $white;
+  }
+
+  .breadcrumb li {
+    a {
+      color: $primary;
+      text-decoration: none;
+      padding: 6px 0 6px 40px;
+      background: $m-color_2;
+      position: relative;
+      display: block;
+      float: left;
+
+      &:after {
+        content: " ";
+        display: block;
+        width: 0;
+        height: 0;
+        border-top: 50px solid transparent;
+
+        /* Go big on the size, and let overflow hide */
+        border-bottom: 50px solid transparent;
+        border-left: 30px solid $m-color_2;
+        position: absolute;
+        top: 50%;
+        margin-top: -50px;
+        left: 100%;
+        z-index: 2;
+      }
+
+      &:before {
+        content: " ";
+        display: block;
+        width: 0;
+        height: 0;
+        border-top: 50px solid transparent;
+
+        /* Go big on the size, and let overflow hide */
+        border-bottom: 50px solid transparent;
+        border-left: 30px solid $m-color_2;
+        position: absolute;
+        top: 50%;
+        margin-top: -50px;
+        margin-left: 1px;
+        left: 100%;
+        z-index: 1;
+      }
+    }
+
+    &:last-child a:before {
+      margin-left: -6px;
+    }
+
+    &:first-child a {
+      padding-left: 10px;
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+    }
+
+    &.active a {
+      background: $primary;
+      color: $white;
+
+      &:after {
+        border-left-color: $primary;
+      }
+    }
+
+    &:last-child a {
+      pointer-events: none;
+      cursor: default;
+      padding-left: 20px;
+      padding-right: 20px;
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
+
+      &:after {
+        border: none;
+      }
+    }
+  }
+}
+
+/*
+    Breadcrumb 3
+*/
+
+.breadcrumb-three {
+  padding: 0;
+  background-color: transparent;
+
+  .breadcrumb {
+    padding: 0;
+  }
+
+  .breadcrumb-item {
+    color: $m-color_6;
+    padding: 9px 9px;
+    background: $m-color_1;
+    border-bottom-right-radius: 13px;
+    border-top-right-radius: 13px;
+
+    &.active {
+      color: $primary;
+      font-weight: 600;
+    }
+
+    + .breadcrumb-item::before {
+      color: $m-color_9;
+      font-weight: 700;
+      font-size: 13px;
+      content: '';
+      padding: 0px 6px;
+      vertical-align: sub;
+    }
+  }
+}
+
+/*
+    Breadcrumb 4
+*/
+
+.breadcrumb-four .breadcrumb {
+  display: inline-flex;
+  padding: 0;
+  background-color: transparent;
+  margin-bottom: 0;
+
+  li {
+    position: relative;
+    font-size: 14px;
+    background: $white;
+    margin-right: 20px;
+    margin-bottom: 6px;
+    padding: 7px 10px;
+    border-radius: 10px;
+    border: 1px solid $m-color_3;
+    -webkit-box-shadow: 2px 5px 17px 0 rgba(31, 45, 61, 0.1);
+    box-shadow: 0px 1px 8px 0px rgba(31, 45, 61, 0.1);
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &:not(:first-child):before {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      height: 4px;
+      width: 4px;
+      background: $primary;
+      left: -13px;
+      top: 50%;
+    }
+
+    a {
+      color: #555;
+      vertical-align: sub;
+
+      &:hover {
+        text-decoration: none;
+        color: #4d7496;
+      }
+    }
+
+    &:not(:first-child) svg {
+      margin-right: 5px;
+    }
+
+    svg {
+      color: #6f6f6f;
+      vertical-align: text-bottom;
+      width: 20px;
+    }
+
+    &.active {
+      a {
+        color: $primary !important;
+        font-weight: 600;
+      }
+
+      svg {
+        color: $primary;
+      }
+    }
+
+    span {
+      vertical-align: text-bottom;
+    }
+  }
+}
+
+/*
+    Breadcrumb 5
+*/
+
+.breadcrumb-five .breadcrumb {
+  padding: 0;
+  background-color: transparent;
+  margin-bottom: 0;
+
+  li {
+    position: relative;
+    font-size: 14px;
+    margin-right: 20px;
+    padding: 0 7px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &:not(:first-child):before {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      height: 4px;
+      width: 4px;
+      background: $primary;
+      left: -13px;
+      top: 50%;
+    }
+
+    a {
+      color: #555;
+      vertical-align: sub;
+
+      &:hover {
+        text-decoration: none;
+        color: #4d7496;
+      }
+    }
+
+    svg {
+      color: #6f6f6f;
+      vertical-align: bottom;
+      width: 20px;
+    }
+
+    &.active a {
+      color: $primary !important;
+      font-weight: 600;
+    }
+  }
+}
+
+@media (max-width: 575px) {
+  .breadcrumb-two {
+    .breadcrumb li {
+      padding: 0;
+
+      a {
+        padding: 6px 10px 6px 10px;
+        margin-bottom: 5px;
+
+        &:after {
+          display: none;
+        }
+      }
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before, .breadcrumb li a:before {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,49 @@
+/*
+    =====================
+        Unique Visitors
+    =====================
+*/
+
+.widget {
+  &.widget-chart-three {
+    background: $white;
+
+    .widget-heading {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed $m-color_3;
+      padding: 20px 20px;
+      margin-bottom: 0;
+      padding-bottom: 20px;
+
+      h5 {
+        font-size: 17px;
+        display: block;
+        color: $m-color_10;
+        font-weight: 600;
+        margin-bottom: 0;
+      }
+
+      .dropdown {
+        align-self: center;
+
+        a svg {
+          color: $m-color_6;
+          width: 19px;
+          height: 19px;
+        }
+
+        .dropdown-menu {
+          padding: 8px 8px;
+          min-width: 10rem;
+          border-radius: 6px;
+          top: 5px !important;
+        }
+      }
+    }
+
+    .apexcharts-legend-marker {
+      left: -5px !important;
+    }
+  }
+}

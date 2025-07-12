@@ -1,0 +1,128 @@
+/*
+    ===========================
+        Visitors by Browser
+    ===========================
+*/
+
+.widget-four {
+  position: relative;
+  background: $white;
+  padding: 20px;
+  border-radius: 8px;
+  height: 100%;
+
+  .widget-heading {
+    margin-bottom: 54px;
+
+    h5 {
+      font-size: 17px;
+      display: block;
+      color: $m-color_10;
+      font-weight: 600;
+      margin-bottom: 0;
+    }
+  }
+
+  .widget-content {
+    font-size: 17px;
+
+    .browser-list {
+      display: flex;
+
+      &:not(:last-child) {
+        margin-bottom: 30px;
+      }
+    }
+
+    .w-icon {
+      display: inline-block;
+      padding: 8px 8px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-self: center;
+      height: 34px;
+      width: 34px;
+      margin-right: 12px;
+
+      svg {
+        display: block;
+        width: 17px;
+        height: 17px;
+      }
+    }
+
+    .browser-list {
+      &:nth-child(1) .w-icon {
+        background: $l-primary;
+      }
+
+      &:nth-child(2) .w-icon {
+        background: $l-danger;
+      }
+
+      &:nth-child(3) .w-icon {
+        background: $l-warning;
+      }
+
+      &:nth-child(1) .w-icon svg {
+        color: $primary;
+      }
+
+      &:nth-child(2) .w-icon svg {
+        color: $danger;
+      }
+
+      &:nth-child(3) .w-icon svg {
+        color: $warning;
+      }
+    }
+
+    .w-browser-details {
+      width: 100%;
+      align-self: center;
+    }
+
+    .w-browser-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1px;
+
+      h6 {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 0;
+        color: $m-color_6;
+      }
+
+      p {
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 0;
+        color: $m-color_6;
+      }
+    }
+
+    .w-browser-stats .progress {
+      margin-bottom: 0;
+      height: 22px;
+      padding: 4px;
+      border-radius: 20px;
+      box-shadow: 0 2px 2px rgba(224, 230, 237, 0.4588235294), 1px 6px 7px rgba(224, 230, 237, 0.4588235294);
+
+      .progress-bar {
+        position: relative;
+
+        &:before {
+          content: '';
+          height: 7px;
+          width: 7px;
+          background: $white;
+          position: absolute;
+          right: 3px;
+          border-radius: 50%;
+          top: 3.4px;
+        }
+      }
+    }
+  }
+}

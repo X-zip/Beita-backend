@@ -1,0 +1,133 @@
+/*  
+    ======================
+        MEDIA QUERIES
+    ======================
+*/
+
+@media (max-width: 991px) {
+  .header-container {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  /*
+      =============
+          NavBar
+      =============
+  */
+
+  .main-container.sidebar-closed #content, #content {
+    margin-left: 0;
+  }
+
+  /*
+      =============
+          Sidebar
+      =============
+  */
+
+  #sidebar .theme-brand {
+    border-radius: 0;
+    background-color: $primary;
+    padding: 7px 12px 7px 24px;
+    border-color: $primary;
+  }
+
+  .sidebar-closed #sidebar .theme-brand {
+    padding: 0.9px 12px 0.9px 24px;
+  }
+
+  .main-container:not(.sbar-open) .sidebar-wrapper, body.alt-menu .sidebar-closed > .sidebar-wrapper {
+    width: 0;
+    left: -52px;
+  }
+
+  .main-container {
+    padding: 0;
+  }
+
+  #sidebar ul.menu-categories.ps {
+    height: calc(100vh - 114px) !important;
+  }
+
+  .sidebar-wrapper {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 9999;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+    border-radius: 0;
+  }
+
+  .sidebar-noneoverflow {
+    overflow: hidden;
+  }
+
+  #sidebar {
+    height: 100vh !important;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+    background: $white;
+  }
+
+  /* display .overlay when it has the .active class */
+
+  .overlay.show {
+    display: block;
+    opacity: .7;
+  }
+
+  .navbar .navbar-item .nav-item {
+    &.message-dropdown .dropdown-menu {
+      &:after {
+        right: 107px;
+      }
+
+      right: -104px;
+      padding: 24px 0;
+    }
+
+    &.user-profile-dropdown .dropdown-menu {
+      right: -16px;
+
+      &::after {
+        right: 23px;
+      }
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  header.navbar {
+    margin: 0 0 0 233px;
+  }
+
+  .sidebar-noneoverflow .header-container {
+    padding-left: 80px;
+  }
+
+  .sidebar-closed #sidebar .theme-brand li.theme-text a {
+    display: none;
+  }
+}
+
+@media (max-width: 575px) {
+  .navbar .navbar-item .nav-item {
+    &.message-dropdown .dropdown-menu {
+      min-width: 16.2rem;
+    }
+
+    &.dropdown.notification-dropdown .dropdown-menu {
+      right: -60px;
+      min-width: 16rem;
+      padding: 24px 12px;
+
+      &:after {
+        right: 64px;
+      }
+    }
+  }
+}

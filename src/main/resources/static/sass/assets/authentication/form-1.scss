@@ -1,0 +1,290 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+  background: $white;
+}
+
+.form-container {
+  display: flex;
+}
+
+.form-form {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+
+  .form-form-wrap {
+    max-width: 480px;
+    margin: 0 auto;
+    min-width: 311px;
+    min-height: 100%;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .form-container {
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+    padding: .71428571rem 2.85714286rem;
+    width: 100%;
+    min-height: 100%;
+
+    .form-content {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  .form-form-wrap {
+    .user-meta {
+      margin-bottom: 35px;
+
+      img {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        margin-right: 15px;
+        border: 4px solid $m-color_3;
+      }
+
+      div {
+        align-self: center;
+      }
+
+      p {
+        font-size: 31px;
+        color: $dark;
+        margin-bottom: 0;
+      }
+    }
+
+    h1 .brand-name {
+      color: $primary;
+      font-weight: 600;
+    }
+
+    p.signup-link {
+      font-size: 14px;
+      color: $dark;
+      font-weight: 700;
+      margin-bottom: 50px;
+
+      a {
+        color: $primary;
+        border-bottom: 1px solid;
+      }
+    }
+
+    form .field-wrapper {
+      &.input {
+        position: relative;
+        padding: 11px 0 25px 0;
+        border-bottom: none;
+
+        &:focus {
+          border: 1px solid $black;
+        }
+      }
+
+      &.toggle-pass p {
+        font-weight: 600;
+        color: $dark;
+        margin-bottom: 0;
+      }
+
+      .logged-in-user-name {
+        font-size: 37px;
+        color: $dark;
+      }
+
+      svg {
+        position: absolute;
+        top: 16px;
+        color: $primary;
+        fill: rgba(27, 85, 226, 0.2392156863);
+      }
+
+      &.terms_condition {
+        margin-bottom: 20px;
+
+        label {
+          font-size: 14px;
+          color: $m-color_6;
+          padding-left: 31px;
+          font-weight: 100;
+        }
+
+        a {
+          color: $primary;
+        }
+      }
+
+      input {
+        display: inline-block;
+        vertical-align: middle;
+        border-radius: 0;
+        min-width: 50px;
+        max-width: 635px;
+        width: 100%;
+        min-height: 36px;
+        background-color: #ffffff;
+        border: none;
+        -ms-transition: all 0.2s ease-in-out 0s;
+        transition: all 0.2s ease-in-out 0s;
+        color: $dark;
+        font-weight: 700;
+        font-size: 16px;
+        border-bottom: 1px solid $m-color_3;
+        padding: 0px 0 10px 35px;
+
+        &::-webkit-input-placeholder, &::-ms-input-placeholder, &::-moz-placeholder {
+          color: $m-color_5;
+          font-size: 14px;
+        }
+
+        &:focus {
+          border-bottom: 1px solid $primary;
+          box-shadow: none;
+        }
+      }
+
+      &.toggle-pass {
+        align-self: center;
+        text-align: left;
+
+        .switch {
+          margin-bottom: 0;
+          vertical-align: sub;
+          margin-left: 7px;
+        }
+      }
+
+      button.btn {
+        align-self: center;
+      }
+
+      a.forgot-pass-link {
+        width: 100%;
+        font-weight: 700;
+        color: $primary;
+        text-align: center;
+        display: block;
+        letter-spacing: 2px;
+        font-size: 15px;
+        margin-top: 15px;
+      }
+
+      .n-chk .new-control-indicator {
+        top: 1px;
+        border: 1px solid $m-color_4;
+        background-color: $m-color_1;
+
+        &:after {
+          top: 52%;
+        }
+      }
+
+      &.keep-logged-in {
+        margin-top: 60px;
+
+        label {
+          font-size: 14px;
+          color: $m-color_6;
+          padding-left: 31px;
+          font-weight: 100;
+        }
+      }
+    }
+  }
+
+  .terms-conditions {
+    max-width: 480px;
+    margin: 0 auto;
+    color: $dark;
+    font-weight: 600;
+    margin-top: 90px;
+
+    a {
+      color: $primary;
+      font-weight: 700;
+    }
+  }
+}
+
+.form-image {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: fixed;
+  right: 0;
+  min-height: auto;
+  height: 100vh;
+  width: 50%;
+
+  .l-image {
+    background-image: url(https://cdn.pixabay.com/photo/2015/12/10/16/39/shield-1086703_960_720.png);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $m-color_19;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position-x: center;
+    background-position-y: center;
+  }
+}
+
+@media (max-width: 991px) {
+  .form-form {
+    width: 100%;
+
+    .form-form-wrap {
+      min-width: auto;
+    }
+  }
+
+  .form-image {
+    display: none;
+  }
+}
+
+@media (max-width: 575px) {
+  .form-form .form-form-wrap form .field-wrapper.toggle-pass {
+    margin-bottom: 28px;
+  }
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .form-form {
+    .form-form-wrap {
+      width: 100%;
+    }
+
+    .form-container {
+      height: 100%;
+    }
+  }
+}

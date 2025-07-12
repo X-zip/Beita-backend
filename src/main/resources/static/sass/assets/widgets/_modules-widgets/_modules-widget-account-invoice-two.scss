@@ -1,0 +1,57 @@
+/*
+    ==================
+        Balance
+    ==================
+*/
+
+.widget-account-invoice-two {
+  padding: 22px 19px;
+  background: $warning;
+  background: linear-gradient(to right, #0081ff 0%, #0045ff 100%);
+
+  .account-box {
+    .info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 84px;
+    }
+
+    h5 {
+      color: $m-color_3;
+      margin-bottom: 0;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    p {
+      color: $m-color_3;
+      font-weight: 700;
+      margin-bottom: 0;
+      align-self: center;
+    }
+
+    .acc-action {
+      margin-top: 23px;
+      display: flex;
+      justify-content: space-between;
+
+      a {
+        display: inline-block;
+        padding: 8px;
+        border-radius: 6px;
+        color: $m-color_3;
+        font-weight: 600;
+        box-shadow: 0px 0px 2px 0px $m-color_4;
+
+        &:first-child {
+          margin-right: 2px;
+        }
+
+        svg {
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
+  }
+}

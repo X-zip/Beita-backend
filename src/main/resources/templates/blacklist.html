@@ -1,0 +1,263 @@
+<!-- Copyright (c) 2019-2020 昱清科技 all rights reserved. -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <title>校园树洞</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico"/>
+    <link href="assets/css/loader.css" rel="stylesheet" type="text/css" />
+    <script src="assets/js/loader.js"></script>
+
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/plugins.css" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+    <link href="plugins/apex/apexcharts.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/dashboard/dash_1.css" rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+</head>
+<body>
+
+ <!--  BEGIN NAVBAR  -->
+    <div th:insert="component :: navBar"></div>
+    <!--  END NAVBAR  -->
+
+    <!--  BEGIN MAIN CONTAINER  -->
+    <div class="main-container" id="container">
+
+        <div class="overlay"></div>
+        <div class="search-overlay"></div>
+
+        <!--  BEGIN SIDEBAR  -->
+       <div class="sidebar-wrapper sidebar-theme"  th:insert="component :: pageSidebar"></div>
+        <!--  END SIDEBAR  -->
+        
+        <!--  BEGIN CONTENT AREA  -->
+        <div id="content" class="main-content">
+            <div class="layout-px-spacing">
+                <div class="row layout-top-spacing">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+				        <div class="modal" id="exampleModal">
+						  <div class="modal-dialog" role="document">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <h5 class="modal-title" id="exampleModalLabel">封禁</h5>
+						      </div>
+						      <div class="modal-body">
+								  <div class="form-group">
+									<label for="" class="col-sm-3 control-label">封禁时长</label> 
+									<div class="col-sm-8">
+										<input type="radio" id="isAvailable1" name='radio' value='0' checked>1天
+										<input type="radio" id="isAvailable1" name='radio' value='1'>3天
+										<input type="radio" id="isAvailable2" name='radio' value='2'>7天
+										<input type="radio" id="isAvailable3" name='radio' value='3'>永久  
+									</div>
+								  </div>
+								  <div class="form-group" style="margin-top:20px;">
+									<div class="col-sm-8">
+										<input class="form-control" type="text" id="description" placeholder="封禁原因" name="description">	
+									</div>
+								  </div>
+								  <input type="hidden" id="openid"  name="openid">	
+								  <div class="modal-footer">
+							        <button class="btn btn-primary mb-2" type="button"  onClick ="hideModal()">取消</button>
+							        <button class="btn btn-primary mb-2" onClick ="blockUser()">封禁</button>
+							      </div>
+						      </div>
+				
+						    </div>
+						  </div>
+						</div>
+				     	<div class="form-group col-lg-6 col-12 mx-auto" >
+					     	<input type="search" id="site-search" name="q" class="form-control">	
+							<button class="btn btn-primary mb-2" onclick="search()" >标题搜索</button>
+							<button class="btn btn-primary mb-2" onclick="search_comment()" >评论搜索</button>
+							<!-- <button class="btn btn-primary mb-2" onclick="search_all()" >所有帖子</button>
+							<button class="btn btn-primary mb-2" onclick="search_allComment()" >所有评论</button> -->
+						</div>
+						
+						<table border="1" class="table table-bordered mb-4">
+						    <tr>
+						        <td>编号</td>
+						        <td>内容</td>
+						        <td>openid</td>
+						        <td>封禁</td>
+						        <td>所有帖子</td>
+						        <td>所有评论</td>
+						    </tr>
+						    <tr th:each="task : ${taskList}">
+						        <td th:text="${task.id}" ><input name="idValue" type="text" th:value="${task.id}"></td>
+						        <td th:text="${task.title}" style="max-width:600px"></td>
+						        <td th:text="${task.openid}"></td>
+						        <td>
+						         <button class="btn btn-primary mb-2" type="button" id="showModal">封禁</button>
+						        </td>
+						        <td>
+						         <button class="btn btn-primary mb-2" type="button" id="search_all">查看</button>
+						        </td>
+						        <td>
+						         <button class="btn btn-primary mb-2" type="button" id="search_allComment">查看</button>
+						        </td>
+						    </tr>
+					    </table> 
+						
+				     	<table border="1" class="table table-bordered mb-4">
+						    <tr>
+						        <td>编号</td>
+						        <td>openid</td>
+						        <td>封禁时长</td>
+						        <td>开始时间</td>
+						        <td>封禁原因</td>
+						        <td>解封</td>
+						    </tr>
+						    <tr th:each="list : ${blackList}">
+						        <td th:text="${list.id}" ><input name="idValue" type="text" th:value="${task.id}"></td>
+						        <td th:text="${list.openid}"></td>
+						        <td th:text="${list.period}"></td>
+						        <td th:text="${list.start}"></td>
+						        <td th:text="${list.description}"></td>
+						        <td>
+						         <button class="btn btn-primary mb-2" type="button" id="deleteBlacklist" >解封</button>
+						        </td>
+						    </tr>
+					    </table>  
+				    	<div class="paginating-container pagination-solid">
+							<input type="hidden" id="curPage" value="${curPage}"></input>
+							<ul class="pagination" id="pageListId">
+								<li class="btn btn-primary mb-2" style="margin:10px;" th:if="${curPage > 0}"><a style="color:white;margin:10px;" th:href="'/blacklist?length=' 
+								+ ${(curPage-1)*10} " th:text="上一页" th:if="${curPage > 0}"></a></li>
+								<li class="btn btn-primary mb-2" style="margin:10px;" th:if="${number == 10 }"><a style="color:white;margin:10px;" th:href="'/blacklist?length=' 
+								+ ${(curPage+1)*10}" th:text="下一页"></a></li>
+							</ul>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  END CONTENT AREA  -->
+
+
+    </div>
+    <!-- END MAIN CONTAINER -->
+    
+
+ 
+    <script src="assets/js/libs/jquery-3.1.1.min.js"></script>
+    <script src="bootstrap/js/popper.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="assets/js/app.js"></script>
+     <script>
+        $(document).ready(function() {
+            App.init();
+        });
+    </script>
+    <script src="assets/js/custom.js"></script>
+    <!-- END GLOBAL MANDATORY SCRIPTS -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    <script src="plugins/apex/apexcharts.min.js"></script>
+    <script src="assets/js/dashboard/dash_1.js"></script>
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+<script th:inline="javascript" type="text/javascript">
+$(document).on('click', '#addChoose', function (){
+    var checkID = $(this).parents("tr").find("td").eq(0).text();
+    console.log(checkID)
+    $.ajax({
+        type: "get",
+        url: "/addChooseList?id="+checkID+"&&choose=1",
+        dataType: "text",// 设置你收到服务器数据的格式，根据服务器返回类型填：json、text
+        //contentType : 'application/json;charset=utf-8',//设置你发送给服务器的格式: application/json;charset=utf-8
+        success: function(data){
+        	setTimeout("window.location.reload()",100);     
+        }
+    }); 
+})
+
+
+$(document).on('click', '#removeChoose', function (){
+	var checkID = $(this).parents("tr").find("td").eq(0).text();
+    $.ajax({
+        type: "get",
+        url: "/addChooseList?id="+checkID+"&&choose=0",
+        dataType: "text",// 设置你收到服务器数据的格式，根据服务器返回类型填：json、text
+        //contentType : 'application/json;charset=utf-8',//设置你发送给服务器的格式: application/json;charset=utf-8
+        success: function(data){
+        	setTimeout("window.location.reload()",100);   
+        }
+    }); 
+})
+
+function search()
+{
+    var content = document.getElementById("site-search").value;
+    if (content.length == '') {
+    	alert("搜索内容不能为空！");
+    } else {
+    	window.location.href = "/getOpenidBySearch?search="+content
+    }
+    
+}
+
+
+function search_comment()
+{
+    var content = document.getElementById("site-search").value;
+    if (content.length == '') {
+    	alert("搜索内容不能为空！");
+    } else {
+    	window.location.href = "/getOpenidBySearchComment?search="+content
+    }  
+}
+
+$(document).on('click', '#search_all', function (){
+	var id = $(this).parents("tr").find("td").eq(2).text();
+    window.location.href = "/getAllByOpenid?search="+id
+})
+
+$(document).on('click', '#search_allComment', function (){
+	var id = $(this).parents("tr").find("td").eq(2).text();
+    window.location.href = "/getAllCommentByOpenid?search="+id
+})
+
+
+$(document).on('click', '#showModal', function () {
+	var openid = $(this).parents("tr").find("td").eq(2).text();
+    console.log(openid)
+    document.getElementById("openid").value=openid;
+    document.getElementById("exampleModal").style.display="block";    
+})
+
+function hideModal() {
+    document.getElementById("exampleModal").style.display="none";
+}
+
+function blockUser() {
+	var radio = document.getElementsByName("radio");	
+	for (i=0; i<radio.length; i++) {
+		if (radio[i].checked) {
+			var period =  radio[i].value
+		}
+	}
+	var content = document.getElementById("description").value;
+	var openid = document.getElementById("openid").value;
+	console.log(period)
+	window.location.href = "/addBlacklist?period="+period + "&&description="+content + "&&openid=" + openid
+}
+
+$(document).on('click', '#deleteBlacklist', function (){
+	var id = $(this).parents("tr").find("td").eq(0).text();
+	window.location.href = "/deleteBlacklist?id="+id
+})
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+/*
+	Component Card 1
+*/
+
+.component-card_1 {
+  border: 1px solid $m-color_3;
+  border-radius: 6px;
+  width: 19rem;
+  margin: 0 auto;
+  box-shadow: 4px 6px 10px -3px $m-color_4;
+
+  .card-body {
+    padding: 28px 25px;
+  }
+
+  .icon-svg {
+    margin-bottom: 20px;
+    display: inline-block;
+    background: $dark;
+    padding: 12px;
+    border-radius: 50%;
+    color: $m-color_1;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .card-title {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+  }
+
+  .card-text {
+    color: $m-color_6;
+  }
+}

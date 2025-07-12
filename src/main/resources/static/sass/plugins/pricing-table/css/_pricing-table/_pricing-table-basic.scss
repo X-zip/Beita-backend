@@ -1,0 +1,121 @@
+/* norbu */
+
+.pricing--norbu {
+  .pricing__item {
+    margin: 1em;
+    color: $dark;
+    cursor: default;
+    background: $white;
+    border-radius: 10px;
+    border: 1px solid $dark;
+    -webkit-transition: border-color 0.3s, background 0.3s;
+    transition: border-color 0.3s, background 0.3s;
+
+    &:hover {
+      color: $primary;
+      border: 1px solid $primary;
+    }
+  }
+
+  .pricing__title {
+    font-size: 26px;
+    font-weight: 600;
+    margin: 0.5em 0;
+    padding: 1em;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 20%;
+      height: 1px;
+      background: $dark;
+      left: 40%;
+      bottom: 0;
+    }
+  }
+
+  .pricing__item:hover .pricing__title::after {
+    background: $primary;
+  }
+
+  .icon {
+    display: inline-block;
+    min-width: 2em;
+  }
+
+  .pricing__price {
+    font-size: 50px;
+    padding: 0.5em 0 0 0;
+    font-weight: 600;
+    position: relative;
+    z-index: 100;
+  }
+
+  .pricing__currency {
+    font-size: 0.5em;
+    vertical-align: super;
+  }
+
+  .pricing__period {
+    font-size: 15px;
+    padding: 1em;
+  }
+
+  .pricing__sentence {
+    padding: 1em 2em;
+    font-size: 1em;
+    margin: 0 auto 1em;
+  }
+
+  .pricing__feature-list {
+    font-size: 1.15em;
+    letter-spacing: 0;
+    padding: 2em 0;
+    list-style: none;
+  }
+
+  .pricing__feature {
+    line-height: 1.6;
+    font-size: 15px;
+
+    svg {
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  .pricing__action {
+    text-transform: uppercase;
+    flex: none;
+    padding: 12px 45px;
+    color: $dark;
+    border: solid 1px $dark;
+    font-weight: 600;
+    border-radius: 6px;
+    -webkit-transition: background 0.3s;
+    transition: background 0.3s;
+  }
+
+  .pricing__item:hover .pricing__action {
+    color: $primary;
+    background: $l-primary;
+    border: solid 1px $primary;
+    box-shadow: 0px 5px 20px 0 rgba(0, 0, 0, 0.1);
+    will-change: opacity, transform;
+    transition: all 0.3s ease-out;
+    -webkit-transition: all 0.3s ease-out;
+  }
+
+  .pricing__action {
+    &:hover, &:focus {
+      color: $l-primary;
+      background: $primary;
+      border-color: $primary;
+      box-shadow: 0px 5px 20px 0 rgba(0, 0, 0, 0.1);
+      will-change: opacity, transform;
+      transition: all 0.3s ease-out;
+      -webkit-transition: all 0.3s ease-out;
+    }
+  }
+}

@@ -1,0 +1,115 @@
+/*
+	Component Card 9
+*/
+
+.component-card_9 {
+  border: 1px solid $m-color_3;
+  border-radius: 6px;
+  width: 22rem;
+  margin: 0 auto;
+  -webkit-box-shadow: 4px 6px 10px -3px $m-color_4;
+  box-shadow: 4px 6px 10px -3px $m-color_4;
+
+  .card-body {
+    padding: 22px 20px;
+  }
+
+  .meta-date {
+    margin-bottom: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: $primary;
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+  }
+
+  .card-text {
+    color: $m-color_6;
+    line-height: 22px;
+  }
+
+  .meta-info {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    padding-top: 15px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      height: 1px;
+      width: 215px;
+      background: $m-color_3;
+      top: 0;
+      right: 0;
+      left: 0;
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+
+  .meta-user {
+    display: flex;
+  }
+
+  .avatar {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
+    margin-right: 10px;
+
+    .avatar-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background-color: $m-color_9;
+      color: $m-color_3;
+      font-size: 14px;
+    }
+  }
+
+  .user-name {
+    align-self: center;
+    color: $m-color_9;
+    font-weight: 600;
+  }
+
+  .meta-action {
+    display: flex;
+  }
+
+  .meta-likes {
+    align-self: center;
+    margin-right: 13px;
+    color: $primary;
+
+    svg {
+      width: 16px;
+      vertical-align: sub;
+      color: $primary;
+      fill: rgba(27, 85, 226, 0.2392156863);
+    }
+  }
+
+  .meta-view {
+    align-self: center;
+    color: $primary;
+
+    svg {
+      width: 16px;
+      vertical-align: sub;
+      color: $primary;
+      fill: rgba(27, 85, 226, 0.2392156863);
+    }
+  }
+}

@@ -1,0 +1,61 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+.custom-progress {
+  &.progress-up .range-count {
+    margin-bottom: 15px;
+  }
+
+  &.progress-down .range-count {
+    margin-top: 15px;
+  }
+}
+
+.range-count {
+  font-weight: 700;
+  color: $dark;
+
+  .range-count-number {
+    display: inline-block;
+    background: #ffffff;
+    padding: 3px 8px;
+    border-radius: 5px;
+    color: $primary;
+    border: 1px solid $m-color_3;
+  }
+}
+
+.custom-progress {
+  &.top-right .range-count, &.bottom-right .range-count {
+    text-align: right;
+  }
+}
+
+.progress-range-counter {
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background: $primary;
+    cursor: pointer;
+    -webkit-transition: all 0.35s ease;
+    transition: all 0.35s ease;
+  }
+
+  &:active::-webkit-slider-thumb {
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+    box-shadow: none;
+  }
+
+  &:focus::-webkit-slider-thumb {
+    box-shadow: none;
+  }
+
+  &::-moz-range-thumb {
+    background: $primary;
+    cursor: pointer;
+  }
+}

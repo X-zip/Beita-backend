@@ -1,0 +1,56 @@
+/*
+    Infobox 3
+*/
+
+.infobox-3 {
+  position: relative;
+  border: 1px solid $m-color_3;
+  width: 50%;
+  margin-top: 30px;
+  padding: 50px 25px 25px 25px;
+  border-radius: 6px;
+  -webkit-box-shadow: 0px 2px 10px 1px rgba(31, 45, 61, 0.1);
+  box-shadow: 0px 2px 10px 1px rgba(31, 45, 61, 0.1);
+  margin-right: auto;
+  margin-left: auto;
+
+  .info-icon {
+    position: absolute;
+    margin-bottom: 20px;
+    background: $primary;
+    display: inline-block;
+    top: -31px;
+    padding: 6px;
+    border-radius: 6px;
+
+    svg {
+      width: 50px;
+      height: 50px;
+      stroke-width: 1px;
+      color: $white;
+    }
+  }
+
+  .info-heading {
+    font-weight: 600;
+    font-size: 19px;
+    margin-bottom: 14px;
+    letter-spacing: 2px;
+  }
+
+  .info-text {
+    font-size: 15px;
+    color: $m-color_6;
+    margin-bottom: 15px;
+  }
+
+  .info-link {
+    color: $primary;
+    font-weight: 600;
+
+    svg {
+      width: 15px;
+      height: 15px;
+    }
+  }
+}

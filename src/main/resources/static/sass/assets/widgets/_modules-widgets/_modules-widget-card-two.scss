@@ -1,0 +1,88 @@
+/*
+    ==================
+        Dev Summit
+    ==================
+*/
+
+.widget-card-two {
+  background: $white;
+  padding: 20px 0px;
+
+  .media {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 19px;
+    padding-bottom: 21px;
+    border-bottom: 1px dashed $m-color_3;
+
+    .w-img {
+      margin-right: 10px;
+
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 3px solid $m-color_3;
+      }
+    }
+
+    .media-body {
+      align-self: center;
+
+      h6 {
+        font-weight: 700;
+        font-size: 15px;
+        letter-spacing: 0;
+        margin-bottom: 0;
+      }
+
+      p {
+        margin-bottom: 0;
+        font-weight: 600;
+        color: $m-color_6;
+      }
+    }
+  }
+
+  .card-bottom-section {
+    text-align: center;
+
+    h5 {
+      font-size: 14px;
+      color: $m-color_14;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .img-group img {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 2px solid $m-color_3;
+
+      &:not(:last-child) {
+        margin-right: 5px;
+      }
+    }
+
+    a {
+      display: block;
+      margin-top: 18px;
+      background: $primary;
+      color: $white;
+      padding: 10px 10px;
+      transform: none;
+      margin-right: 15px;
+      margin-left: 15px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1px;
+
+      &.btn {
+        &:hover, &:focus {
+          border-color: $primary;
+        }
+      }
+    }
+  }
+}

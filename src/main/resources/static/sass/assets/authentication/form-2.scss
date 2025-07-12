@@ -1,0 +1,337 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+  background-color: $white;
+}
+
+.form-form {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  margin: 0 auto;
+
+  .form-form-wrap {
+    max-width: 480px;
+    margin: 0 auto;
+    min-width: 311px;
+    min-height: 100%;
+    align-self: center;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+  }
+
+  .form-container {
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+    width: 100%;
+    min-height: 100%;
+
+    .form-content {
+      display: block;
+      width: 100%;
+      padding: 25px;
+      background: $white;
+      text-align: center;
+      border-radius: 15px;
+      border: 1px solid $m-color_3;
+      -webkit-box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.0901960784), 0 1px 20px 0 rgba(0, 0, 0, 0.08), 0px 1px 11px 0px rgba(0, 0, 0, 0.06);
+      -moz-box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.0901960784), 0 1px 20px 0 rgba(0, 0, 0, 0.08), 0px 1px 11px 0px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.0901960784), 0 1px 20px 0 rgba(0, 0, 0, 0.08), 0px 1px 11px 0px rgba(0, 0, 0, 0.06);
+
+      h1 {
+        font-size: 32px;
+        color: $dark;
+      }
+
+      > p {
+        font-size: 13px;
+        color: $m-color_6;
+        font-weight: 600;
+        margin-bottom: 35px;
+      }
+    }
+  }
+
+  .form-form-wrap {
+    .user-meta {
+      margin-bottom: 35px;
+
+      img {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        margin-right: 15px;
+        border: 4px solid $m-color_3;
+      }
+
+      div {
+        align-self: center;
+      }
+
+      p {
+        font-size: 31px;
+        color: $dark;
+        margin-bottom: 0;
+      }
+    }
+
+    h1 .brand-name {
+      color: $dark;
+      font-weight: 600;
+    }
+
+    p.signup-link {
+      font-size: 14px;
+      color: $dark;
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-align: center;
+      margin-top: 50px;
+
+      &.register {
+        font-size: 13px;
+        color: $m-color_6;
+        font-weight: 600;
+        margin-bottom: 25px;
+        margin-top: 0;
+      }
+
+      &.recovery {
+        margin-top: 0;
+      }
+
+      a {
+        color: $primary;
+        border-bottom: 1px solid;
+      }
+    }
+
+    form .field-wrapper {
+      &.input {
+        padding: 11px 0px 16px 0;
+        border-bottom: none;
+        position: relative;
+
+        &:focus {
+          border: 1px solid $black;
+        }
+      }
+
+      &.toggle-pass p {
+        font-weight: 600;
+        color: $dark;
+        margin-bottom: 0;
+      }
+
+      .logged-in-user-name {
+        font-size: 37px;
+        color: $dark;
+      }
+
+      label {
+        font-size: 10px;
+        font-weight: 700;
+        color: $dark;
+        margin-bottom: 8px;
+      }
+
+      &.terms_condition {
+        margin-bottom: 20px;
+
+        label {
+          font-size: 14px;
+          color: $m-color_6;
+          padding-left: 31px;
+          font-weight: 100;
+        }
+
+        a {
+          color: $primary;
+        }
+      }
+
+      svg {
+        &.feather-user {
+          top: 53px;
+        }
+
+        &.feather-lock {
+          top: 50px;
+        }
+
+        &.feather-at-sign {
+          top: 47px;
+
+          &.register {
+            top: 53px;
+          }
+        }
+
+        &:not(.feather-eye) {
+          position: absolute;
+          left: 12px;
+          color: $m-color_6;
+          fill: rgba(0, 23, 55, 0.08);
+          width: 20px;
+          height: 20px;
+        }
+
+        &.feather-eye {
+          position: absolute;
+          top: 49px;
+          right: 13px;
+          color: $m-color_6;
+          fill: rgba(0, 23, 55, 0.08);
+          width: 17px;
+          cursor: pointer;
+        }
+      }
+
+      input {
+        display: inline-block;
+        vertical-align: middle;
+        border-radius: 6px;
+        min-width: 50px;
+        max-width: 635px;
+        width: 100%;
+        -ms-transition: all 0.2s ease-in-out 0s;
+        transition: all 0.2s ease-in-out 0s;
+        color: $dark;
+        font-weight: 600;
+        font-size: 16px;
+        padding: 13px 35px 13px 46px;
+
+        &::-webkit-input-placeholder, &::-ms-input-placeholder, &::-moz-placeholder {
+          color: $m-color_5;
+          font-size: 14px;
+        }
+      }
+
+      width: 100%;
+
+      button.btn {
+        align-self: center;
+        width: 100%;
+        padding: 11px 14px;
+        font-size: 16px;
+        letter-spacing: 2px;
+      }
+
+      a.forgot-pass-link {
+        font-weight: 600;
+        color: $m-color_6;
+        display: block;
+        letter-spacing: 1px;
+        font-size: 12px;
+        margin-bottom: 8px;
+      }
+
+      .n-chk .new-control-indicator {
+        top: 2px;
+        border: 1px solid $m-color_4;
+        background-color: $m-color_1;
+
+        &:after {
+          top: 54%;
+        }
+      }
+    }
+  }
+}
+
+.new-control.new-checkbox.checkbox-primary > input:checked ~ span.new-control-indicator {
+  border: none;
+}
+
+.form-form .form-form-wrap form {
+  .division {
+    text-align: center;
+    font-size: 13px;
+    margin: 35px 0 38px 0;
+  }
+
+  .social {
+    text-align: center;
+
+    a {
+      background: transparent;
+      box-shadow: none;
+      border: 1px solid $m-color_3;
+      padding: 12px 10px;
+      width: 181px;
+
+      &.social-fb {
+        margin-right: 15px;
+
+        svg, .brand-name {
+          color: $primary;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .form-form {
+    width: 100%;
+
+    .form-form-wrap {
+      min-width: auto;
+      margin: 0 auto;
+    }
+
+    .form-container .form-content {
+      border-radius: 15px;
+    }
+  }
+}
+
+@media (max-width: 575px) {
+  .form-form .form-form-wrap form {
+    .field-wrapper.toggle-pass {
+      margin-bottom: 28px;
+    }
+
+    .social a {
+      &.social-fb, &.social-github {
+        margin-right: auto;
+        margin-left: auto;
+        margin-bottom: 10px;
+        display: block;
+      }
+    }
+  }
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .form-form {
+    .form-form-wrap {
+      width: 100%;
+    }
+
+    .form-container {
+      height: 100%;
+    }
+  }
+}
+
+@supports (-ms-ime-align: auto) {
+  .form-form .form-form-wrap {
+    height: 100%;
+  }
+}

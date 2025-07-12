@@ -1,0 +1,97 @@
+//  =================
+//      Imports
+//  =================
+
+@import '../../base/base';    // Base Variables
+
+
+/*
+    ===============================
+    /|\                         /|\
+    /|\                         /|\
+    /|\    Analytics Section    /|\
+    /|\                         /|\
+    /|\                         /|\
+    ===============================
+*/
+
+.layout-spacing {
+  padding-bottom: 30px;
+}
+
+.widget {
+  position: relative;
+  padding: 0;
+  border-radius: 6px;
+  border: none;
+  -webkit-box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.08), 0 1px 20px 0 rgba(0, 0, 0, 0.07), 0px 1px 11px 0px rgba(0, 0, 0, 0.07);
+  -moz-box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.08), 0 1px 20px 0 rgba(0, 0, 0, 0.07), 0px 1px 11px 0px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 4px 6px 0 rgba(85, 85, 85, 0.08), 0 1px 20px 0 rgba(0, 0, 0, 0.07), 0px 1px 11px 0px rgba(0, 0, 0, 0.07);
+}
+
+
+//  ===================================
+//       _modules-widgets Imports 
+//  ===================================
+
+@import '_modules-widgets/_modules-widget-card-four';
+@import '_modules-widgets/_modules-widget-chart-three';
+@import '_modules-widgets/_modules-widget-activity-two';
+@import '_modules-widgets/_modules-widget-activity-three';
+@import '_modules-widgets/_modules-widget-one_hybrid';
+@import '_modules-widgets/_modules-widget-account-invoice-two';
+@import '_modules-widgets/_modules-widget-card-one';
+@import '_modules-widgets/_modules-widget-four';
+@import '_modules-widgets/_modules-widget-card-two';
+@import '_modules-widgets/_modules-widget-five';
+
+
+
+
+/*
+    ===========================
+    /|\                     /|\
+    /|\                     /|\
+    /|\    Sales Section    /|\
+    /|\                     /|\
+    /|\                     /|\
+    ===========================
+*/
+
+.layout-spacing {
+  padding-bottom: 30px;
+}
+
+.sales .widget {
+  position: relative;
+  padding: 20px;
+  border-radius: 8px;
+  border: none;
+  background: $white;
+
+  .widget-heading {
+    margin-bottom: 15px;
+  }
+
+  h5 {
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: 0px;
+    margin-bottom: 0;
+    color: $m-color_9;
+  }
+}
+
+
+@import '_modules-widgets/_modules-widget-two';
+@import '_modules-widgets/_modules-widget-one';
+@import '_modules-widgets/_modules-widget-three';
+@import '_modules-widgets/_modules-widget-chart-one';
+@import '_modules-widgets/_modules-widget-chart-two';
+@import '_modules-widgets/_modules-widget-table-one';
+@import '_modules-widgets/_modules-widget-activity-one';
+@import '_modules-widgets/_modules-widget-activity-four';
+@import '_modules-widgets/_modules-widget-account-invoice-one';
+@import '_modules-widgets/_modules-widget-table-two';
+@import '_modules-widgets/_modules-widget-table-three';
+@import '_modules-widgets/_modules-widgets-media-query';

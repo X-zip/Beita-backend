@@ -1,0 +1,54 @@
+/*
+	Component Card 5
+*/
+
+.component-card_5 {
+  width: 20rem;
+  margin: 0 auto;
+  border: none;
+  border-radius: 8px;
+  background: $secondary;
+  -webkit-box-shadow: 4px 6px 10px -3px $m-color_4;
+  box-shadow: 4px 6px 10px -3px $m-color_4;
+
+  .card-body {
+    padding: 30px 30px;
+
+    .user-info {
+      display: flex;
+      padding: 22px 0 0 0;
+    }
+
+    .media-body {
+      align-self: center;
+    }
+
+    img {
+      width: 56px;
+      height: 56px;
+      margin-right: 18px;
+      border-radius: 50%;
+    }
+
+    h5.card-user_name {
+      font-size: 15px;
+      color: $white;
+      letter-spacing: 1px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    p.card-user_occupation {
+      font-size: 14px;
+      color: $l-dark;
+      letter-spacing: 1px;
+      margin-bottom: 0;
+    }
+
+    .card-text {
+      color: $m-color_1;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+  }
+}

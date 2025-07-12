@@ -1,0 +1,165 @@
+/*
+    =====================
+        Recent Orders
+    =====================
+*/
+
+.widget-table-two {
+  position: relative;
+
+  h5 {
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  .widget-content {
+    background: transparent;
+  }
+
+  .table {
+    border-collapse: separate;
+    border-spacing: 0 5px;
+    margin-bottom: 0;
+
+    > {
+      thead > tr > th {
+        text-transform: initial;
+        font-weight: 600;
+        border-top: none;
+        background: $m-color_3;
+        padding-top: 0;
+        padding-bottom: 0;
+        padding-right: 0;
+        padding-left: 0;
+        -webkit-transition: all 0.1s ease;
+        transition: all 0.1s ease;
+        padding: 10px 0 10px 5px;
+
+        &:first-child {
+          border-bottom-left-radius: 6px;
+          border-top-left-radius: 6px;
+        }
+
+        &:last-child {
+          border-bottom-right-radius: 6px;
+          border-top-right-radius: 6px;
+        }
+
+        .th-content {
+          color: $primary;
+          font-weight: 600;
+          font-size: 14px;
+          letter-spacing: 1px;
+        }
+
+        &:first-child .th-content {
+          margin-left: 10px;
+        }
+
+        &:last-child .th-content {
+          text-align: right;
+          margin-right: 10px;
+        }
+
+        &:nth-last-child(2) .th-content {
+          text-align: center;
+          padding: 0 15px 0 0;
+        }
+      }
+
+      tbody > tr {
+        > td {
+          border-top: none;
+          background: transparent;
+          padding-top: 0;
+          padding-bottom: 0;
+          padding-right: 0;
+          padding-left: 0;
+          -webkit-transition: all 0.1s ease;
+          transition: all 0.1s ease;
+        }
+
+        &:hover {
+          > td {
+            transform: translateY(-1px) scale(1.01);
+          }
+
+          > td .td-content {
+            color: $m-color_9;
+          }
+        }
+
+        > td .td-content {
+          cursor: pointer;
+          font-weight: 600;
+          letter-spacing: 1px;
+          color: $m-color_6;
+        }
+
+        > td {
+          &:first-child {
+            border-top-left-radius: 6px;
+            padding: 10px 0 10px 15px;
+            border-bottom-left-radius: 6px;
+          }
+
+          &:last-child {
+            border-top-right-radius: 6px;
+            padding: 15.5px 15px 15.5px 0;
+            text-align: right;
+            border-bottom-right-radius: 6px;
+          }
+        }
+      }
+    }
+
+    .td-content {
+      &.customer-name {
+        color: $m-color_9;
+      }
+
+      &.product-brand {
+        letter-spacing: 1px;
+      }
+
+      img {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        margin-right: 13px;
+      }
+    }
+
+    tr > td:nth-last-child(2) .td-content {
+      text-align: center;
+    }
+
+    .td-content .badge {
+      transform: none;
+    }
+
+    tr {
+      &:hover .td-content .badge {
+        transform: translateY(-3px);
+      }
+
+      .td-content {
+        .outline-badge-primary {
+          background-color: $l-primary;
+        }
+
+        .outline-badge-success {
+          color: $m-color_14;
+          background-color: $l-success;
+          border-color: $m-color_14;
+        }
+
+        .outline-badge-danger {
+          background-color: $l-danger;
+        }
+      }
+    }
+  }
+}
