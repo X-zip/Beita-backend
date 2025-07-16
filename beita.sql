@@ -4,13 +4,13 @@ Navicat MySQL Data Transfer
 Source Server         : localhost
 Source Server Version : 50713
 Source Host           : localhost:3306
-Source Database       : beita_test
+Source Database       : beita_backend
 
 Target Server Type    : MYSQL
 Target Server Version : 50713
 File Encoding         : 65001
 
-Date: 2025-07-12 21:41:40
+Date: 2025-07-16 20:21:40
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -27,6 +27,11 @@ CREATE TABLE `accesscode` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
+-- Records of accesscode
+-- ----------------------------
+INSERT INTO `accesscode` VALUES ('1', '123abc', '1');
+
+-- ----------------------------
 -- Table structure for avatar
 -- ----------------------------
 DROP TABLE IF EXISTS `avatar`;
@@ -37,6 +42,11 @@ CREATE TABLE `avatar` (
   `campus` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of avatar
+-- ----------------------------
+INSERT INTO `avatar` VALUES ('1', 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fm-2.duitang.com%2Falbum%2F%3Fid%3D113132652&psig=AOvVaw1I8ygSZDuukyrXGTwadLsh&ust=1752753945119000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOCY87OrwY4DFQAAAAAdAAAAABAE', '1', '1');
 
 -- ----------------------------
 -- Table structure for banner
@@ -51,6 +61,11 @@ CREATE TABLE `banner` (
 ) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
+-- Records of banner
+-- ----------------------------
+INSERT INTO `banner` VALUES ('1', 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fm-2.duitang.com%2Falbum%2F%3Fid%3D113132652&psig=AOvVaw1I8ygSZDuukyrXGTwadLsh&ust=1752753945119000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOCY87OrwY4DFQAAAAAdAAAAABAE', '/page', '1');
+
+-- ----------------------------
 -- Table structure for bitrank
 -- ----------------------------
 DROP TABLE IF EXISTS `bitrank`;
@@ -63,6 +78,11 @@ CREATE TABLE `bitrank` (
   `c_time` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5480 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of bitrank
+-- ----------------------------
+INSERT INTO `bitrank` VALUES ('1', '123', 'abc', '1', '123qweasd', '1');
 
 -- ----------------------------
 -- Table structure for blacklist
@@ -81,6 +101,11 @@ CREATE TABLE `blacklist` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2523 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
+-- Records of blacklist
+-- ----------------------------
+INSERT INTO `blacklist` VALUES ('1', '123qaz', '永久', '2025-01-01 00:00:00', '广告', '1', '0', '');
+
+-- ----------------------------
 -- Table structure for campus
 -- ----------------------------
 DROP TABLE IF EXISTS `campus`;
@@ -94,6 +119,11 @@ CREATE TABLE `campus` (
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
+-- Records of campus
+-- ----------------------------
+INSERT INTO `campus` VALUES ('1', '1', '1', '测试region', '测试campus');
+
+-- ----------------------------
 -- Table structure for claim
 -- ----------------------------
 DROP TABLE IF EXISTS `claim`;
@@ -101,7 +131,12 @@ CREATE TABLE `claim` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `text` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of claim
+-- ----------------------------
+INSERT INTO `claim` VALUES ('0', '未声明');
 
 -- ----------------------------
 -- Table structure for comment
@@ -127,6 +162,11 @@ CREATE TABLE `comment` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4548257 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Records of comment
+-- ----------------------------
+INSERT INTO `comment` VALUES ('1', '123qwe', '1qaz2wsx', '%3D113132652&psig=AOvVaw1I8ygSZDuukyrXGTwadLsh&ust=1752753945119000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOCY87OrwY4DFQAAAAAdAAAAABAE', '你好', '1', '匿名', '2025/00/00 00:00:00', '', '1', '0', '0', '0');
+
+-- ----------------------------
 -- Table structure for dirty_list
 -- ----------------------------
 DROP TABLE IF EXISTS `dirty_list`;
@@ -135,6 +175,11 @@ CREATE TABLE `dirty_list` (
   `content` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of dirty_list
+-- ----------------------------
+INSERT INTO `dirty_list` VALUES ('1', '代写');
 
 -- ----------------------------
 -- Table structure for like
@@ -146,6 +191,11 @@ CREATE TABLE `like` (
   `pk` int(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=208989 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of like
+-- ----------------------------
+INSERT INTO `like` VALUES ('1', '123qwe', '1');
 
 -- ----------------------------
 -- Table structure for login
@@ -160,6 +210,11 @@ CREATE TABLE `login` (
   `comment` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of login
+-- ----------------------------
+INSERT INTO `login` VALUES ('1', 'ceshi', 'ceshi000', '1', '2030-11-28', '测试校园账号');
 
 -- ----------------------------
 -- Table structure for member
@@ -179,6 +234,11 @@ CREATE TABLE `member` (
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Records of member
+-- ----------------------------
+INSERT INTO `member` VALUES ('0000000001', '1234qwer', '0000000001', '0000000001', '0000000001', '0000000001', '0000000001', 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.qiubiaoqing.com%2Fimg_detail%2F764174823814335090.html&psig=AOvVaw1I8ygSZDuukyrXGTwadLsh&ust=1752753945119000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOCY87OrwY4DFQAAAAAdAAAAABAK', 'ceshi');
+
+-- ----------------------------
 -- Table structure for nickname
 -- ----------------------------
 DROP TABLE IF EXISTS `nickname`;
@@ -189,6 +249,11 @@ CREATE TABLE `nickname` (
   `campus` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of nickname
+-- ----------------------------
+INSERT INTO `nickname` VALUES ('1', '123123123', '', 'ceshi');
 
 -- ----------------------------
 -- Table structure for qr
@@ -203,6 +268,11 @@ CREATE TABLE `qr` (
 ) ENGINE=InnoDB AUTO_INCREMENT=344 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
+-- Records of qr
+-- ----------------------------
+INSERT INTO `qr` VALUES ('1', 'https://www.google.com/url?sa=i&url=https%3A%2F%2Ftouxiangkong.com%2Flist%2Fweixintouxiang298_1.html&psig=AOvVaw1I8ygSZDuukyrXGTwadLsh&ust=1752753945119000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOCY87OrwY4DFQAAAAAdAAAAABAW', '1', '1');
+
+-- ----------------------------
 -- Table structure for radiogroupcategory
 -- ----------------------------
 DROP TABLE IF EXISTS `radiogroupcategory`;
@@ -211,6 +281,11 @@ CREATE TABLE `radiogroupcategory` (
   `category` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of radiogroupcategory
+-- ----------------------------
+INSERT INTO `radiogroupcategory` VALUES ('1', '闲置');
 
 -- ----------------------------
 -- Table structure for secret
@@ -224,6 +299,11 @@ CREATE TABLE `secret` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
+-- Records of secret
+-- ----------------------------
+INSERT INTO `secret` VALUES ('1', '123456', 'qwerasdf');
+
+-- ----------------------------
 -- Table structure for suggestion
 -- ----------------------------
 DROP TABLE IF EXISTS `suggestion`;
@@ -235,6 +315,11 @@ CREATE TABLE `suggestion` (
   `openid` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14422 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of suggestion
+-- ----------------------------
+INSERT INTO `suggestion` VALUES ('1', '1', '{\"Content\":\"广告\"}', '2022-06-15 17:43:10', '12345qwert');
 
 -- ----------------------------
 -- Table structure for task
@@ -267,6 +352,11 @@ CREATE TABLE `task` (
 ) ENGINE=InnoDB AUTO_INCREMENT=660190 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Records of task
+-- ----------------------------
+INSERT INTO `task` VALUES ('1', '嗨呀\n', '', '嗨呀\n', '', '', 'https://p5.itc.cn/q_70/images03/20210120/1d2080d4fc5a422ea6238cee9bbed8c4.jpeg', '1', '0', '1', '0', 'radio41', '', '1', '匿名', '2022/05/14 10:52:34', '2022/05/14 10:52:34', '0', '', '0', '0', '');
+
+-- ----------------------------
 -- Table structure for template
 -- ----------------------------
 DROP TABLE IF EXISTS `template`;
@@ -278,6 +368,11 @@ CREATE TABLE `template` (
   `template_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of template
+-- ----------------------------
+INSERT INTO `template` VALUES ('1', '1', '1', 'ceshi', 'ceshi1234565');
 
 -- ----------------------------
 -- Table structure for user_verify
@@ -306,3 +401,8 @@ CREATE TABLE `user_verify` (
   `bio` varchar(10000) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=104154 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of user_verify
+-- ----------------------------
+INSERT INTO `user_verify` VALUES ('1', '123qwe', 'https://thirdwx.qlogo.cn/mmopen/vi_32/wEcLGFrHG9qbIM2UMxEWNwfjUfF3AwU3aUbL5Iz6smvBdwyDLGkWIAvWibohZQPDZ9riaOd9TzA0zV46cK64jYog/132', '0', '2025-07-16 00:00:00', '1', '', '1', '', '', '', '', '', '', '0', '', '', '1', '', '');
