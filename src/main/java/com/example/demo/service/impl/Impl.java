@@ -14,17 +14,121 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
-
+import com.meilisearch.sdk.Client;
+import com.meilisearch.sdk.Index;
+import com.meilisearch.sdk.model.Searchable;
+import com.meilisearch.sdk.SearchRequest;
+import com.meilisearch.sdk.model.TaskInfo;
+import javax.annotation.PostConstruct;  // 需导入该注解
+import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.file.Files;
+import java.nio.file.Path;
 @Service(value = "beitaService")
 public class Impl implements BeitaService{
 	@Autowired
 	TaskDao taskDao;
+
+	@Autowired
+	private Index index;
+	// 自动注入Client（如需使用）
+	@Autowired
+	private Client client;
+	private static final ObjectMapper objectMapper = new ObjectMapper();
+	@PostConstruct
+	public void initMeilisearch() {
+		// 设置搜索字段为title和content
+		String[] SearchableAttributes = new String[]{"content", "title"};
+		String[] filterableAttributes = new String[]{"is_delete", "is_complaint"};
+		index.updateFilterableAttributesSettings(filterableAttributes);
+		index.updateSearchableAttributesSettings(SearchableAttributes);
+
+		// 3. 等待任务完成（关键步骤）
+		// 参数：任务ID、超时时间（毫秒）、轮询间隔（毫秒）
+		int TOTAL_COUNT = getTaskCount();
+		int batchSize = 10000;
+		int offset = 0; // 起始位置，从0开始
+		TOTAL_COUNT = 10;
+		while (offset < TOTAL_COUNT) {
+			// 计算当前批次的实际大小（最后一批可能不足BATCH_SIZE）
+			int currentBatchSize = Math.min(batchSize, TOTAL_COUNT - offset);
+
+			try {
+				// 1. 获取当前批次数据
+				List<Task> tasks = getallTaskbyBatch(offset, currentBatchSize);
+				// 2. 转换为数组并添加到Meilisearch（Client会自动序列化字段）
+				List<Map<String, Object>> documents = tasks.stream()
+						.map(this::convertTaskToDocument)
+						.collect(Collectors.toList());
+				// 批量添加文档
+				try {
+					// 尝试转换为JSON
+					String doc = listMapToJson(documents);
+					index.addDocuments(doc,"id");
+					System.out.println("初始数据同步完成，共同步" + offset +'-'+ (offset+currentBatchSize)+ "条任务");
+				} catch (JsonProcessingException e) {
+					// 异常处理逻辑（根据业务需求调整）
+					System.err.println("JSON转换失败：" + e.getMessage());
+					e.printStackTrace(); // 打印堆栈信息便于调试
+				}
+
+				// 3. 更新起始位置（准备取下一批）
+				offset += currentBatchSize;
+
+			} catch (Exception e) {
+				// 异常处理：如重试当前批次、记录错误日志
+				System.err.println("处理批次失败（offset=" + offset + "）：" + e.getMessage());
+				// 可添加重试逻辑，避免单个批次失败导致整体中断
+				// retryCurrentBatch(offset, currentBatchSize);
+			}
+		}
+	}
+	public String listMapToJson(List<Map<String, Object>> data) throws JsonProcessingException {
+		return objectMapper.writeValueAsString(data);
+	}
+	private Map<String, Object> convertTaskToDocument(Task task) {
+		Map<String, Object> doc = new HashMap<>();
+		doc.put("id", task.getId());
+		doc.put("ip", task.getIp());
+		doc.put("content", task.getContent());
+		doc.put("price", task.getPrice());
+		doc.put("title", task.getTitle());
+		doc.put("wechat", task.getWechat());
+		doc.put("openid", task.getOpenid());
+		doc.put("avatar", task.getAvatar());
+		doc.put("campusGroup", task.getCampusGroup());
+		doc.put("commentNum", task.getCommentNum());
+		doc.put("watchNum", task.getWatchNum());
+		doc.put("likeNum", task.getLikeNum());
+		doc.put("radioGroup", task.getRadioGroup());
+		doc.put("img", task.getImg());
+		doc.put("cover", task.getCover());
+		doc.put("is_delete", task.getIs_delete());
+		doc.put("is_complaint", task.getIs_complaint());
+		doc.put("region", task.getRegion());
+		doc.put("userName", task.getUserName());
+		doc.put("c_time", task.getC_time());
+		doc.put("comment_time", task.getComment_time());
+		doc.put("choose", task.getChoose());
+		doc.put("hot", task.getHot());
+		return doc;
+	}
+	@Override
+	public List<Task> getallTaskbyBatch(int start, int limit) {
+		// TODO Auto-generated method stub
+		return taskDao.getallTaskbyBatch(start, limit);
+	}
+	public int getTaskCount(){
+		return taskDao.getTaskCount();
+	}
 	@Override
 	public List<Task> getallTask(int length) {
-		// TODO Auto-generated method stub
-		return taskDao.getallTask(length);
+		return getallTask(length); // 调用原方法，传入默认limit
 	}
-	
 	@Override
 	public List<Task> getHotTask(int length) {
 		// TODO Auto-generated method stub
@@ -46,12 +150,51 @@ public class Impl implements BeitaService{
 	@Override
 	public  List<Task> gettaskbySearch(String search,int length) {
 		// TODO Auto-generated method stub
-		return taskDao.gettaskbySearch(search,length);
+		SearchRequest searchRequest = SearchRequest.builder()
+				.q(search)
+				.offset(length)
+				.limit(20)
+				.filter(new String[]{"is_delete=0", "is_complaint=0"})	//设置过滤器，只显示未被删除的结果；保留数据恢复的可能性
+				.build();
+		// 5. 执行搜索（传入SearchRequest）
+		Searchable searchResult = index.search(searchRequest);
+		// 3. 解析searchResult为List<Task>
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		// 3.1 从搜索结果中获取hits（匹配的文档数组，Meilisearch默认字段为"hits"）
+		// 注意：需根据实际返回的JSON结构调整字段名，通常为"hits"
+		Object hits = searchResult.getHits(); // 假设Searchable有getHits()方法
+
+		// 3.2 将hits转换为List<Task>
+		List<Task> tasks = objectMapper.convertValue(
+				hits,
+				new TypeReference<List<Task>>() {} // 指定目标类型为List<Task>
+		);
+
+		return tasks;
+//		return taskDao.gettaskbySearch(search,length);
 	}
 
 	@Override
 	public int addTask(Task task) {
 		// TODO Auto-generated method stub
+		List<Task> tasks = new ArrayList<>();
+		tasks.add(task);
+		// 2. 转换为数组并添加到Meilisearch（Client会自动序列化字段）
+		List<Map<String, Object>> documents = tasks.stream()
+				.map(this::convertTaskToDocument)
+				.collect(Collectors.toList());
+		// 批量添加文档
+		// 尝试转换为JSON
+		try{
+			String doc = listMapToJson(documents);
+			index.addDocuments(doc,"id");
+			System.out.println("新增一条数据");
+		} catch (JsonProcessingException e) {
+			// 异常处理逻辑（根据业务需求调整）
+			System.err.println("JSON转换失败：" + e.getMessage());
+			e.printStackTrace(); // 打印堆栈信息便于调试
+		}
 		return taskDao.addTask(task);
 	}
 

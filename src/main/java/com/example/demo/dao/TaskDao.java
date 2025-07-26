@@ -14,10 +14,15 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 @Mapper
 public interface TaskDao {
-	
+
+	@Select("SELECT COUNT(*) FROM task")
+	public int getTaskCount();
+
+	// 加载全部帖子，无论是否被删除
+	@Select("select * from task order by c_time asc limit #{start},#{limit} ")
+	public List<Task>getallTaskbyBatch(int start, int limit);
 	@Select("select * from task where is_delete=0 order by c_time desc limit #{length},20 ")
 	public List<Task>getallTask(int length);
-	
 	@Select("select * from task where is_delete=0 "
 			+ " and DATEDIFF(Now(),replace(substring(c_time,1,10),'/','-'))<2 "
 			+ " order by (watchNum+commentNum*10+likeNum*10) desc limit #{length} ")
