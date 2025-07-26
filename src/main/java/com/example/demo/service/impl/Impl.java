@@ -52,7 +52,6 @@ public class Impl implements BeitaService{
 		int TOTAL_COUNT = getTaskCount();
 		int batchSize = 10000;
 		int offset = 0; // 起始位置，从0开始
-		TOTAL_COUNT = 10;
 		while (offset < TOTAL_COUNT) {
 			// 计算当前批次的实际大小（最后一批可能不足BATCH_SIZE）
 			int currentBatchSize = Math.min(batchSize, TOTAL_COUNT - offset);
