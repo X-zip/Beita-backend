@@ -44,6 +44,7 @@ public class Impl implements BeitaService{
 		// 设置搜索字段为title和content
 		String[] SearchableAttributes = new String[]{"content", "title"};
 		String[] filterableAttributes = new String[]{"is_delete", "is_complaint"};
+		// 相似性分数相同的数据按发布时间和点赞数排序
 		index.updateFilterableAttributesSettings(filterableAttributes);
 		index.updateSearchableAttributesSettings(SearchableAttributes);
 
@@ -52,6 +53,7 @@ public class Impl implements BeitaService{
 		int TOTAL_COUNT = getTaskCount();
 		int batchSize = 10000;
 		int offset = 0; // 起始位置，从0开始
+		TOTAL_COUNT = 10;
 		while (offset < TOTAL_COUNT) {
 			// 计算当前批次的实际大小（最后一批可能不足BATCH_SIZE）
 			int currentBatchSize = Math.min(batchSize, TOTAL_COUNT - offset);
@@ -153,7 +155,7 @@ public class Impl implements BeitaService{
 				.q(search)
 				.offset(length)
 				.limit(20)
-				.filter(new String[]{"is_delete=0", "is_complaint=0"})	//设置过滤器，只显示未被删除的结果；保留数据恢复的可能性
+				.filter(new String[]{"is_delete = 0 AND is_complaint = 0"})	//过滤条件需要有空格
 				.build();
 		// 5. 执行搜索（传入SearchRequest）
 		Searchable searchResult = index.search(searchRequest);

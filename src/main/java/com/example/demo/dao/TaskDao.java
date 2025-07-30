@@ -76,40 +76,59 @@ public interface TaskDao {
 		"</script>"})
     public List<Task>gettaskbyZH(@Param("radioGroup") List<String> radioGroup,int length);
 	
+//	@Select({"<script>",
+//		"select * from task where radioGroup in ",
+//		"<foreach collection='radioGroup' item='item' index='index' separator=',' open='(' close = ')'>",
+//		"#{item}",
+//		"</foreach>",
+//		"and is_delete=0 order by c_time desc limit #{length},20",
+//		"</script>"})
+//    public List<Task>gettaskbyCtime(@Param("radioGroup") List<String> radioGroup,int length);
 	@Select({"<script>",
 		"select * from task where radioGroup in ",
 		"<foreach collection='radioGroup' item='item' index='index' separator=',' open='(' close = ')'>",
 		"#{item}",
 		"</foreach>",
-		"and is_delete=0 order by c_time desc limit #{length},20",
+		"and is_delete=0 ",
+		"<if test='length != null'>and id &lt; #{length}</if>",
+		"order by c_time desc limit 20", // 只保留每页条数，去掉offset
 		"</script>"})
-    public List<Task>gettaskbyCtime(@Param("radioGroup") List<String> radioGroup,int length);
+public List<Task>gettaskbyCtime(@Param("radioGroup") List<String> radioGroup,int length);
 	
 	@Select({"<script>",
-		"select * from task where radioGroup in ",
-		"<foreach collection='radioGroup' item='item' index='index' separator=',' open='(' close = ')'>",
-		"#{item}",
-		"</foreach>",
-		"and is_delete=0 order by comment_time desc limit #{length},10",
-		"</script>"})
+			"select * from task where radioGroup in ",
+			"<foreach collection='radioGroup' item='item' index='index' separator=',' open='(' close=')'>",
+			"#{item}",
+			"</foreach>",
+			"and is_delete=0 ",
+			"<if test='length != null'>and id &lt; #{length}</if>",
+			"order by comment_time desc limit 10", // 仅保留每页条数，去掉offset
+			"</script>"})
     public List<Task>gettaskbyComment(@Param("radioGroup") List<String> radioGroup,int length);
-	
+
 	@Select({"<script>",
-		"select * from task where radioGroup in ",
-		"<foreach collection='radioGroup' item='item' index='index' separator=',' open='(' close = ')'>",
-		"#{item}",
-		"</foreach>",
-		"and is_delete=0 and choose = 1 order by c_time desc limit #{length},20",
-		"</script>"})
+			"select * from task where radioGroup in ",
+			"<foreach collection='radioGroup' item='item' index='index' separator=',' open='(' close=')'>",
+			"#{item}",
+			"</foreach>",
+			"and is_delete=0 and choose = 1 ",
+			"<if test='length != null'>and id &lt; #{length}</if>",
+			"order by c_time desc limit 20", // 仅保留每页条数，移除offset
+			"</script>"})
     public List<Task>gettaskbyChoose(@Param("radioGroup") List<String> radioGroup,int length);
-	
+
 	@Select({"<script>",
-		"select * from task where radioGroup in ",
-		"<foreach collection='radioGroup' item='item' index='index' separator=',' open='(' close = ')'>",
-		"#{item}",
-		"</foreach>",
-		"and is_delete=0 order by (watchNum+commentNum*10+likeNum*10)/(DATEDIFF(Now(),replace(substring(c_time,1,10),'/','-'))/3+1) desc limit #{length},20",
-		"</script>"})
+			"select * from task where radioGroup in ",
+			"<foreach collection='radioGroup' item='item' index='index' separator=',' open='(' close=')'>",
+			"#{item}",
+			"</foreach>",
+			"and is_delete=0 ",
+			// 游标条件：当length不为null时，查询id小于length的记录（length实际为上一页最后一个id）
+			"<if test='length != null'>and id &lt; #{length}</if>",
+			// 保持原热度排序公式不变
+			"order by (watchNum + commentNum*10 + likeNum*10) / (DATEDIFF(Now(), replace(substring(c_time,1,10),'/','-'))/3 + 1) desc ",
+			"limit 20", // 仅保留每页条数，移除offset
+			"</script>"})
     public List<Task>gettaskbyHot(@Param("radioGroup") List<String> radioGroup,int length);
 	
 	@Select({"<script>",
