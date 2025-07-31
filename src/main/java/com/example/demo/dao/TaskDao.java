@@ -15,11 +15,11 @@ import java.util.List;
 @Mapper
 public interface TaskDao {
 
-	@Select("SELECT COUNT(*) FROM task")
+	@Select("SELECT COUNT(*) FROM task where is_delete=0 and is_complaint=0")
 	public int getTaskCount();
 
-	// 加载全部帖子，无论是否被删除
-	@Select("select * from task order by c_time asc limit #{start},#{limit} ")
+	// 加载未被删除的正常贴子
+	@Select("select * from task where is_delete=0 and is_complaint=0 order by c_time asc limit #{start},#{limit} ")
 	public List<Task>getallTaskbyBatch(int start, int limit);
 	@Select("select * from task where is_delete=0 order by c_time desc limit #{length},20 ")
 	public List<Task>getallTask(int length);

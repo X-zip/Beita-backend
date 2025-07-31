@@ -42,18 +42,24 @@ public class Impl implements BeitaService{
 	@PostConstruct
 	public void initMeilisearch() {
 		// 设置搜索字段为title和content
+		// 索引中只保存正常贴子，被删除/被举报的帖子完全不进入meilisearch；当他们的状态修改时，也直接在meilisearch中修改
 		String[] SearchableAttributes = new String[]{"content", "title"};
-		String[] filterableAttributes = new String[]{"is_delete", "is_complaint"};
-		// 相似性分数相同的数据按发布时间和点赞数排序
-		index.updateFilterableAttributesSettings(filterableAttributes);
 		index.updateSearchableAttributesSettings(SearchableAttributes);
-
-		// 3. 等待任务完成（关键步骤）
-		// 参数：任务ID、超时时间（毫秒）、轮询间隔（毫秒）
+		String[] sortableAttributes = new String[]{"c_time"}; // 综合考虑相关性和时效性
+		index.updateSortableAttributesSettings(sortableAttributes);
+		String[] rankingRules = new String[]{
+				"words",          // 关键词匹配度（核心相关性）
+				"typo",           // 拼写纠错容忍度
+				"proximity",      // 关键词位置接近度
+				"attribute",      // 搜索字段优先级（如title比content重要）
+				"exactness",       // 精确匹配度
+				"c_time:desc",    // 次要规则：发布时间降序（最新的在前）
+		};
+		index.updateRankingRulesSettings(rankingRules);
 		int TOTAL_COUNT = getTaskCount();
 		int batchSize = 10000;
 		int offset = 0; // 起始位置，从0开始
-		TOTAL_COUNT = 10;
+//		TOTAL_COUNT = 10;  //测试用
 		while (offset < TOTAL_COUNT) {
 			// 计算当前批次的实际大小（最后一批可能不足BATCH_SIZE）
 			int currentBatchSize = Math.min(batchSize, TOTAL_COUNT - offset);
@@ -155,18 +161,15 @@ public class Impl implements BeitaService{
 				.q(search)
 				.offset(length)
 				.limit(20)
-				.filter(new String[]{"is_delete = 0 AND is_complaint = 0"})	//过滤条件需要有空格
 				.build();
-		// 5. 执行搜索（传入SearchRequest）
+		// SearchRequest执行复杂搜索
 		Searchable searchResult = index.search(searchRequest);
-		// 3. 解析searchResult为List<Task>
+		// 解析searchResult为List<Task>
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		// 3.1 从搜索结果中获取hits（匹配的文档数组，Meilisearch默认字段为"hits"）
-		// 注意：需根据实际返回的JSON结构调整字段名，通常为"hits"
-		Object hits = searchResult.getHits(); // 假设Searchable有getHits()方法
+		Object hits = searchResult.getHits();
 
-		// 3.2 将hits转换为List<Task>
+		// 将hits转换为List<Task>
 		List<Task> tasks = objectMapper.convertValue(
 				hits,
 				new TypeReference<List<Task>>() {} // 指定目标类型为List<Task>
@@ -181,11 +184,10 @@ public class Impl implements BeitaService{
 		// TODO Auto-generated method stub
 		List<Task> tasks = new ArrayList<>();
 		tasks.add(task);
-		// 2. 转换为数组并添加到Meilisearch（Client会自动序列化字段）
+		// 转换为数组并添加到Meilisearch
 		List<Map<String, Object>> documents = tasks.stream()
 				.map(this::convertTaskToDocument)
 				.collect(Collectors.toList());
-		// 批量添加文档
 		// 尝试转换为JSON
 		try{
 			String doc = listMapToJson(documents);
@@ -304,25 +306,59 @@ public class Impl implements BeitaService{
 	@Override
 	public int deleteTask(int Id) {
 		// TODO Auto-generated method stub
+		// 同步在索引中删除
+		index.deleteDocument(String.valueOf(Id));
 		return taskDao.deleteTask(Id);
 	}
 	
 	@Override
 	public int recoverTask(int Id) {
 		// TODO Auto-generated method stub
-		return taskDao.recoverTask(Id);
+		// 恢复等价于在meilisearch新增这个帖子
+		int ret = taskDao.recoverTask(Id);
+		List<Task> recover_task = gettaskbyId(Id);
+		List<Map<String, Object>> documents = recover_task.stream()
+				.map(this::convertTaskToDocument)
+				.collect(Collectors.toList());
+		// 尝试转换为JSON
+		try{
+			String doc = listMapToJson(documents);
+			index.addDocuments(doc,"id");
+			System.out.println("恢复一条被删除数据");
+		} catch (JsonProcessingException e) {
+			// 异常处理逻辑（根据业务需求调整）
+			System.err.println("JSON转换失败：" + e.getMessage());
+			e.printStackTrace(); // 打印堆栈信息便于调试
+		}
+		return ret;
 	}
 	
 	@Override
 	public int hideTask(int Id) {
 		// TODO Auto-generated method stub
+		index.deleteDocument(String.valueOf(Id));
 		return taskDao.hideTask(Id);
 	}
 	
 	@Override
 	public int recoverTaskHide(int Id) {
 		// TODO Auto-generated method stub
-		return taskDao.recoverTaskHide(Id);
+		int ret = taskDao.recoverTaskHide(Id);
+		List<Task> recover_task = gettaskbyId(Id);
+		List<Map<String, Object>> documents = recover_task.stream()
+				.map(this::convertTaskToDocument)
+				.collect(Collectors.toList());
+		// 尝试转换为JSON
+		try{
+			String doc = listMapToJson(documents);
+			index.addDocuments(doc,"id");
+			System.out.println("恢复一条被举报的数据");
+		} catch (JsonProcessingException e) {
+			// 异常处理逻辑（根据业务需求调整）
+			System.err.println("JSON转换失败：" + e.getMessage());
+			e.printStackTrace(); // 打印堆栈信息便于调试
+		}
+		return ret;
 	}
 	
 	@Override
