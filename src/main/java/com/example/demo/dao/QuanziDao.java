@@ -487,8 +487,8 @@ public interface QuanziDao {
 	@Insert("insert into qr (imageUrl,campus) values (#{imgPath},#{campus})")
     int addQR(String imgPath,String campus);
 	
-	@Select("select id, openid, pic, c_time, status, campus, email, region, phone from user_verify where openid=#{openid}")
-	public List<VerifyUser> getVerifyUserByOpenid(String openid);
+	@Select("select id, openid, pic, c_time, status, campus, email, region, phone, identity from user_verify where openid=#{openid}")
+	public List<VerifyUserIdentity> getVerifyUserByOpenid(String openid);
 	
 	@Insert("insert into user_verify (openid, pic, status, c_time, email, campus) values (#{openid}, #{pic}, #{status}, NOW(), #{email}, #{campus})")
 	public int addVerifyUser(VerifyUser verify_user);

@@ -136,7 +136,7 @@ public interface QuanziService {
     List<VerifyUser> getVerifyUserbyCampusLengthStatus(String campus, int length, int status);
     List<VerifyUser> getVerifyUserbyRegionCampusLengthStatus(String region, String campus, int length, int status);
     List<VerifyUser> getVerifyUserbyCampus(String campus);
-    List<VerifyUser> getVerifyUserByOpenid(String openid);
+    List<VerifyUserIdentity> getVerifyUserByOpenid(String openid);
     int udpateUserInfoByOpenid(String openid, String nickname, String avatar);
     int addUserInfoByOpenid(String openid, String nickname, String avatar, int status);
     int addVerifyUser(VerifyUser verify_user);

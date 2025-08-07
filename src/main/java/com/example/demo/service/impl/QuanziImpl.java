@@ -645,7 +645,7 @@ public class QuanziImpl implements QuanziService{
 	}
 	
 	@Override
-	public List<VerifyUser> getVerifyUserByOpenid(String openid){
+	public List<VerifyUserIdentity> getVerifyUserByOpenid(String openid){
 		return quanziDao.getVerifyUserByOpenid(openid);
 	}
 	
