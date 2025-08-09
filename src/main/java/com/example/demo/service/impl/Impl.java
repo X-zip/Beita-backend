@@ -10,16 +10,16 @@ import com.example.demo.model.Suggestion;
 import com.example.demo.model.Task;
 import com.example.demo.dao.TaskDao;
 import com.example.demo.service.BeitaService;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import com.meilisearch.sdk.Client;
 import com.meilisearch.sdk.Index;
 import com.meilisearch.sdk.model.Searchable;
 import com.meilisearch.sdk.SearchRequest;
-import com.meilisearch.sdk.model.TaskInfo;
-import javax.annotation.PostConstruct;  // 需导入该注解
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,60 +38,90 @@ public class Impl implements BeitaService{
 	// 自动注入Client（如需使用）
 	@Autowired
 	private Client client;
+	// 初始化状态标志（线程安全）
+	private final AtomicBoolean isInitialized = new AtomicBoolean(false);
+	// 初始化失败标志
+	private final AtomicBoolean initFailed = new AtomicBoolean(false);
 	private static final ObjectMapper objectMapper = new ObjectMapper();
-	@PostConstruct
+	@Async("meilisearchExecutor")  // 指定专用线程池
 	public void initMeilisearch() {
-		// 设置搜索字段为title和content
-		// 索引中只保存正常贴子，被删除/被举报的帖子完全不进入meilisearch；当他们的状态修改时，也直接在meilisearch中修改
-		String[] SearchableAttributes = new String[]{"content", "title"};
-		index.updateSearchableAttributesSettings(SearchableAttributes);
-		String[] sortableAttributes = new String[]{"c_time"}; // 综合考虑相关性和时效性
-		index.updateSortableAttributesSettings(sortableAttributes);
-		String[] rankingRules = new String[]{
-				"words",          // 关键词匹配度（核心相关性）
-				"typo",           // 拼写纠错容忍度
-				"proximity",      // 关键词位置接近度
-				"attribute",      // 搜索字段优先级（如title比content重要）
-				"exactness",       // 精确匹配度
-				"c_time:desc",    // 次要规则：发布时间降序（最新的在前）
-		};
-		index.updateRankingRulesSettings(rankingRules);
-		int TOTAL_COUNT = getTaskCount();
-		int batchSize = 10000;
-		int offset = 0; // 起始位置，从0开始
-//		TOTAL_COUNT = 10;  //测试用
-		while (offset < TOTAL_COUNT) {
-			// 计算当前批次的实际大小（最后一批可能不足BATCH_SIZE）
-			int currentBatchSize = Math.min(batchSize, TOTAL_COUNT - offset);
+		// 避免重复初始化
+		if (isInitialized.get()) {
+			return;
+		}
 
-			try {
-				// 1. 获取当前批次数据
-				List<Task> tasks = getallTaskbyBatch(offset, currentBatchSize);
-				// 2. 转换为数组并添加到Meilisearch（Client会自动序列化字段）
-				List<Map<String, Object>> documents = tasks.stream()
-						.map(this::convertTaskToDocument)
-						.collect(Collectors.toList());
-				// 批量添加文档
+		try {
+			System.out.println("开始Meilisearch初始化，线程: " + Thread.currentThread().getName());
+
+			// 1. 配置索引
+			configureIndex();
+
+			// 2. 批量导入数据（降低批次大小适配4G内存）
+			int totalCount = getTaskCount();
+			int batchSize = 5000;  // 4G内存建议减小批次
+			int offset = 0;
+
+			while (offset < totalCount && !Thread.currentThread().isInterrupted()) {
+				int currentBatchSize = Math.min(batchSize, totalCount - offset);
 				try {
-					// 尝试转换为JSON
+					List<Task> tasks = getallTaskbyBatch(offset, currentBatchSize);
+					List<Map<String, Object>> documents = tasks.stream()
+							.map(this::convertTaskToDocument)
+							.collect(Collectors.toList());
+
 					String doc = listMapToJson(documents);
-					index.addDocuments(doc,"id");
-					System.out.println("初始数据同步完成，共同步" + offset +'-'+ (offset+currentBatchSize)+ "条任务");
-				} catch (JsonProcessingException e) {
-					// 异常处理逻辑（根据业务需求调整）
-					System.err.println("JSON转换失败：" + e.getMessage());
-					e.printStackTrace(); // 打印堆栈信息便于调试
+					index.addDocuments(doc, "id");
+					System.out.println("同步完成：" + offset + "-" + (offset + currentBatchSize) +
+							"，进度：" + ((offset + currentBatchSize) * 100 / totalCount) + "%");
+
+					offset += currentBatchSize;
+
+					// 每批处理后短暂休眠，降低CPU占用
+					Thread.sleep(100);
+				} catch (Exception e) {
+					System.err.println("批次处理失败（offset=" + offset + "）：" + e.getMessage());
+					// 重试当前批次（最多3次）
+					for (int retry = 1; retry <= 3; retry++) {
+						try {
+							Thread.sleep(1000 * retry);  // 指数退避
+							// 重新获取数据并重试
+							List<Task> tasks = getallTaskbyBatch(offset, currentBatchSize);
+							List<Map<String, Object>> documents = tasks.stream()
+									.map(this::convertTaskToDocument)
+									.collect(Collectors.toList());
+							index.addDocuments(listMapToJson(documents), "id");
+							offset += currentBatchSize;
+							break;
+						} catch (Exception ex) {
+							if (retry == 3) throw ex;  // 最后一次重试失败则抛出
+						}
+					}
 				}
-
-				// 3. 更新起始位置（准备取下一批）
-				offset += currentBatchSize;
-
-			} catch (Exception e) {
-				// 异常处理：如重试当前批次、记录错误日志
-				System.err.println("处理批次失败（offset=" + offset + "）：" + e.getMessage());
-				// 可添加重试逻辑，避免单个批次失败导致整体中断
-				// retryCurrentBatch(offset, currentBatchSize);
 			}
+
+			// 标记初始化完成
+			isInitialized.set(true);
+			System.out.println("Meilisearch初始化完成，共导入" + totalCount + "条数据");
+
+		} catch (Exception e) {
+			System.err.println("Meilisearch初始化失败：" + e.getMessage());
+			initFailed.set(true);  // 标记初始化失败
+		}
+	}
+	private void configureIndex() {
+		try {
+			String[] searchableAttributes = new String[]{"content", "title"};
+			index.updateSearchableAttributesSettings(searchableAttributes);
+
+			String[] sortableAttributes = new String[]{"c_time"};
+			index.updateSortableAttributesSettings(sortableAttributes);
+
+			String[] rankingRules = new String[]{
+					"exactness", "words", "proximity", "c_time:desc", "typo"
+			};
+			index.updateRankingRulesSettings(rankingRules);
+		} catch (Exception e) {
+			throw new RuntimeException("索引配置失败", e);
 		}
 	}
 	public String listMapToJson(List<Map<String, Object>> data) throws JsonProcessingException {
@@ -147,36 +177,38 @@ public class Impl implements BeitaService{
 		// TODO Auto-generated method stub
 		return taskDao.gettaskbyId(Id);
 	}
-	
+
 	@Override
 	public  List<Task> gettaskbyOpenId(String openid,int length) {
 		// TODO Auto-generated method stub
 		return taskDao.gettaskbyOpenId(openid,length);
 	}
-	
 	@Override
-	public  List<Task> gettaskbySearch(String search,int length) {
-		// TODO Auto-generated method stub
-		SearchRequest searchRequest = SearchRequest.builder()
-				.q(search)
-				.offset(length)
-				.limit(20)
-				.build();
-		// SearchRequest执行复杂搜索
-		Searchable searchResult = index.search(searchRequest);
-		// 解析searchResult为List<Task>
-		ObjectMapper objectMapper = new ObjectMapper();
+	public List<Task> gettaskbySearch(String search, int length) {
+		if (!isInitialized.get() || initFailed.get()) {
+			System.out.println("初始化未完成或失败时使用原有实现");
+			return taskDao.gettaskbySearch(search, length);
+		}
+		System.out.println("初始化完成后使用新实现");
+		return getTaskByMeiliSearch(search, length);
+	}
+	private List<Task> getTaskByMeiliSearch(String search, int length) {
+		try {
+			SearchRequest searchRequest = SearchRequest.builder()
+					.q(search)
+					.offset(length)
+					.limit(20)
+					.build();
 
-		Object hits = searchResult.getHits();
-
-		// 将hits转换为List<Task>
-		List<Task> tasks = objectMapper.convertValue(
-				hits,
-				new TypeReference<List<Task>>() {} // 指定目标类型为List<Task>
-		);
-
-		return tasks;
-//		return taskDao.gettaskbySearch(search,length);
+			Searchable searchResult = index.search(searchRequest);
+			return objectMapper.convertValue(
+					searchResult.getHits(),
+					new TypeReference<List<Task>>() {}
+			);
+		} catch (Exception e) {
+			System.err.println("Meilisearch搜索失败，降级使用DAO：" + e.getMessage());
+			return taskDao.gettaskbySearch(search, length);  // 搜索失败时降级
+		}
 	}
 
 	@Override
@@ -206,13 +238,13 @@ public class Impl implements BeitaService{
 		// TODO Auto-generated method stub
 		return taskDao.gettaskbyRadio(radioGroup,length);
 	}
-	
+
 	@Override
 	public  List<Task> gettaskbyRadioSecond(List<String> radioGroup,int length) {
 		// TODO Auto-generated method stub
 		return taskDao.gettaskbyRadioSecond(radioGroup,length);
 	}
-	
+
 	@Override
 	public  List<Task> gettaskbyType(List<String> radioGroup,String type,int length) {
 		// TODO Auto-generated method stub
@@ -232,12 +264,12 @@ public class Impl implements BeitaService{
 			return taskDao.gettaskbyLX(radioGroup,length);
 		} else if (type.equals("7")) {
 			return taskDao.gettaskbyZH(radioGroup,length);
-		} else{			
+		} else{
 			return taskDao.gettaskbyRadioSecond(radioGroup,length);
 		}
-		
+
 	}
-	
+
 	@Override
 	public  List<Task> gettaskbyTypeCampus(List<String> radioGroup,String type,int length, String campus) {
 		// TODO Auto-generated method stub
@@ -251,52 +283,52 @@ public class Impl implements BeitaService{
 			return taskDao.gettaskbyChooseCampus(radioGroup,length,campus);
 		} else {
 			return taskDao.gettaskbyRadioSecondCampus(radioGroup,length,campus);
-		} 		
+		}
 	}
-	
+
 	@Override
 	public  List<Task> gettaskbyRadioSecondForWX(String radioGroup,int length) {
 		// TODO Auto-generated method stub
 		return taskDao.gettaskbyRadioSecondForWX(radioGroup,length);
 	}
-	
+
 	@Override
 	public  int upDateTask(String c_time,int Id) {
 		// TODO Auto-generated method stub
 		return taskDao.upDateTask(c_time,Id);
 	}
-	
+
 	@Override
 	public  int incWatch(int Id) {
 		// TODO Auto-generated method stub
 		return taskDao.incWatch(Id);
 	}
-	
+
 	@Override
 	public  int incLike(int Id) {
 		// TODO Auto-generated method stub
 		return taskDao.incLike(Id);
 	}
-	
+
 	@Override
 	public  int incCommentLike(int Id) {
 		// TODO Auto-generated method stub
 		return taskDao.incCommentLike(Id);
 	}
-	
+
 	@Override
 	public  int decCommentLike(int Id) {
 		// TODO Auto-generated method stub
 		return taskDao.decCommentLike(Id);
 	}
-	
-	
+
+
 	@Override
 	public  int incComment(int Id) {
 		// TODO Auto-generated method stub
 		return taskDao.incComment(Id);
 	}
-	
+
 	@Override
 	public  int decLike(int Id) {
 		// TODO Auto-generated method stub
@@ -310,7 +342,7 @@ public class Impl implements BeitaService{
 		index.deleteDocument(String.valueOf(Id));
 		return taskDao.deleteTask(Id);
 	}
-	
+
 	@Override
 	public int recoverTask(int Id) {
 		// TODO Auto-generated method stub
@@ -332,14 +364,14 @@ public class Impl implements BeitaService{
 		}
 		return ret;
 	}
-	
+
 	@Override
 	public int hideTask(int Id) {
 		// TODO Auto-generated method stub
 		index.deleteDocument(String.valueOf(Id));
 		return taskDao.hideTask(Id);
 	}
-	
+
 	@Override
 	public int recoverTaskHide(int Id) {
 		// TODO Auto-generated method stub
@@ -360,49 +392,49 @@ public class Impl implements BeitaService{
 		}
 		return ret;
 	}
-	
+
 	@Override
 	public int topTask(int Id) {
 		// TODO Auto-generated method stub
 		return taskDao.topTask(Id);
 	}
-	
+
 	@Override
 	public int downTask(int Id) {
 		// TODO Auto-generated method stub
 		return taskDao.downTask(Id);
 	}
-	
+
 	@Override
 	public int addLike(Like like) {
 		// TODO Auto-generated method stub
 		return taskDao.addLike(like);
 	}
-	
+
 	@Override
 	public int addComment(Comment comment) {
 		// TODO Auto-generated method stub
 		return taskDao.addComment(comment) + taskDao.upDateTaskCommentTime(comment);
 	}
-	
+
 	@Override
 	public  List<Like> getlikeByPk(String openid,int pk) {
 		// TODO Auto-generated method stub
 		return taskDao.getlikeByPk(openid,pk);
 	}
-	
+
 	@Override
 	public  List<Comment> getCommentByPk(int pk) {
 		// TODO Auto-generated method stub
 		return taskDao.getCommentByPk(pk);
 	}
-	
+
 	@Override
 	public  List<Comment> getCommentByLength(int pk,int length) {
 		// TODO Auto-generated method stub
 		return taskDao.getCommentByLength(pk,length);
 	}
-	
+
 	@Override
 	public  List<Comment> getCommentByType(int pk,int length,String type) {
 		// TODO Auto-generated method stub
@@ -413,33 +445,33 @@ public class Impl implements BeitaService{
 		} else {
 			return taskDao.getCommentByHot(pk,length);
 		}
-		
+
 	}
-	
+
 	@Override
 	public  List<Comment> getCommentByPid(int pid) {
 		// TODO Auto-generated method stub
 		return taskDao.getCommentByPid(pid);
 	}
-	
+
 	@Override
 	public  List<Comment> getFirstCommentByPid(int pid) {
 		// TODO Auto-generated method stub
 		return taskDao.getFirstCommentByPid(pid);
 	}
-	
+
 	@Override
 	public  List<Comment> getCommentByIdList(List<String> str) {
 		// TODO Auto-generated method stub
 		return taskDao.getCommentByIdList(str);
 	}
-	
+
 	@Override
 	public int deleteLike(int Id) {
 		// TODO Auto-generated method stub
 		return taskDao.deleteLike(Id);
 	}
-	
+
 	@Override
 	public  List<Like> getlikeByOpenid(String openid,int length) {
 		// TODO Auto-generated method stub
@@ -455,193 +487,193 @@ public class Impl implements BeitaService{
 		// TODO Auto-generated method stub
 		return taskDao.getCommentByOpenid(openid,length);
 	}
-	
+
 	@Override
 	public  List<Comment> getCommentByApplyto(String applyTo,int length) {
 		// TODO Auto-generated method stub
 		return taskDao.getCommentByApplyto(applyTo,length);
 	}
-	
+
 	@Override
 	public  List<Member> getMember(String openid) {
 		// TODO Auto-generated method stub
 		return taskDao.getMember(openid);
 	}
-	
+
 	@Override
 	public int addMember(Member member) {
 		// TODO Auto-generated method stub
 		return taskDao.addMember(member);
 	}
-	
+
 	@Override
 	public  List<Member> getAllMember() {
 		// TODO Auto-generated method stub
 		return taskDao.getAllMember();
 	}
-	
+
 	@Override
 	public  int upDateWatch(int watchNum,int Id) {
 		// TODO Auto-generated method stub
 		return taskDao.upDateWatch(watchNum,Id);
 	}
-	
+
 	@Override
 	public  int updateChoose(int Id,int choose) {
 		// TODO Auto-generated method stub
 		return taskDao.updateChoose(Id,choose);
 	}
-	
+
 	@Override
 	public  List<Comment> getAllComment(int length) {
 		// TODO Auto-generated method stub
 		return taskDao.getAllComment(length);
 	}
-	
+
 
 	@Override
 	public  List<Banner> getBanner() {
 		// TODO Auto-generated method stub
 		return taskDao.getBanner();
 	}
-	
+
 	@Override
 	public  List<Banner> getBanner2() {
 		// TODO Auto-generated method stub
 		return taskDao.getBanner2();
 	}
-	
+
 	@Override
 	public int deleteBanner(int Id) {
 		// TODO Auto-generated method stub
 		return taskDao.deleteBanner(Id);
 	}
-	
+
 	@Override
 	public int addBanner(String imgPath,String url,String weight) {
 		// TODO Auto-generated method stub
 		return taskDao.addBanner(imgPath,url,weight);
 	}
-	
+
 	@Override
 	public  List<BlackList> checkBlackList(String openid) {
 		// TODO Auto-generated method stub
 		return taskDao.checkBlackList(openid);
 	}
-	
+
 	@Override
 	public  List<BlackList> getBlackList(int length) {
 		// TODO Auto-generated method stub
 		return taskDao.getBlackList(length);
 	}
-	
+
 	@Override
 	public  List<Task> getOpenidbySearch(String search) {
 		// TODO Auto-generated method stub
 		return taskDao.getOpenidbySearch(search);
 	}
-	
+
 	@Override
 	public  List<Task> getAllOpenid(String search) {
 		// TODO Auto-generated method stub
 		return taskDao.getAllOpenid(search);
 	}
-	
-	
+
+
 	@Override
 	public  List<Comment> getOpenidBySearchComment(String search) {
 		// TODO Auto-generated method stub
 		return taskDao.getOpenidBySearchComment(search);
 	}
-	
+
 	@Override
 	public  List<Comment> getOpenidBySearchAllComment(String search) {
 		// TODO Auto-generated method stub
 		return taskDao.getOpenidBySearchAllComment(search);
 	}
-	
+
 	@Override
 	public int addBlacklist(BlackList blacklist) {
 		// TODO Auto-generated method stub
 		return taskDao.addBlacklist(blacklist);
 	}
-	
+
 	@Override
 	public int deleteBlacklist(int Id) {
 		// TODO Auto-generated method stub
 		return taskDao.deleteBlacklist(Id);
 	}
-	
+
 	@Override
 	public int addSuggestion(Suggestion suggestion) {
 		// TODO Auto-generated method stub
 		return taskDao.addSuggestion(suggestion);
 	}
-	
+
 	@Override
 	public  List<Suggestion> getSuggestionByPk(int id) {
 		// TODO Auto-generated method stub
 		return taskDao.getSuggestionByPk(id);
 	}
-	
+
 	@Override
 	public  List<Suggestion> getSuggestion() {
 		// TODO Auto-generated method stub
 		return taskDao.getSuggestion();
 	}
-	
+
 	@Override
 	public List<BitRank> getRankList(int length) {
 		// TODO Auto-generated method stub
 		return taskDao.getRankList(length);
 	}
-	
+
 	@Override
 	public List<BitRank> getRankListByOpenid(String openid) {
 		// TODO Auto-generated method stub
 		return taskDao.getRankListByOpenid(openid);
 	}
-	
+
 	@Override
 	public int addRank(BitRank bitrank) {
 		// TODO Auto-generated method stub
 		return taskDao.addRank(bitrank);
 	}
-	
+
 	@Override
 	public  int updateRank(BitRank bitrank) {
 		// TODO Auto-generated method stub
 		return taskDao.updateRank(bitrank);
 	}
-	
+
 	@Override
 	public  List<Task> getChooseBySearch(String search) {
 		// TODO Auto-generated method stub
 		return taskDao.getChooseBySearch(search);
 	}
-	
+
 	@Override
 	public  List<AccessCode> getCodeCtime(Long c_time) {
 		// TODO Auto-generated method stub
 		return taskDao.getCodeCtime(c_time);
 	}
-	
+
 	@Override
 	public  int saveCode(String code,Long c_time) {
 		// TODO Auto-generated method stub
 		return taskDao.saveCode(code,c_time);
 	}
-	
+
 //	@Override
 //	public int downBannerTask(int Id) {
 //		// TODO Auto-generated method stub
 //		return taskDao.deleteBanner(Id);
 //	}
-//	
+//
 //	@Override
 //	public int addbannerTask(String imgPath,String url,String campus,String weight) {
 //		// TODO Auto-generated method stub
-//		
+//
 //		return taskDao.addBanner(page,imgPath,url,campus,weight);
 //	}
 }
