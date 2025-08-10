@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class AuthUtil {
     /**
-     * 检查用户是否已通过校园认证 (identity = 3)
+     * 检查用户是否已通过校园认证 (status = 1)
      * 这是新的统一认证检查方法，将取代分散在各个Controller中的重复逻辑。
      *
      * @param openid 用户的微信OpenID
@@ -31,8 +31,8 @@ public class AuthUtil {
             return false;
         }
 
-        // identity = 3 表示已通过校园认证
+        // status = 1 表示已通过校园认证
         VerifyUserIdentity user = userList.get(0);
-        return user != null && user.getIdentity() == 3;
+        return user != null && user.getStatus() == 1;
     }
 }

@@ -46,6 +46,7 @@ import com.example.demo.model.Switch;
 import com.example.demo.model.Task;
 import com.example.demo.model.Test;
 import com.example.demo.model.VerifyUser;
+import com.example.demo.model.VerifyUserIdentity;
 import com.example.demo.service.QuanziService;
 import com.example.demo.service.impl.EmailUtils;
 import com.github.houbb.sensitive.word.core.SensitiveWordHelper;
@@ -828,7 +829,7 @@ public class QuanziController {
 	public Object getVerifyUserByOpenid(
 		@RequestParam (value = "openid")String openid) {
 		 Map<String,Object>map=new HashMap<>();
-		 List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
+		 List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
 		 if (existence.size()>0) {
 			 map.put("code", "200");
 			 map.put("msg", existence.get(0).getStatus());
@@ -848,7 +849,7 @@ public class QuanziController {
 			@RequestParam (value = "campus", required=false)String campus) {
         Map<String,Object>map=new HashMap<>();
         
-        List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
+        List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
         if (existence.size()>0) {
         	map.put("code",-1);
             map.put("msg","该微信号已认证");
@@ -881,10 +882,10 @@ public class QuanziController {
 	public Object checkVerifyUserQuanzi(
 			@RequestParam (value = "openid")String openid) {
 		Map<String,Object>map=new HashMap<>();
-		List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
-		if (existence.size()>0) {
-			VerifyUser user = existence.get(0);
-			if (user.getStatus()==1) {
+        List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
+        if (existence.size() > 0) {
+            VerifyUserIdentity user = existence.get(0);
+            if (user.getStatus() == 1) {
 				map.put("code",200);
 	            map.put("msg","该微信号已认证");
 			} else {

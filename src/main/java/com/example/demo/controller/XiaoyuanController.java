@@ -1370,8 +1370,8 @@ public class XiaoyuanController {
 			@RequestParam (value = "nickname")String nickname
 			) {
 		Map<String,Object>map=new HashMap<>();
-		// check existence
-		List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
+        // check existence
+        List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
 		if (existence.size()>0) {
 			int updateCode = quanziService.udpateUserInfoByOpenid(openid,nickname,avatar);
 			map.put("code", updateCode);
@@ -1386,11 +1386,11 @@ public class XiaoyuanController {
 	@RequestMapping(value="/getVerifyUserByOpenidXiaoyuan")
 	public Object getVerifyUserByOpenidXiaoyuan(
 		@RequestParam (value = "openid")String openid) {
-		 Map<String,Object>map=new HashMap<>();
-		 List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
-		 if ((existence.size()>0) && (existence.get(0).getStatus()!=-1)) {
-			 map.put("code", "200");
-			 map.put("msg", existence.get(0).getStatus());
+     Map<String,Object>map=new HashMap<>();
+     List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
+    if ((existence.size()>0)) {
+        map.put("code", "200");
+        map.put("msg", existence.get(0).getStatus());
 		 } else {
 			 map.put("code", "-1");
 			 map.put("msg", "未提交认证信息");
@@ -1408,11 +1408,34 @@ public class XiaoyuanController {
             @RequestParam (value = "region",required = false)String region) {
         Map<String,Object>map=new HashMap<>();
         
-        List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
-        if ((existence.size()>0)&&(existence.get(0).getStatus()!=-1)) {
-        	map.put("code",-1);
-            map.put("msg","该微信号已认证");
-        	
+        List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
+        if (existence.size()>0) {
+            // 已存在：若为软删除/未注册态（status==-1）允许更新，否则视为已认证
+            if (existence.get(0).getStatus()==-1) {
+                int res = -1;
+                VerifyUser verify_user = new VerifyUser();
+                verify_user.setOpenid(openid);
+                verify_user.setPic(pic);
+                if (email.equals("") || email.equals(null)) {
+                    verify_user.setStatus(0);
+                } else {
+                    verify_user.setStatus(1);
+                }
+                verify_user.setRegion(region);
+                verify_user.setCampus(campus);
+                verify_user.setEmail(email);
+                res = quanziService.updateVerifyUserVerifyInfo(verify_user);
+                if (res>0) {
+                    map.put("code",200);
+                    map.put("msg","更新成功！");
+                } else {
+                    map.put("code",-1);
+                    map.put("msg","更新失败，请重试");
+                }
+            } else {
+            	map.put("code",-1);
+                map.put("msg","该微信号已认证");
+            }
         } else {
         	int res = -1;
         	VerifyUser verify_user = new VerifyUser();
@@ -1426,11 +1449,9 @@ public class XiaoyuanController {
         	verify_user.setRegion(region);
         	verify_user.setCampus(campus);
         	verify_user.setEmail(email);
-        	if (existence.size()==0) {
-            	res = quanziService.addVerifyUser(verify_user);
-        	} else if (existence.get(0).getStatus()==-1) {
-        		res = quanziService.updateVerifyUserVerifyInfo(verify_user);
-        	}
+            if (existence.size()==0) {
+                res = quanziService.addVerifyUser(verify_user);
+            }
         	
         	if (res>0) {
         		map.put("code",200);
@@ -1448,10 +1469,10 @@ public class XiaoyuanController {
 	public Object checkVerifyUserQuanzi(
 			@RequestParam (value = "openid")String openid) {
 		Map<String,Object>map=new HashMap<>();
-		List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
-		if (existence.size()>0 && existence.get(0).getStatus()!=-1) {
-			VerifyUser user = existence.get(0);
-			if (user.getStatus()==1) {
+        List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
+        if (existence.size()>0) {
+            VerifyUserIdentity user = existence.get(0);
+            if (user.getStatus()==1) {
 				map.put("code",200);
 	            map.put("msg","该微信号已认证");
 			} else {
@@ -1506,8 +1527,8 @@ public class XiaoyuanController {
 	public Object setIdentityXiaoyuan(
 			@RequestParam (value = "openid")String openid,
 			@RequestParam (value = "identity")String identity) {
-		Map<String,Object>map=new HashMap<>();
-		List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
+        Map<String,Object>map=new HashMap<>();
+        List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
 		if (existence.size()>0) {
         	int updateCode = quanziService.updateUserIdentityByOpenid(openid,identity);
         	map.put("code", 200);
@@ -1822,7 +1843,7 @@ public class XiaoyuanController {
 	        if (testJ.getString("errcode").equals("0") || testJ.getInteger("errcode")==0) {
 	            String phone = testJ.getJSONObject("phone_info").getString("phoneNumber");
 	            // insert into db
-	            List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
+	            List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
 	            if (existence.size()>0) {
 	            	int updateCode = quanziService.udpateUserPhoneByOpenid(openid,phone);
 	            	map.put("code", updateCode);
@@ -1850,10 +1871,10 @@ public class XiaoyuanController {
 			) {
 		Map<String,Object>map=new HashMap<>();
 		// check existence
-		List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
+        List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
 		if (existence.size()>0) {
-			if (existence.get(0).getPhone()!=null) {
-				String phone = existence.get(0).getPhone();
+            if (existence.get(0).getPhone()!=null) {
+                String phone = existence.get(0).getPhone();
 				if (phone.length()>0) {
 					map.put("res", phone);
 				} else {
@@ -1876,7 +1897,7 @@ public class XiaoyuanController {
 			) {
 		Map<String,Object>map=new HashMap<>();
 		// check existence
-		List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
+        List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
 		int res = -1;
 		if (existence.size()>0) {
 			// 用户存在时更新
@@ -1894,7 +1915,7 @@ public class XiaoyuanController {
 		@RequestParam (value = "openid")String openid) {
 		System.out.println("openid for getuserinfo:"+openid);
 		 Map<String,Object>map=new HashMap<>();
-		 List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
+     List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
 		
 		 if (existence.size()>0) {
 			 map.put("res", existence.get(0));
