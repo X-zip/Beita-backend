@@ -62,6 +62,7 @@ import com.example.demo.model.CommentLevel;
 import com.example.demo.model.CommentLevelIdentity;
 import com.example.demo.model.GroupBuy;
 import com.example.demo.model.Like;
+import com.example.demo.model.common.TaskXiaoyuan;
 import com.example.demo.model.Meetup;
 import com.example.demo.model.Member;
 import com.example.demo.model.RadioGroupCategory;
@@ -156,23 +157,7 @@ public class XiaoyuanController {
 	
 	
 	@RequestMapping(value="/addtaskXiaoyuan",method = {RequestMethod.POST})
-    public  Object addTask(
-    						HttpServletRequest request,
-                           @RequestParam (value = "c_time",required = false)String c_time,
-                           @RequestParam (value = "price",required = false)String price,
-                           @RequestParam (value = "wechat",required = false)String wechat,
-                           @RequestParam (value = "openid",required = false)String openid,
-                           @RequestParam (value = "avatar",required = false)String avatar,
-                           @RequestParam (value = "campusGroup",required = false)String campusGroup,
-                           @RequestParam (value = "commentNum",required = false)int commentNum,
-                           @RequestParam (value = "watchNum",required = false)int watchNum,
-                           @RequestParam (value = "likeNum",required = false)int likeNum,
-                           @RequestParam (value = "radioGroup",required = false)String radioGroup,
-                           @RequestParam (value = "img",required = false)String img,
-                           @RequestParam (value = "region",required = false)String region,
-                           @RequestParam (value = "userName",required = false)String userName,
-                           @RequestParam (value = "cover",required = false)String cover,
-                           @RequestParam (value = "encrypted",required = false)String encrypted) throws UnsupportedEncodingException{ 
+    public Object addTask(HttpServletRequest request, TaskXiaoyuan taskDto) throws UnsupportedEncodingException{
 //		System.out.println("addtask");
         Map<String,Object>map=new HashMap<>();
         String ip = IpUtil.getIpAddr(request);
@@ -186,7 +171,7 @@ public class XiaoyuanController {
 		long time_diff_en = 0;
 
         // 登录态校验：仅允许 status = 1 的用户发帖
-        if (!AuthUtil.isUserVerified(openid, quanziService)) {
+        if (!AuthUtil.isUserVerified(taskDto.getOpenid(), quanziService)) {
             map.put("code", 403);
             map.put("msg", "未认证用户，无法发帖");
             return map;
@@ -194,10 +179,10 @@ public class XiaoyuanController {
 
 		// test 时间戳转换
 		Date date_ori = null;
-		if (c_time != null) {
+		if (taskDto.getC_time() != null) {
 			try {
 				SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z", Locale.ENGLISH);
-				date_ori = sdf.parse(c_time);
+				date_ori = sdf.parse(taskDto.getC_time());
 			} catch (ParseException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -209,13 +194,13 @@ public class XiaoyuanController {
         try {
             String password = "[PASSWORD]";
             // encrypted 空值兜底处理
-            if (encrypted == null || encrypted.isEmpty()) {
-                encrypted = "";
+            if (taskDto.getEncrypted() == null || taskDto.getEncrypted().isEmpty()) {
+                taskDto.setEncrypted("");
             }
-            byte[] decryptFrom = AesUtil.parseHexStr2Byte(encrypted);
+            byte[] decryptFrom = AesUtil.parseHexStr2Byte(taskDto.getEncrypted());
             byte[] resultByte = AesUtil.decrypt(decryptFrom,password);
             String result = new String(resultByte,"UTF-8");
-//        System.out.println(result);
+			//System.out.println(result);
 			JSONObject obj = JSON.parseObject(result);
 			content = obj.getString("content");
 			title = obj.getString("title");
@@ -255,24 +240,7 @@ public class XiaoyuanController {
         Date date = new Date(); 
 //        System.out.println("当前日期字符串：" + format.format(date) + "。");
         String c_time_new = format.format(date);
-        Task task=new Task();
-        task.setContent(content);
-        task.setPrice(price);
-        task.setTitle(title);
-        task.setWechat(wechat);
-        task.setOpenid(openid);
-        task.setAvatar(avatar);
-        task.setCampusGroup(campusGroup);
-        task.setCommentNum(commentNum);
-        task.setLikeNum(likeNum);
-        task.setWatchNum(watchNum);
-        task.setRadioGroup(radioGroup);
-        task.setImg(img == null ? "" : img.replace("[","").replace("]","").replace("\"",""));
-        task.setRegion(region);
-        task.setUserName(userName);
-        task.setC_time(c_time_new);
-        task.setCover(cover == null ? "" : cover.replace("[","").replace("]","").replace("\"",""));
-        task.setIp(ip);
+        Task task = new Task(taskDto, content, title, c_time_new, ip);
         
         // set blacklist
         if (content_flag==1 || title_flag == 1) {
@@ -282,8 +250,8 @@ public class XiaoyuanController {
         }
         
         // if-else on region
-        if ("sg".equals(region)) {
-            List<BlackList> checkCode =caicaiService.checkBlackList(openid);
+        if ("sg".equals(taskDto.getRegion())) {
+            List<BlackList> checkCode =caicaiService.checkBlackList(taskDto.getOpenid());
             if(checkCode.size()>0){
             	String period = checkCode.get(0).getPeriod();
             	if (period.equals("1天")) {
@@ -302,8 +270,8 @@ public class XiaoyuanController {
             }else {
                 int addcode = caicaiService.addTask(task);
             }
-        } else if ("beita".equals(region)) {
-            List<BlackList> checkCode =beitaService.checkBlackList(openid);
+        } else if ("beita".equals(taskDto.getRegion())) {
+            List<BlackList> checkCode =beitaService.checkBlackList(taskDto.getOpenid());
             if(checkCode.size()>0){
             	String period = checkCode.get(0).getPeriod();
             	int id = checkCode.get(0).getId();
@@ -329,7 +297,7 @@ public class XiaoyuanController {
             	int addcode = beitaService.addTask(task);
             }
         } else {
-            List<BlackList> checkCode =quanziService.checkBlackList(openid);
+            List<BlackList> checkCode =quanziService.checkBlackList(taskDto.getOpenid());
             if(checkCode.size()>0){
             	String period = checkCode.get(0).getPeriod();
             	if (period.equals("1天")) {
@@ -347,7 +315,7 @@ public class XiaoyuanController {
             	} 
             }else {
             	List<Switch> switchList = new ArrayList<Switch>();
-            	switchList = quanziService.getSwitchStatus(campusGroup);
+            	switchList = quanziService.getSwitchStatus(taskDto.getCampusGroup());
         		if (switchList.size() <= 0) {
         			int addcode=quanziService.addTask(task,"false");
             	} else {
