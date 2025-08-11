@@ -45,7 +45,9 @@ public interface TaskDao {
 			"<foreach collection='radioGroup' item='item' index='index' separator=',' open='(' close = ')'>",
 			"#{item}",
 			"</foreach>",
-			"and is_delete=0 order by c_time desc limit #{length},30",
+			"and is_delete=0",
+			"<if test='length != null'>and id &lt; #{length}</if>",
+			"order by c_time desc limit 30",
 			"</script>"})
     public List<Task>gettaskbyRadioSecond(@Param("radioGroup") List<String> radioGroup,int length);
 	
@@ -54,7 +56,9 @@ public interface TaskDao {
 		"<foreach collection='radioGroup' item='item' index='index' separator=',' open='(' close = ')'>",
 		"#{item}",
 		"</foreach>",
-		"and is_delete=0 and campusGroup in ('1','2') order by c_time desc limit #{length},20",
+		"and is_delete=0 and campusGroup in ('1','2')",
+		"<if test='length != null'>and id &lt; #{length}</if>",
+		"order by c_time desc limit 20",
 		"</script>"})
     public List<Task>gettaskbyLX(@Param("radioGroup") List<String> radioGroup,int length);
 	
@@ -63,7 +67,9 @@ public interface TaskDao {
 		"<foreach collection='radioGroup' item='item' index='index' separator=',' open='(' close = ')'>",
 		"#{item}",
 		"</foreach>",
-		"and is_delete=0 and campusGroup in ('0','2') order by c_time desc limit #{length},30",
+		"and is_delete=0 and campusGroup in ('0','2')",
+		"<if test='length != null'>and id &lt; #{length}</if>",
+		"order by c_time desc limit 30",
 		"</script>"})
     public List<Task>gettaskbyZGC(@Param("radioGroup") List<String> radioGroup,int length);
 	
@@ -72,7 +78,9 @@ public interface TaskDao {
 		"<foreach collection='radioGroup' item='item' index='index' separator=',' open='(' close = ')'>",
 		"#{item}",
 		"</foreach>",
-		"and is_delete=0 and campusGroup in ('3','2') order by c_time desc limit #{length},30",
+		"and is_delete=0 and campusGroup in ('3','2')",
+		"<if test='length != null'>and id &lt; #{length}</if>",
+		"order by c_time desc limit 30",
 		"</script>"})
     public List<Task>gettaskbyZH(@Param("radioGroup") List<String> radioGroup,int length);
 	
@@ -185,7 +193,8 @@ public List<Task>gettaskbyRadioSecondCampus(@Param("radioGroup") List<String> ra
 			+ "commentNum,watchNum,likeNum,radioGroup,img,region,userName,c_time,comment_time,choose,cover,ip,is_delete) "
 			+ "values (#{content},#{price},#{title},#{wechat},#{openid},#{avatar},#{campusGroup},"
 			+ "#{commentNum},#{watchNum},#{likeNum},#{radioGroup},#{img},#{region},#{userName},#{c_time},#{c_time},0,#{cover},#{ip},#{is_delete})")
-    int addTask(Task task);
+	@Options(useGeneratedKeys = true, keyProperty = "id")
+	int addTask(Task task);
 	
 	@Update("update  task set c_time =#{c_time},comment_time=#{c_time} where  id= #{Id}")
     public  int  upDateTask(@Param("c_time") String c_time,
