@@ -20,8 +20,9 @@ import com.meilisearch.sdk.Client;
 import com.meilisearch.sdk.Index;
 import com.meilisearch.sdk.model.Searchable;
 import com.meilisearch.sdk.SearchRequest;
+import com.meilisearch.sdk.model.TaskStatus;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.HashMap;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -42,6 +43,7 @@ public class Impl implements BeitaService{
 	private final AtomicBoolean isInitialized = new AtomicBoolean(false);
 	// 初始化失败标志
 	private final AtomicBoolean initFailed = new AtomicBoolean(false);
+	private final List<Task> tasks_to_add = new CopyOnWriteArrayList<>();
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 	@Async("meilisearchExecutor")  // 指定专用线程池
 	public void initMeilisearch() {
@@ -168,7 +170,7 @@ public class Impl implements BeitaService{
 	}
 	@Override
 	public List<Task> getHotTask(int length) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stubad
 		return taskDao.getHotTask(length);
 	}
 
@@ -185,11 +187,12 @@ public class Impl implements BeitaService{
 	}
 	@Override
 	public List<Task> gettaskbySearch(String search, int length) {
+		System.out.println("用户正在搜索:"+search);
 		if (!isInitialized.get() || initFailed.get()) {
-			System.out.println("初始化未完成或失败时使用原有实现");
+//			System.out.println("初始化未完成或失败时使用原有实现");
 			return taskDao.gettaskbySearch(search, length);
 		}
-		System.out.println("初始化完成后使用新实现");
+//		System.out.println("初始化完成后使用新实现");
 		return getTaskByMeiliSearch(search, length);
 	}
 	private List<Task> getTaskByMeiliSearch(String search, int length) {
@@ -213,26 +216,80 @@ public class Impl implements BeitaService{
 
 	@Override
 	public int addTask(Task task) {
-		// TODO Auto-generated method stub
-		List<Task> tasks = new ArrayList<>();
-		tasks.add(task);
-		// 转换为数组并添加到Meilisearch
-		List<Map<String, Object>> documents = tasks.stream()
+		// 先执行SQL插入（确保数据落地）
+		int sqlResult = taskDao.addTask(task);
+		if (sqlResult <= 0) {
+			return sqlResult; // SQL插入失败直接返回
+		}
+		tasks_to_add.add(task);
+		if(!isInitialized.get())
+		{
+			//	初始化过程中，先不执行插入meilisearch的操作；而是把他们都先存储在documents中，等初始化完成后再统一添加
+			System.out.println("接收到一条帖子，等meilisearch初始化完成后填入");
+			System.out.println("目前共有"+tasks_to_add.size()+"条帖子等待填入");
+			return sqlResult;
+		}
+//		for (Task _task : tasks_to_add) {
+//			// 打印 Task 的关键字段（根据你的 Task 类字段调整）
+//			System.out.println("ID: " + _task.getId() +
+//					", 内容: " + _task.getContent());
+//		}
+		// 转换为Meilisearch文档
+		List<Map<String, Object>> documents = tasks_to_add.stream()
 				.map(this::convertTaskToDocument)
 				.collect(Collectors.toList());
-		// 尝试转换为JSON
-		try{
+		try {
 			String doc = listMapToJson(documents);
-			index.addDocuments(doc,"id");
-			System.out.println("新增一条数据");
-		} catch (JsonProcessingException e) {
-			// 异常处理逻辑（根据业务需求调整）
+			index.addDocuments(doc, "id");
+		}
+		catch (JsonProcessingException e) {
 			System.err.println("JSON转换失败：" + e.getMessage());
 			e.printStackTrace(); // 打印堆栈信息便于调试
 		}
-		return taskDao.addTask(task);
-	}
+		// 重试机制：最多重试3次
+		for (int retry = 0; retry < 3; retry++) {
+			try {
+				String doc = listMapToJson(documents);
+				// 调用Meilisearch并获取任务状态
+				com.meilisearch.sdk.model.TaskInfo taskInfo = index.addDocuments(doc, "id");
+				// 等待任务完成（可选，根据需求调整超时时间）
+				boolean success = waitForMeilisearchTask(taskInfo.getTaskUid(), 5000); // 5秒超时
+				if (success) {
+					System.out.println("新增"+tasks_to_add.size()+"条帖子索引到meilisearch");
+					// 清空tasks_to_add
+					tasks_to_add.clear();
+					return sqlResult;
+				} else {
+					System.err.println("重试" + retry + "次：Meilisearch处理任务超时");
+				}
+			} catch (Exception e) { // 捕获所有可能的异常（网络、JSON、服务错误等）
+				System.err.println("重试" + retry + "次失败：" + e.getMessage());
+				if (retry == 2) { // 最后一次重试失败，记录告警
+					System.err.println("新增帖子索引最终失败，ID: " + task.getId() + "，需人工处理");
+				}
+			}
+			// 重试间隔（指数退避）
+			try { Thread.sleep(1000 * (retry + 1)); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+		}
+		return sqlResult; // 即使索引失败，也返回SQL成功结果（数据已落地）
+}
 
+	// 等待Meilisearch任务完成（检查状态）
+	private boolean waitForMeilisearchTask(int taskUid, long timeoutMs) throws Exception {
+		long start = System.currentTimeMillis();
+		while (System.currentTimeMillis() - start < timeoutMs) {
+			TaskStatus statusStr = client.getTask(taskUid).getStatus();
+
+			if (statusStr == TaskStatus.SUCCEEDED) {
+				return true;
+			} else if (statusStr == TaskStatus.FAILED) {
+				System.err.println("Meilisearch任务失败：" + client.getTask(taskUid).getError());
+				return false;
+			}
+			Thread.sleep(200); // 轮询间隔
+		}
+		return false;
+	}
 	@Override
 	public  List<Task> gettaskbyRadio(String radioGroup,int length) {
 		// TODO Auto-generated method stub

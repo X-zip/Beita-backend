@@ -365,12 +365,12 @@ public class BeitaController {
         }     
         return map;
     }
-	
-	
+
+
 	@RequestMapping(value="/deleteTask")
     public  Object deleteTask(
     						HttpServletRequest request,
-    						@RequestParam (value = "pk")String Id){ 
+    						@RequestParam (value = "pk")String Id){
         Map<String,Object>map=new HashMap<>();
         String ip = IpUtil.getIpAddr(request);
         System.out.println(ip);
@@ -397,7 +397,7 @@ public class BeitaController {
         }else {
             map.put("code",100);
             map.put("msg","失败");
-        }     
+        }
         return map;
     }
 	
