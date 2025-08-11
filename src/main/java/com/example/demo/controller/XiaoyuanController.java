@@ -93,6 +93,7 @@ import utils.ResultGenerator;
 import utils.UUIDGenerator;
 import utils.BlacklistWord;
 import utils.HttpRequest;
+import utils.AuthUtil;
 
 @RestController
 public class XiaoyuanController {
@@ -183,7 +184,14 @@ public class XiaoyuanController {
 		int content_flag = 0;
 		int title_flag = 0;
 		long time_diff_en = 0;
-		
+
+        // 登录态校验：仅允许 status = 1 的用户发帖
+        if (!AuthUtil.isUserVerified(openid, quanziService)) {
+            map.put("code", 403);
+            map.put("msg", "未认证用户，无法发帖");
+            return map;
+        }
+
 		// test 时间戳转换
 		Date date_ori = null;
 		if (c_time != null) {
