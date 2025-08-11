@@ -186,19 +186,27 @@ public class XiaoyuanController {
 		
 		// test 时间戳转换
 		Date date_ori = null;
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z", Locale.ENGLISH);
-			date_ori = sdf.parse(c_time);
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} //将字符串改为date的格式
+		if (c_time != null) {
+			try {
+				SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z", Locale.ENGLISH);
+				date_ori = sdf.parse(c_time);
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} //将字符串改为date的格式
+		} else {
+			date_ori = new Date();
+		}
 		
-		try {
-			String password = "[PASSWORD]";
-			byte[] decryptFrom = AesUtil.parseHexStr2Byte(encrypted);
-			byte[] resultByte = AesUtil.decrypt(decryptFrom,password);
-			String result = new String(resultByte,"UTF-8");
+        try {
+            String password = "[PASSWORD]";
+            // encrypted 空值兜底处理
+            if (encrypted == null || encrypted.isEmpty()) {
+                encrypted = "";
+            }
+            byte[] decryptFrom = AesUtil.parseHexStr2Byte(encrypted);
+            byte[] resultByte = AesUtil.decrypt(decryptFrom,password);
+            String result = new String(resultByte,"UTF-8");
 //        System.out.println(result);
 			JSONObject obj = JSON.parseObject(result);
 			content = obj.getString("content");
@@ -251,11 +259,11 @@ public class XiaoyuanController {
         task.setLikeNum(likeNum);
         task.setWatchNum(watchNum);
         task.setRadioGroup(radioGroup);
-        task.setImg(img.replace("[","").replace("]","").replace("\"",""));
+        task.setImg(img == null ? "" : img.replace("[","").replace("]","").replace("\"",""));
         task.setRegion(region);
         task.setUserName(userName);
         task.setC_time(c_time_new);
-        task.setCover(cover.replace("[","").replace("]","").replace("\"",""));
+        task.setCover(cover == null ? "" : cover.replace("[","").replace("]","").replace("\"",""));
         task.setIp(ip);
         
         // set blacklist
@@ -266,7 +274,7 @@ public class XiaoyuanController {
         }
         
         // if-else on region
-        if (region.equals("sg")) {
+        if ("sg".equals(region)) {
             List<BlackList> checkCode =caicaiService.checkBlackList(openid);
             if(checkCode.size()>0){
             	String period = checkCode.get(0).getPeriod();
@@ -284,9 +292,9 @@ public class XiaoyuanController {
                     map.put("msg","成功");
             	} 
             }else {
-            	int addcode=caicaiService.addTask(task);
+                int addcode = caicaiService.addTask(task);
             }
-        } else if (region.equals("beita")) {
+        } else if ("beita".equals(region)) {
             List<BlackList> checkCode =beitaService.checkBlackList(openid);
             if(checkCode.size()>0){
             	String period = checkCode.get(0).getPeriod();
@@ -310,7 +318,7 @@ public class XiaoyuanController {
             	} 
             }else {
             	task.setRegion("0");
-            	int addcode=beitaService.addTask(task);
+            	int addcode = beitaService.addTask(task);
             }
         } else {
             List<BlackList> checkCode =quanziService.checkBlackList(openid);
