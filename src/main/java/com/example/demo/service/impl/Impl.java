@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import com.meilisearch.sdk.Client;
 import com.meilisearch.sdk.Index;
@@ -60,6 +61,7 @@ public class Impl implements BeitaService{
 
 			// 2. 批量导入数据（降低批次大小适配4G内存）
 			int totalCount = getTaskCount();
+//			totalCount=10;
 			int batchSize = 5000;  // 4G内存建议减小批次
 			int offset = 0;
 
@@ -115,13 +117,16 @@ public class Impl implements BeitaService{
 			String[] searchableAttributes = new String[]{"content", "title"};
 			index.updateSearchableAttributesSettings(searchableAttributes);
 
-			String[] sortableAttributes = new String[]{"c_time"};
-			index.updateSortableAttributesSettings(sortableAttributes);
 
 			String[] rankingRules = new String[]{
-					"exactness", "words", "proximity", "c_time:desc", "typo"
+					"exactness", "words", "proximity", "typo"
 			};
 			index.updateRankingRulesSettings(rankingRules);
+
+//			HashMap<String, String[]> synonyms = new HashMap<String, String[]>();
+//			synonyms.put("学校", new String[] {"校园"});
+//			synonyms.put("校园", new String[] {"学校"});
+//			index.updateSynonymsSettings(synonyms);
 		} catch (Exception e) {
 			throw new RuntimeException("索引配置失败", e);
 		}
@@ -132,28 +137,8 @@ public class Impl implements BeitaService{
 	private Map<String, Object> convertTaskToDocument(Task task) {
 		Map<String, Object> doc = new HashMap<>();
 		doc.put("id", task.getId());
-		doc.put("ip", task.getIp());
 		doc.put("content", task.getContent());
-		doc.put("price", task.getPrice());
 		doc.put("title", task.getTitle());
-		doc.put("wechat", task.getWechat());
-		doc.put("openid", task.getOpenid());
-		doc.put("avatar", task.getAvatar());
-		doc.put("campusGroup", task.getCampusGroup());
-		doc.put("commentNum", task.getCommentNum());
-		doc.put("watchNum", task.getWatchNum());
-		doc.put("likeNum", task.getLikeNum());
-		doc.put("radioGroup", task.getRadioGroup());
-		doc.put("img", task.getImg());
-		doc.put("cover", task.getCover());
-		doc.put("is_delete", task.getIs_delete());
-		doc.put("is_complaint", task.getIs_complaint());
-		doc.put("region", task.getRegion());
-		doc.put("userName", task.getUserName());
-		doc.put("c_time", task.getC_time());
-		doc.put("comment_time", task.getComment_time());
-		doc.put("choose", task.getChoose());
-		doc.put("hot", task.getHot());
 		return doc;
 	}
 	@Override
@@ -200,14 +185,26 @@ public class Impl implements BeitaService{
 			SearchRequest searchRequest = SearchRequest.builder()
 					.q(search)
 					.offset(length)
-					.limit(20)
+					.limit(10)
 					.build();
 
 			Searchable searchResult = index.search(searchRequest);
-			return objectMapper.convertValue(
-					searchResult.getHits(),
-					new TypeReference<List<Task>>() {}
-			);
+			// 直接从搜索结果中提取id列表（无需转换为Task对象）
+			List<Integer> idList = new ArrayList<>();
+			// hits本质是List<Map<String, Object>>，直接遍历提取"id"字段
+			for (Object hit : searchResult.getHits()) {
+				// 强制转换为Map（Meilisearch的hit以键值对形式存储）
+				Map<String, Object> doc = (Map<String, Object>) hit;
+				// 提取"id"并转换为Integer（注意处理可能的空值）
+				if (doc.containsKey("id")) {
+					Object idObj = doc.get("id");
+					// 若id在Meilisearch中存储为数字类型，直接强转
+					if (idObj instanceof Number) {
+						idList.add(((Number) idObj).intValue());
+					}
+				}
+			}
+			return taskDao.getSimilarTaskById(idList);
 		} catch (Exception e) {
 			System.err.println("Meilisearch搜索失败，降级使用DAO：" + e.getMessage());
 			return taskDao.gettaskbySearch(search, length);  // 搜索失败时降级
