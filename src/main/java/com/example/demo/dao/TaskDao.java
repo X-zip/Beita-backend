@@ -23,6 +23,17 @@ public interface TaskDao {
 	public List<Task>getallTaskbyBatch(int start, int limit);
 	@Select("select * from task where is_delete=0 order by c_time desc limit #{length},20 ")
 	public List<Task>getallTask(int length);
+	@Select({
+			"<script>",
+			"SELECT * FROM task",
+			"WHERE id IN",
+			"<foreach item='id' collection='ids' open='(' separator=',' close=')'>",
+			"   #{id}",
+			"</foreach>",
+			"ORDER BY c_time DESC",
+			"</script>"
+	})
+	List<Task> getSimilarTaskById(@Param("ids") List<Integer> ids);
 	@Select("select * from task where is_delete=0 "
 			+ " and DATEDIFF(Now(),replace(substring(c_time,1,10),'/','-'))<2 "
 			+ " order by (watchNum+commentNum*10+likeNum*10) desc limit #{length} ")
@@ -97,7 +108,7 @@ public interface TaskDao {
 		"<foreach collection='radioGroup' item='item' index='index' separator=',' open='(' close = ')'>",
 		"#{item}",
 		"</foreach>",
-		"and is_delete=0 ",
+		"and is_delete=0",
 		"<if test='length != null'>and id &lt; #{length}</if>",
 		"order by c_time desc limit 20", // 只保留每页条数，去掉offset
 		"</script>"})
