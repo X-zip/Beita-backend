@@ -61,7 +61,6 @@ public class Impl implements BeitaService{
 
 			// 2. 批量导入数据（降低批次大小适配4G内存）
 			int totalCount = getTaskCount();
-//			totalCount=10;
 			int batchSize = 5000;  // 4G内存建议减小批次
 			int offset = 0;
 
@@ -123,10 +122,6 @@ public class Impl implements BeitaService{
 			};
 			index.updateRankingRulesSettings(rankingRules);
 
-//			HashMap<String, String[]> synonyms = new HashMap<String, String[]>();
-//			synonyms.put("学校", new String[] {"校园"});
-//			synonyms.put("校园", new String[] {"学校"});
-//			index.updateSynonymsSettings(synonyms);
 		} catch (Exception e) {
 			throw new RuntimeException("索引配置失败", e);
 		}
@@ -170,16 +165,25 @@ public class Impl implements BeitaService{
 		// TODO Auto-generated method stub
 		return taskDao.gettaskbyOpenId(openid,length);
 	}
+
 	@Override
 	public List<Task> gettaskbySearch(String search, int length) {
+
 		System.out.println("用户正在搜索:"+search);
 		if (!isInitialized.get() || initFailed.get()) {
-//			System.out.println("初始化未完成或失败时使用原有实现");
 			return taskDao.gettaskbySearch(search, length);
 		}
-//		System.out.println("初始化完成后使用新实现");
-		return getTaskByMeiliSearch(search, length);
+		List<Task> traditional_search = taskDao.gettaskbySearch(search, length);
+		if (traditional_search.size()>0){
+//			System.out.println("使用传统搜索");
+			return traditional_search;
+		}
+		else{
+//			System.out.println("使用meilisearch搜索");
+			return getTaskByMeiliSearch(search, length);
+		}
 	}
+
 	private List<Task> getTaskByMeiliSearch(String search, int length) {
 		try {
 			SearchRequest searchRequest = SearchRequest.builder()
@@ -226,11 +230,7 @@ public class Impl implements BeitaService{
 			System.out.println("目前共有"+tasks_to_add.size()+"条帖子等待填入");
 			return sqlResult;
 		}
-//		for (Task _task : tasks_to_add) {
-//			// 打印 Task 的关键字段（根据你的 Task 类字段调整）
-//			System.out.println("ID: " + _task.getId() +
-//					", 内容: " + _task.getContent());
-//		}
+
 		// 转换为Meilisearch文档
 		List<Map<String, Object>> documents = tasks_to_add.stream()
 				.map(this::convertTaskToDocument)
