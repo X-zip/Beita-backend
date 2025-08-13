@@ -4,10 +4,10 @@ import lombok.Data;
 
 /**
  * @author : zhaoyingxiang
- * 删除任务请求DTO
+ * 删除评论请求DTO
  */
 @Data
-public class DeleteTaskDTO {
+public class DeleteCommentDTO {
     /**
      * 用户OpenID
      */

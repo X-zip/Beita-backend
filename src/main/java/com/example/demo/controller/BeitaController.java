@@ -44,6 +44,7 @@ import com.example.demo.model.Test;
 import com.example.demo.model.VerifyUser;
 import com.example.demo.model.common.AddCommentDTO;
 import com.example.demo.model.common.DeleteTaskDTO;
+import com.example.demo.model.common.DeleteCommentDTO;
 import com.example.demo.service.BeitaService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.QuanziService;
@@ -624,14 +625,30 @@ public class BeitaController {
     }
 	
 	
-	@RequestMapping(value="/deleteComment")
+    @RequestMapping(value="/deleteComment", method = {RequestMethod.POST})
     public  Object deleteComment(
     						HttpServletRequest request,
-                           @RequestParam (value = "pk")int Id){ 
-		Map<String,Object>map=new HashMap<>();
+                            @RequestBody DeleteCommentDTO deleteCommentDTO){ 
+        Map<String,Object> map = new HashMap<>();
+
+        // 登录态校验：仅允许 status = 1 的用户删除
+        if (!AuthUtil.isUserVerified(deleteCommentDTO.getOpenid(), quanziService)) {
+            map.put("code", 403);
+            map.put("msg", "未认证用户，无权执行该操作");
+            return map;
+        }
+
         String ip = IpUtil.getIpAddr(request);
         System.out.println(ip);
-        int updateCode =beitaService.deleteComment(Id);
+        int updateCode = 0;
+        try {
+            int id = Integer.parseInt(deleteCommentDTO.getPk());
+            updateCode = beitaService.deleteComment(id);
+        } catch (Exception ex) {
+            map.put("code",100);
+            map.put("msg","失败");
+            return map;
+        }
         if(updateCode==1){
             map.put("code",200);
             map.put("msg","成功");
