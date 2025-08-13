@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +43,7 @@ import com.example.demo.model.Task;
 import com.example.demo.model.Test;
 import com.example.demo.model.VerifyUser;
 import com.example.demo.model.common.AddCommentDTO;
+import com.example.demo.model.common.DeleteTaskDTO;
 import com.example.demo.service.BeitaService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.QuanziService;
@@ -373,17 +376,23 @@ public class BeitaController {
     }
 	
 	
-	@RequestMapping(value="/deleteTask")
-    public  Object deleteTask(
+    @RequestMapping(value="/deleteTask", method = {RequestMethod.POST})
+    public Object deleteTask(
     						HttpServletRequest request,
-    						@RequestParam (value = "pk")String Id){ 
-        Map<String,Object>map=new HashMap<>();
+                            @RequestBody DeleteTaskDTO deleteTaskDTO){ 
+        Map<String,Object> map = new HashMap<>();
+        // 登录态校验：仅允许 status = 1 的用户删除
+        if (!AuthUtil.isUserVerified(deleteTaskDTO.getOpenid(), quanziService)) {
+            map.put("code", 403);
+            map.put("msg", "未认证用户，无权执行该操作");
+            return map;
+        }
         String ip = IpUtil.getIpAddr(request);
         System.out.println(ip);
         int updateCode = 0;
 		try {
 			String password = "[PASSWORD]";
-			byte[] decryptFrom = AesUtil.parseHexStr2Byte(Id);
+            byte[] decryptFrom = AesUtil.parseHexStr2Byte(deleteTaskDTO.getPk());
 			byte[] resultByte = AesUtil.decrypt(decryptFrom,password);
 			String result = new String(resultByte,"UTF-8");
 			JSONObject obj = JSON.parseObject(result);

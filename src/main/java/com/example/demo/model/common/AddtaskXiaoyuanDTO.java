@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  * @author : zhaoyingxiang
- *
+ * 校园板块新增task的入参DTO
  */
 @Data
 public class AddtaskXiaoyuanDTO {
