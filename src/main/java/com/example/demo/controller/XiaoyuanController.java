@@ -37,11 +37,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,7 +58,7 @@ import com.example.demo.model.CommentLevel;
 import com.example.demo.model.CommentLevelIdentity;
 import com.example.demo.model.GroupBuy;
 import com.example.demo.model.Like;
-import com.example.demo.model.common.TaskXiaoyuan;
+import com.example.demo.model.common.AddtaskXiaoyuanDTO;
 import com.example.demo.model.Meetup;
 import com.example.demo.model.Member;
 import com.example.demo.model.RadioGroupCategory;
@@ -157,7 +153,7 @@ public class XiaoyuanController {
 	
 	
 	@RequestMapping(value="/addtaskXiaoyuan",method = {RequestMethod.POST})
-    public Object addTask(HttpServletRequest request, TaskXiaoyuan taskDto) throws UnsupportedEncodingException{
+    public Object addTask(HttpServletRequest request, AddtaskXiaoyuanDTO taskDto) throws UnsupportedEncodingException{
 //		System.out.println("addtask");
         Map<String,Object>map=new HashMap<>();
         String ip = IpUtil.getIpAddr(request);
@@ -240,7 +236,17 @@ public class XiaoyuanController {
         Date date = new Date(); 
 //        System.out.println("当前日期字符串：" + format.format(date) + "。");
         String c_time_new = format.format(date);
-        Task task = new Task(taskDto, content, title, c_time_new, ip);
+
+        Task task = new Task();
+        org.springframework.beans.BeanUtils.copyProperties(taskDto, task);
+        task.setContent(content);
+        task.setTitle(title);
+        task.setC_time(c_time_new);
+        task.setIp(ip);
+        
+        // 特殊处理的字段
+        task.setImg(taskDto.getImg() == null ? "" : taskDto.getImg().replace("[","").replace("]","").replace("\"",""));
+        task.setCover(taskDto.getCover() == null ? "" : taskDto.getCover().replace("[","").replace("]","").replace("\"",""));
         
         // set blacklist
         if (content_flag==1 || title_flag == 1) {

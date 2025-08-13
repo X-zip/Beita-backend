@@ -7,7 +7,7 @@ import lombok.Data;
  *
  */
 @Data
-public class TaskXiaoyuan {
+public class AddtaskXiaoyuanDTO {
     /**
      * 创建时间
      */
