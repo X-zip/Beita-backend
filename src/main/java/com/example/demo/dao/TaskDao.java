@@ -302,11 +302,12 @@ public List<Task>gettaskbyRadioSecondCampus(@Param("radioGroup") List<String> ra
 	})
     public List<Comment>getCommentByIdList(@Param("str") List<String> str);
 	
-	@Select("select * from  comment  where openid= #{openid} and is_delete = 0 order by c_time desc limit #{length},10")
+	@Select("select * from  comment  where openid= #{openid} and is_delete = 0 order by c_time desc limit #{length},20")
     public List<Comment>getCommentByOpenid(String openid,int length);
 	@Select("select * from  comment  where applyTo= #{applyTo} and is_delete = 0 order by c_time desc limit #{length},10")
     public List<Comment>getCommentByApplyto(String applyTo,int length);
 	
+
 	@Update("update comment set is_delete=1 where  id= #{Id}")
     int  deleteComment(@Param("Id")int Id);
 	
