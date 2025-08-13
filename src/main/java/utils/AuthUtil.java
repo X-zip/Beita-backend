@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * 认证工具类
- * <p>
+ * @author : zhaoyingxiang
  * 用于集中管理用户认证相关的逻辑，如此处改造为核心的OpenID认证状态检查
  */
 public class AuthUtil {

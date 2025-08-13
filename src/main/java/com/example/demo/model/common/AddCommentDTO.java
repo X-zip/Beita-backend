@@ -54,7 +54,7 @@ public class AddCommentDTO {
     private String level;
     
     /**
-     * 不知道
+     * 二级评论的parent id
      */
     private int pid;
 }

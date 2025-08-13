@@ -14,7 +14,7 @@ public class DeleteTaskDTO {
     private String openid;
 
     /**
-     * 表中对应id
+     * 关联的任务/帖子ID
      */
     private String pk;
 }
