@@ -61,7 +61,6 @@ public class Impl implements BeitaService{
 
 			// 2. 批量导入数据（降低批次大小适配4G内存）
 			int totalCount = getTaskCount();
-//			totalCount=10;
 			int batchSize = 5000;  // 4G内存建议减小批次
 			int offset = 0;
 
@@ -116,17 +115,14 @@ public class Impl implements BeitaService{
 		try {
 			String[] searchableAttributes = new String[]{"content", "title"};
 			index.updateSearchableAttributesSettings(searchableAttributes);
-
+			String[] sortableAttributes = {"c_time"}; // 声明c_time可用于排序
+			index.updateSortableAttributesSettings(sortableAttributes);
 
 			String[] rankingRules = new String[]{
-					"exactness", "words", "proximity", "typo"
+					"exactness", "proximity", "c_time:desc", "typo", "words"
 			};
 			index.updateRankingRulesSettings(rankingRules);
 
-//			HashMap<String, String[]> synonyms = new HashMap<String, String[]>();
-//			synonyms.put("学校", new String[] {"校园"});
-//			synonyms.put("校园", new String[] {"学校"});
-//			index.updateSynonymsSettings(synonyms);
 		} catch (Exception e) {
 			throw new RuntimeException("索引配置失败", e);
 		}
@@ -139,6 +135,7 @@ public class Impl implements BeitaService{
 		doc.put("id", task.getId());
 		doc.put("content", task.getContent());
 		doc.put("title", task.getTitle());
+		doc.put("c_time", task.getC_time());
 		return doc;
 	}
 	@Override
@@ -170,22 +167,34 @@ public class Impl implements BeitaService{
 		// TODO Auto-generated method stub
 		return taskDao.gettaskbyOpenId(openid,length);
 	}
+
 	@Override
 	public List<Task> gettaskbySearch(String search, int length) {
+		// 设置分页为20
+		int limit = 20;
 		System.out.println("用户正在搜索:"+search);
 		if (!isInitialized.get() || initFailed.get()) {
-//			System.out.println("初始化未完成或失败时使用原有实现");
 			return taskDao.gettaskbySearch(search, length);
 		}
-//		System.out.println("初始化完成后使用新实现");
-		return getTaskByMeiliSearch(search, length);
+		List<Task> traditional_search = taskDao.gettaskbySearch(search, length);
+		if (traditional_search.size()==limit){
+			return traditional_search;
+		}
+		else{
+			List<Task> meiliResults = getTaskByMeiliSearch(search, length+traditional_search.size(), limit-traditional_search.size());
+			if (meiliResults != null) { // 避免空指针异常
+				traditional_search.addAll(meiliResults);
+			}
+			return traditional_search;
+		}
 	}
-	private List<Task> getTaskByMeiliSearch(String search, int length) {
+
+	private List<Task> getTaskByMeiliSearch(String search, int length, int limit) {
 		try {
 			SearchRequest searchRequest = SearchRequest.builder()
 					.q(search)
 					.offset(length)
-					.limit(10)
+					.limit(limit)
 					.build();
 
 			Searchable searchResult = index.search(searchRequest);
@@ -219,18 +228,13 @@ public class Impl implements BeitaService{
 			return sqlResult; // SQL插入失败直接返回
 		}
 		tasks_to_add.add(task);
-		if(!isInitialized.get())
-		{
+		if (!isInitialized.get()) {
 			//	初始化过程中，先不执行插入meilisearch的操作；而是把他们都先存储在documents中，等初始化完成后再统一添加
 			System.out.println("接收到一条帖子，等meilisearch初始化完成后填入");
-			System.out.println("目前共有"+tasks_to_add.size()+"条帖子等待填入");
+			System.out.println("目前共有" + tasks_to_add.size() + "条帖子等待填入");
 			return sqlResult;
 		}
-//		for (Task _task : tasks_to_add) {
-//			// 打印 Task 的关键字段（根据你的 Task 类字段调整）
-//			System.out.println("ID: " + _task.getId() +
-//					", 内容: " + _task.getContent());
-//		}
+
 		// 转换为Meilisearch文档
 		List<Map<String, Object>> documents = tasks_to_add.stream()
 				.map(this::convertTaskToDocument)
@@ -238,55 +242,17 @@ public class Impl implements BeitaService{
 		try {
 			String doc = listMapToJson(documents);
 			index.addDocuments(doc, "id");
+			System.out.println("新增" + tasks_to_add.size() + "条帖子索引到meilisearch");
+			tasks_to_add.clear();
+		} catch (Exception e) {
+			System.err.println(e);
 		}
-		catch (JsonProcessingException e) {
-			System.err.println("JSON转换失败：" + e.getMessage());
-			e.printStackTrace(); // 打印堆栈信息便于调试
-		}
-		// 重试机制：最多重试3次
-		for (int retry = 0; retry < 3; retry++) {
-			try {
-				String doc = listMapToJson(documents);
-				// 调用Meilisearch并获取任务状态
-				com.meilisearch.sdk.model.TaskInfo taskInfo = index.addDocuments(doc, "id");
-				// 等待任务完成（可选，根据需求调整超时时间）
-				boolean success = waitForMeilisearchTask(taskInfo.getTaskUid(), 5000); // 5秒超时
-				if (success) {
-					System.out.println("新增"+tasks_to_add.size()+"条帖子索引到meilisearch");
-					// 清空tasks_to_add
-					tasks_to_add.clear();
-					return sqlResult;
-				} else {
-					System.err.println("重试" + retry + "次：Meilisearch处理任务超时");
-				}
-			} catch (Exception e) { // 捕获所有可能的异常（网络、JSON、服务错误等）
-				System.err.println("重试" + retry + "次失败：" + e.getMessage());
-				if (retry == 2) { // 最后一次重试失败，记录告警
-					System.err.println("新增帖子索引最终失败，ID: " + task.getId() + "，需人工处理");
-				}
-			}
-			// 重试间隔（指数退避）
-			try { Thread.sleep(1000 * (retry + 1)); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
-		}
-		return sqlResult; // 即使索引失败，也返回SQL成功结果（数据已落地）
-}
+
+		return sqlResult;
+	}
 
 	// 等待Meilisearch任务完成（检查状态）
-	private boolean waitForMeilisearchTask(int taskUid, long timeoutMs) throws Exception {
-		long start = System.currentTimeMillis();
-		while (System.currentTimeMillis() - start < timeoutMs) {
-			TaskStatus statusStr = client.getTask(taskUid).getStatus();
 
-			if (statusStr == TaskStatus.SUCCEEDED) {
-				return true;
-			} else if (statusStr == TaskStatus.FAILED) {
-				System.err.println("Meilisearch任务失败：" + client.getTask(taskUid).getError());
-				return false;
-			}
-			Thread.sleep(200); // 轮询间隔
-		}
-		return false;
-	}
 	@Override
 	public  List<Task> gettaskbyRadio(String radioGroup,int length) {
 		// TODO Auto-generated method stub
