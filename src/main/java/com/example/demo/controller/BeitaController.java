@@ -375,6 +375,7 @@ public class BeitaController {
         }     
         return map;
     }
+
 	
 	
     @RequestMapping(value="/deleteTask", method = {RequestMethod.POST})
@@ -413,7 +414,7 @@ public class BeitaController {
         }else {
             map.put("code",100);
             map.put("msg","失败");
-        }     
+        }
         return map;
     }
 	

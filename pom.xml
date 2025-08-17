@@ -113,6 +113,16 @@
 		    <scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>4.9.3</version> <!-- 先尝试当前版本的兼容升级，如3.14.10；若不行换4.9.3 -->
+		</dependency>
+		<dependency>
+		   <groupId>com.meilisearch.sdk</groupId>
+		   <artifactId>meilisearch-java</artifactId>
+		   <version>0.15.0</version>
+		 </dependency>
+		<dependency>
 		    <groupId>io.netty</groupId>
 		    <artifactId>netty-all</artifactId>
 		    <version>4.1.45.Final</version>

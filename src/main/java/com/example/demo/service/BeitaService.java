@@ -14,7 +14,10 @@ import com.example.demo.model.Suggestion;
 import com.example.demo.model.Task;
 
 public interface BeitaService {
-	List<Task> getallTask(int length);
+    List<Task> getallTaskbyBatch(int start, int limit);
+    List<Task> getallTask(int length);
+    int getTaskCount();
+    void initMeilisearch();
 	List<Task> getHotTask(int length);
 	List<Task> gettaskbyOpenId(String openid,int length);
 	List<Task> gettaskbyId(int Id);
