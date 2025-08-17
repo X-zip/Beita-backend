@@ -32,3 +32,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Claude ###
+CLAUDE.md
+
+cursor.md

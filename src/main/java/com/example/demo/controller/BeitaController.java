@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,13 +42,18 @@ import com.example.demo.model.Suggestion;
 import com.example.demo.model.Task;
 import com.example.demo.model.Test;
 import com.example.demo.model.VerifyUser;
+import com.example.demo.model.common.AddCommentDTO;
+import com.example.demo.model.common.DeleteTaskDTO;
+import com.example.demo.model.common.DeleteCommentDTO;
 import com.example.demo.service.BeitaService;
 import com.example.demo.service.EmailService;
+import com.example.demo.service.QuanziService;
 import com.example.demo.service.impl.EmailUtils;
 
 import utils.AesUtil;
 import utils.IpUtil;
 import utils.BlacklistWord;
+import utils.AuthUtil;
 
 
 @RestController
@@ -57,6 +64,9 @@ public class BeitaController {
 	
 	@Autowired
 	private EmailService emailService;
+    
+    @Autowired
+    private QuanziService quanziService;
 	static String charset = "UTF-8";
 
 	
@@ -366,18 +376,25 @@ public class BeitaController {
         return map;
     }
 
-
-	@RequestMapping(value="/deleteTask")
-    public  Object deleteTask(
+	
+	
+    @RequestMapping(value="/deleteTask", method = {RequestMethod.POST})
+    public Object deleteTask(
     						HttpServletRequest request,
-    						@RequestParam (value = "pk")String Id){
-        Map<String,Object>map=new HashMap<>();
+                            @RequestBody DeleteTaskDTO deleteTaskDTO){ 
+        Map<String,Object> map = new HashMap<>();
+        // 登录态校验：仅允许 status = 1 的用户删除
+        if (!AuthUtil.isUserVerified(deleteTaskDTO.getOpenid(), quanziService)) {
+            map.put("code", 403);
+            map.put("msg", "未认证用户，无权执行该操作");
+            return map;
+        }
         String ip = IpUtil.getIpAddr(request);
         System.out.println(ip);
         int updateCode = 0;
 		try {
 			String password = "[PASSWORD]";
-			byte[] decryptFrom = AesUtil.parseHexStr2Byte(Id);
+            byte[] decryptFrom = AesUtil.parseHexStr2Byte(deleteTaskDTO.getPk());
 			byte[] resultByte = AesUtil.decrypt(decryptFrom,password);
 			String result = new String(resultByte,"UTF-8");
 			JSONObject obj = JSON.parseObject(result);
@@ -447,30 +464,24 @@ public class BeitaController {
     }
 	
 	@RequestMapping(value="/addcomment")
-    public  Object addComment(
-                           @RequestParam (value = "openid")String openid,
-                           @RequestParam (value = "applyTo")String applyTo,
-                           @RequestParam (value = "avatar")String avatar,
-                           @RequestParam (value = "comment")String comment,
-                           @RequestParam (value = "userName")String userName,
-                           @RequestParam (value = "c_time")String c_time,
-                           @RequestParam (value = "pk")int pk,
-                           @RequestParam (value = "img")String img,
-                           @RequestParam (value = "level")String level,
-                           @RequestParam (value = "pid")int pid){ 
+    public Object addComment(AddCommentDTO addCommentDTO){
         Map<String,Object>map=new HashMap<>();
-        Comment commenta=new Comment();
-        commenta.setApplyTo(applyTo);
-        commenta.setAvatar(avatar);
-        commenta.setC_time(c_time);
-        commenta.setComment(comment);
-        commenta.setOpenid(openid);
-        commenta.setPk(pk);
-        commenta.setUserName(userName);
-        commenta.setImg(img.replace("[","").replace("]","").replace("\"",""));
-        commenta.setLevel(level);
-        commenta.setPid(pid);
-        List<BlackList> checkCode =beitaService.checkBlackList(openid);
+        Comment comment=new Comment();
+
+        org.springframework.beans.BeanUtils.copyProperties(addCommentDTO, comment);
+        
+        // 特殊处理img字段，避免NPE
+        String img = addCommentDTO.getImg();
+        comment.setImg(img == null ? "" : img.replace("[","").replace("]","").replace("\"",""));
+        
+        // 校园认证校验，未认证返回403
+        if (!AuthUtil.isUserVerified(addCommentDTO.getOpenid(), quanziService)) {
+            map.put("code", 403);
+            map.put("msg", "未认证用户，无权执行该操作");
+            return map;
+        }
+        
+        List<BlackList> checkCode = beitaService.checkBlackList(addCommentDTO.getOpenid());
         if(checkCode.size()>0){
         	String period = checkCode.get(0).getPeriod();
         	int id = checkCode.get(0).getId();
@@ -492,8 +503,8 @@ public class BeitaController {
                 map.put("msg","成功");
         	} 
         }else {
-            int addcode=beitaService.addComment(commenta);
-            int updateCode =beitaService.incComment(pk);
+            int addcode=beitaService.addComment(comment);
+            int updateCode =beitaService.incComment(comment.getPk());
         }
 //        if(addcode==1){
 //            map.put("code",200);
@@ -615,14 +626,30 @@ public class BeitaController {
     }
 	
 	
-	@RequestMapping(value="/deleteComment")
+    @RequestMapping(value="/deleteComment", method = {RequestMethod.POST})
     public  Object deleteComment(
     						HttpServletRequest request,
-                           @RequestParam (value = "pk")int Id){ 
-		Map<String,Object>map=new HashMap<>();
+                            @RequestBody DeleteCommentDTO deleteCommentDTO){ 
+        Map<String,Object> map = new HashMap<>();
+
+        // 登录态校验：仅允许 status = 1 的用户删除
+        if (!AuthUtil.isUserVerified(deleteCommentDTO.getOpenid(), quanziService)) {
+            map.put("code", 403);
+            map.put("msg", "未认证用户，无权执行该操作");
+            return map;
+        }
+
         String ip = IpUtil.getIpAddr(request);
         System.out.println(ip);
-        int updateCode =beitaService.deleteComment(Id);
+        int updateCode = 0;
+        try {
+            int id = Integer.parseInt(deleteCommentDTO.getPk());
+            updateCode = beitaService.deleteComment(id);
+        } catch (Exception ex) {
+            map.put("code",100);
+            map.put("msg","失败");
+            return map;
+        }
         if(updateCode==1){
             map.put("code",200);
             map.put("msg","成功");

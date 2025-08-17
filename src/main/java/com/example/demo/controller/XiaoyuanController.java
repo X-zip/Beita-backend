@@ -37,11 +37,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,6 +58,7 @@ import com.example.demo.model.CommentLevel;
 import com.example.demo.model.CommentLevelIdentity;
 import com.example.demo.model.GroupBuy;
 import com.example.demo.model.Like;
+import com.example.demo.model.common.AddtaskXiaoyuanDTO;
 import com.example.demo.model.Meetup;
 import com.example.demo.model.Member;
 import com.example.demo.model.RadioGroupCategory;
@@ -93,6 +90,7 @@ import utils.ResultGenerator;
 import utils.UUIDGenerator;
 import utils.BlacklistWord;
 import utils.HttpRequest;
+import utils.AuthUtil;
 
 @RestController
 public class XiaoyuanController {
@@ -155,23 +153,7 @@ public class XiaoyuanController {
 	
 	
 	@RequestMapping(value="/addtaskXiaoyuan",method = {RequestMethod.POST})
-    public  Object addTask(
-    						HttpServletRequest request,
-                           @RequestParam (value = "c_time",required = false)String c_time,
-                           @RequestParam (value = "price",required = false)String price,
-                           @RequestParam (value = "wechat",required = false)String wechat,
-                           @RequestParam (value = "openid",required = false)String openid,
-                           @RequestParam (value = "avatar",required = false)String avatar,
-                           @RequestParam (value = "campusGroup",required = false)String campusGroup,
-                           @RequestParam (value = "commentNum",required = false)int commentNum,
-                           @RequestParam (value = "watchNum",required = false)int watchNum,
-                           @RequestParam (value = "likeNum",required = false)int likeNum,
-                           @RequestParam (value = "radioGroup",required = false)String radioGroup,
-                           @RequestParam (value = "img",required = false)String img,
-                           @RequestParam (value = "region",required = false)String region,
-                           @RequestParam (value = "userName",required = false)String userName,
-                           @RequestParam (value = "cover",required = false)String cover,
-                           @RequestParam (value = "encrypted",required = false)String encrypted) throws UnsupportedEncodingException{ 
+    public Object addTask(HttpServletRequest request, AddtaskXiaoyuanDTO taskDto) throws UnsupportedEncodingException{
 //		System.out.println("addtask");
         Map<String,Object>map=new HashMap<>();
         String ip = IpUtil.getIpAddr(request);
@@ -183,23 +165,38 @@ public class XiaoyuanController {
 		int content_flag = 0;
 		int title_flag = 0;
 		long time_diff_en = 0;
-		
+
+        // 登录态校验：仅允许 status = 1 的用户发帖
+        if (!AuthUtil.isUserVerified(taskDto.getOpenid(), quanziService)) {
+            map.put("code", 403);
+            map.put("msg", "未认证用户，无法发帖");
+            return map;
+        }
+
 		// test 时间戳转换
 		Date date_ori = null;
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z", Locale.ENGLISH);
-			date_ori = sdf.parse(c_time);
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} //将字符串改为date的格式
+		if (taskDto.getC_time() != null) {
+			try {
+				SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z", Locale.ENGLISH);
+				date_ori = sdf.parse(taskDto.getC_time());
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} //将字符串改为date的格式
+		} else {
+			date_ori = new Date();
+		}
 		
-		try {
-			String password = "[PASSWORD]";
-			byte[] decryptFrom = AesUtil.parseHexStr2Byte(encrypted);
-			byte[] resultByte = AesUtil.decrypt(decryptFrom,password);
-			String result = new String(resultByte,"UTF-8");
-//        System.out.println(result);
+        try {
+            String password = "[PASSWORD]";
+            // encrypted 空值兜底处理
+            if (taskDto.getEncrypted() == null || taskDto.getEncrypted().isEmpty()) {
+                taskDto.setEncrypted("");
+            }
+            byte[] decryptFrom = AesUtil.parseHexStr2Byte(taskDto.getEncrypted());
+            byte[] resultByte = AesUtil.decrypt(decryptFrom,password);
+            String result = new String(resultByte,"UTF-8");
+			//System.out.println(result);
 			JSONObject obj = JSON.parseObject(result);
 			content = obj.getString("content");
 			title = obj.getString("title");
@@ -239,24 +236,17 @@ public class XiaoyuanController {
         Date date = new Date(); 
 //        System.out.println("当前日期字符串：" + format.format(date) + "。");
         String c_time_new = format.format(date);
-        Task task=new Task();
+
+        Task task = new Task();
+        org.springframework.beans.BeanUtils.copyProperties(taskDto, task);
         task.setContent(content);
-        task.setPrice(price);
         task.setTitle(title);
-        task.setWechat(wechat);
-        task.setOpenid(openid);
-        task.setAvatar(avatar);
-        task.setCampusGroup(campusGroup);
-        task.setCommentNum(commentNum);
-        task.setLikeNum(likeNum);
-        task.setWatchNum(watchNum);
-        task.setRadioGroup(radioGroup);
-        task.setImg(img.replace("[","").replace("]","").replace("\"",""));
-        task.setRegion(region);
-        task.setUserName(userName);
         task.setC_time(c_time_new);
-        task.setCover(cover.replace("[","").replace("]","").replace("\"",""));
         task.setIp(ip);
+        
+        // 特殊处理的字段
+        task.setImg(taskDto.getImg() == null ? "" : taskDto.getImg().replace("[","").replace("]","").replace("\"",""));
+        task.setCover(taskDto.getCover() == null ? "" : taskDto.getCover().replace("[","").replace("]","").replace("\"",""));
         
         // set blacklist
         if (content_flag==1 || title_flag == 1) {
@@ -266,8 +256,8 @@ public class XiaoyuanController {
         }
         
         // if-else on region
-        if (region.equals("sg")) {
-            List<BlackList> checkCode =caicaiService.checkBlackList(openid);
+        if ("sg".equals(taskDto.getRegion())) {
+            List<BlackList> checkCode =caicaiService.checkBlackList(taskDto.getOpenid());
             if(checkCode.size()>0){
             	String period = checkCode.get(0).getPeriod();
             	if (period.equals("1天")) {
@@ -284,10 +274,10 @@ public class XiaoyuanController {
                     map.put("msg","成功");
             	} 
             }else {
-            	int addcode=caicaiService.addTask(task);
+                int addcode = caicaiService.addTask(task);
             }
-        } else if (region.equals("beita")) {
-            List<BlackList> checkCode =beitaService.checkBlackList(openid);
+        } else if ("beita".equals(taskDto.getRegion())) {
+            List<BlackList> checkCode =beitaService.checkBlackList(taskDto.getOpenid());
             if(checkCode.size()>0){
             	String period = checkCode.get(0).getPeriod();
             	int id = checkCode.get(0).getId();
@@ -310,10 +300,10 @@ public class XiaoyuanController {
             	} 
             }else {
             	task.setRegion("0");
-            	int addcode=beitaService.addTask(task);
+            	int addcode = beitaService.addTask(task);
             }
         } else {
-            List<BlackList> checkCode =quanziService.checkBlackList(openid);
+            List<BlackList> checkCode =quanziService.checkBlackList(taskDto.getOpenid());
             if(checkCode.size()>0){
             	String period = checkCode.get(0).getPeriod();
             	if (period.equals("1天")) {
@@ -331,7 +321,7 @@ public class XiaoyuanController {
             	} 
             }else {
             	List<Switch> switchList = new ArrayList<Switch>();
-            	switchList = quanziService.getSwitchStatus(campusGroup);
+            	switchList = quanziService.getSwitchStatus(taskDto.getCampusGroup());
         		if (switchList.size() <= 0) {
         			int addcode=quanziService.addTask(task,"false");
             	} else {
@@ -1370,8 +1360,8 @@ public class XiaoyuanController {
 			@RequestParam (value = "nickname")String nickname
 			) {
 		Map<String,Object>map=new HashMap<>();
-		// check existence
-		List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
+        // check existence
+        List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
 		if (existence.size()>0) {
 			int updateCode = quanziService.udpateUserInfoByOpenid(openid,nickname,avatar);
 			map.put("code", updateCode);
@@ -1386,11 +1376,11 @@ public class XiaoyuanController {
 	@RequestMapping(value="/getVerifyUserByOpenidXiaoyuan")
 	public Object getVerifyUserByOpenidXiaoyuan(
 		@RequestParam (value = "openid")String openid) {
-		 Map<String,Object>map=new HashMap<>();
-		 List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
-		 if ((existence.size()>0) && (existence.get(0).getStatus()!=-1)) {
-			 map.put("code", "200");
-			 map.put("msg", existence.get(0).getStatus());
+     Map<String,Object>map=new HashMap<>();
+     List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
+    if ((existence.size()>0)) {
+        map.put("code", "200");
+        map.put("msg", existence.get(0).getStatus());
 		 } else {
 			 map.put("code", "-1");
 			 map.put("msg", "未提交认证信息");
@@ -1408,11 +1398,34 @@ public class XiaoyuanController {
             @RequestParam (value = "region",required = false)String region) {
         Map<String,Object>map=new HashMap<>();
         
-        List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
-        if ((existence.size()>0)&&(existence.get(0).getStatus()!=-1)) {
-        	map.put("code",-1);
-            map.put("msg","该微信号已认证");
-        	
+        List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
+        if (existence.size()>0) {
+            // 已存在：若为软删除/未注册态（status==-1）允许更新，否则视为已认证
+            if (existence.get(0).getStatus()==-1) {
+                int res = -1;
+                VerifyUser verify_user = new VerifyUser();
+                verify_user.setOpenid(openid);
+                verify_user.setPic(pic);
+                if (email.equals("") || email.equals(null)) {
+                    verify_user.setStatus(0);
+                } else {
+                    verify_user.setStatus(1);
+                }
+                verify_user.setRegion(region);
+                verify_user.setCampus(campus);
+                verify_user.setEmail(email);
+                res = quanziService.updateVerifyUserVerifyInfo(verify_user);
+                if (res>0) {
+                    map.put("code",200);
+                    map.put("msg","更新成功！");
+                } else {
+                    map.put("code",-1);
+                    map.put("msg","更新失败，请重试");
+                }
+            } else {
+            	map.put("code",-1);
+                map.put("msg","该微信号已认证");
+            }
         } else {
         	int res = -1;
         	VerifyUser verify_user = new VerifyUser();
@@ -1426,11 +1439,9 @@ public class XiaoyuanController {
         	verify_user.setRegion(region);
         	verify_user.setCampus(campus);
         	verify_user.setEmail(email);
-        	if (existence.size()==0) {
-            	res = quanziService.addVerifyUser(verify_user);
-        	} else if (existence.get(0).getStatus()==-1) {
-        		res = quanziService.updateVerifyUserVerifyInfo(verify_user);
-        	}
+            if (existence.size()==0) {
+                res = quanziService.addVerifyUser(verify_user);
+            }
         	
         	if (res>0) {
         		map.put("code",200);
@@ -1448,10 +1459,10 @@ public class XiaoyuanController {
 	public Object checkVerifyUserQuanzi(
 			@RequestParam (value = "openid")String openid) {
 		Map<String,Object>map=new HashMap<>();
-		List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
-		if (existence.size()>0 && existence.get(0).getStatus()!=-1) {
-			VerifyUser user = existence.get(0);
-			if (user.getStatus()==1) {
+        List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
+        if (existence.size()>0) {
+            VerifyUserIdentity user = existence.get(0);
+            if (user.getStatus()==1) {
 				map.put("code",200);
 	            map.put("msg","该微信号已认证");
 			} else {
@@ -1506,8 +1517,8 @@ public class XiaoyuanController {
 	public Object setIdentityXiaoyuan(
 			@RequestParam (value = "openid")String openid,
 			@RequestParam (value = "identity")String identity) {
-		Map<String,Object>map=new HashMap<>();
-		List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
+        Map<String,Object>map=new HashMap<>();
+        List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
 		if (existence.size()>0) {
         	int updateCode = quanziService.updateUserIdentityByOpenid(openid,identity);
         	map.put("code", 200);
@@ -1822,7 +1833,7 @@ public class XiaoyuanController {
 	        if (testJ.getString("errcode").equals("0") || testJ.getInteger("errcode")==0) {
 	            String phone = testJ.getJSONObject("phone_info").getString("phoneNumber");
 	            // insert into db
-	            List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
+	            List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
 	            if (existence.size()>0) {
 	            	int updateCode = quanziService.udpateUserPhoneByOpenid(openid,phone);
 	            	map.put("code", updateCode);
@@ -1850,10 +1861,10 @@ public class XiaoyuanController {
 			) {
 		Map<String,Object>map=new HashMap<>();
 		// check existence
-		List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
+        List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
 		if (existence.size()>0) {
-			if (existence.get(0).getPhone()!=null) {
-				String phone = existence.get(0).getPhone();
+            if (existence.get(0).getPhone()!=null) {
+                String phone = existence.get(0).getPhone();
 				if (phone.length()>0) {
 					map.put("res", phone);
 				} else {
@@ -1876,7 +1887,7 @@ public class XiaoyuanController {
 			) {
 		Map<String,Object>map=new HashMap<>();
 		// check existence
-		List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
+        List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
 		int res = -1;
 		if (existence.size()>0) {
 			// 用户存在时更新
@@ -1894,7 +1905,7 @@ public class XiaoyuanController {
 		@RequestParam (value = "openid")String openid) {
 		System.out.println("openid for getuserinfo:"+openid);
 		 Map<String,Object>map=new HashMap<>();
-		 List<VerifyUser> existence = quanziService.getVerifyUserByOpenid(openid);
+     List<VerifyUserIdentity> existence = quanziService.getVerifyUserByOpenid(openid);
 		
 		 if (existence.size()>0) {
 			 map.put("res", existence.get(0));
