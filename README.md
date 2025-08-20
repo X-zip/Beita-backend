@@ -217,6 +217,13 @@ server.ssl.key-store-password=123456
 - 黑名单机制
 - 内容审核
 
+### 重构建议
+- **NPE风险**: 现有接口实现较为粗糙，重构时请务必增加空值判断与处理，规避NPE（Null Pointer Exception）风险。
+- **DTO使用**: 接口参数请使用DTO（Data Transfer Object）对象进行封装，避免直接使用`@RequestParam`。
+- **代码结构**:
+    - DTO对象应与Entity分离，并在`src/main/java/com/example/demo/model/common`包下创建。
+    - DTO类名请遵循`NormalControllerDTO`的大驼峰命名规范。
+
 ## 常见问题
 
 ### Q: 启动时数据库连接失败
